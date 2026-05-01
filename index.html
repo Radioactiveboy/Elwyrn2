@@ -80,8 +80,8 @@
   /* DIALOGUE BOX */
   #dialogueBox{position:fixed;bottom:0;left:0;right:0;height:220px;background:linear-gradient(180deg,rgba(20,16,8,.97),rgba(10,8,4,.99));border-top:2px solid #c8a84b;box-shadow:0 -6px 40px rgba(0,0,0,.6);display:none;z-index:65;font-family:'Cinzel',serif;}
   #dialogueInner{display:grid;grid-template-columns:200px 1fr;height:100%;max-width:960px;margin:0 auto;}
-  #dialoguePortrait{padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid rgba(200,168,75,.2);gap:6px;}
-  #dialoguePortraitFace{font-size:3.5rem;}
+  #dialoguePortrait{padding:14px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid rgba(200,168,75,.2);gap:7px;}
+  #dialoguePortraitCanvas{border:1px solid rgba(200,168,75,.3);border-radius:3px;box-shadow:0 0 12px rgba(0,0,0,.6),inset 0 0 20px rgba(0,0,0,.4);image-rendering:pixelated;}
   #dialoguePortraitName{font-size:.68rem;color:#f0d878;letter-spacing:.12em;text-align:center;}
   #dialoguePortraitTitle{font-size:.52rem;color:#8a7840;letter-spacing:.1em;text-align:center;font-style:italic;}
   #dialogueRight{display:flex;flex-direction:column;padding:14px 20px;gap:10px;}
@@ -119,7 +119,8 @@
   #invDetail{padding:14px;display:flex;flex-direction:column;gap:9px;}
   #invDetailEmpty{color:#5a5030;font-size:.66rem;letter-spacing:.1em;font-style:italic;margin:auto;}
   #invDetailContent{display:none;flex-direction:column;gap:8px;}
-  #invDetailIcon{font-size:2.2rem;text-align:center;}#invDetailName{font-size:.85rem;color:#f0d878;letter-spacing:.1em;text-align:center;}
+  #invDetailIcon{display:flex;justify-content:center;margin-bottom:2px;}
+  #invDetailIcon canvas{border:1px solid rgba(200,168,75,.25);border-radius:2px;image-rendering:pixelated;}#invDetailName{font-size:.85rem;color:#f0d878;letter-spacing:.1em;text-align:center;}
   #invDetailRarity{font-size:.54rem;letter-spacing:.2em;text-align:center;text-transform:uppercase;}
   #invDetailDesc{font-size:.6rem;color:#b0a878;line-height:1.6;letter-spacing:.04em;font-style:italic;}
   #invDetailStats{font-size:.6rem;color:#90c890;line-height:1.8;letter-spacing:.06em;}
@@ -154,7 +155,126 @@
   #overlayMsg{font-size:.88rem;color:#c8a84b;letter-spacing:.2em;text-transform:uppercase;}
   #overlayBtn{margin-top:12px;padding:12px 32px;border:1px solid #c8a84b;background:none;color:#c8a84b;font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
   #overlayBtn:hover{background:rgba(200,168,75,.15);color:#e8c86b;}
+
+  /* SHOP UI */
+  #shopPanel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(760px,96vw);background:rgba(10,12,6,.98);border:2px solid #c8a84b;box-shadow:0 0 60px rgba(0,0,0,.9);display:none;z-index:82;font-family:'Cinzel',serif;animation:invSlide .2s ease-out;flex-direction:column;}
+  #shopHeader{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 10px;border-bottom:1px solid rgba(200,168,75,.3);background:rgba(200,168,75,.06);flex-shrink:0;}
+  #shopTitle{font-family:'Cinzel Decorative',serif;font-size:.9rem;color:#f0d878;letter-spacing:.15em;text-transform:uppercase;}
+  #shopGold{font-size:.68rem;color:#e8c84b;letter-spacing:.12em;}
+  #shopClose{background:none;border:1px solid rgba(200,168,75,.3);color:#c8a84b;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.15em;padding:4px 10px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+  #shopClose:hover{background:rgba(200,168,75,.15);color:#ffe878;}
+  #shopTabs{display:flex;border-bottom:1px solid rgba(200,168,75,.2);}
+  .shop-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:#6a5830;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:9px;cursor:pointer;transition:all .15s;}
+  .shop-tab.active{color:#f0d878;border-bottom-color:#c8a84b;background:rgba(200,168,75,.06);}
+  .shop-tab:hover:not(.active){color:#c8a84b;}
+  #shopBody{display:grid;grid-template-columns:1fr 220px;min-height:300px;max-height:62vh;}
+  #shopGrid{padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-content:start;overflow-y:auto;border-right:1px solid rgba(200,168,75,.15);}
+  .shop-slot{width:100%;aspect-ratio:1;background:rgba(255,255,255,.04);border:1px solid rgba(200,168,75,.18);border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .14s;position:relative;gap:2px;padding:4px;}
+  .shop-slot:hover{background:rgba(200,168,75,.14);border-color:#c8a84b;}
+  .shop-slot.selected{background:rgba(200,168,75,.22);border-color:#ffe070;box-shadow:0 0 8px rgba(200,168,75,.3);}
+  .shop-slot.empty-slot{cursor:default;opacity:.25;}
+  .shop-slot canvas{display:block;}
+  .shop-slot .slot-name{font-size:.4rem;color:#c8b870;letter-spacing:.04em;text-align:center;line-height:1.2;margin-top:1px;}
+  .shop-slot .slot-price{position:absolute;bottom:2px;right:3px;font-size:.46rem;color:#e8c840;}
+  .shop-slot .slot-qty{position:absolute;top:2px;left:3px;font-size:.46rem;color:#a09060;}
+  .shop-slot.common{border-color:rgba(180,180,180,.28);}.shop-slot.uncommon{border-color:rgba(60,200,60,.32);}.shop-slot.rare{border-color:rgba(60,100,220,.4);}
+  #shopDetail{padding:14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+  #shopDetailEmpty{color:#5a5030;font-size:.64rem;font-style:italic;margin:auto;text-align:center;letter-spacing:.08em;}
+  #shopDetailContent{display:none;flex-direction:column;gap:8px;height:100%;}
+  #shopDetailCanvasWrap{display:flex;justify-content:center;}
+  #shopDetailCanvas{border:1px solid rgba(200,168,75,.25);border-radius:2px;image-rendering:pixelated;}
+  #shopDetailName{font-size:.82rem;color:#f0d878;letter-spacing:.1em;text-align:center;}
+  #shopDetailRarity{font-size:.52rem;letter-spacing:.2em;text-align:center;text-transform:uppercase;}
+  #shopDetailDesc{font-size:.58rem;color:#b0a878;line-height:1.6;font-style:italic;}
+  #shopDetailStats{font-size:.58rem;color:#90c890;line-height:1.8;}
+  #shopDetailPrice{font-size:.7rem;color:#e8c840;text-align:center;margin-top:auto;}
+  #shopActionBtn{padding:9px;border:1px solid rgba(200,168,75,.5);background:rgba(200,168,75,.1);color:#f0d878;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
+  #shopActionBtn:hover:not(:disabled){background:rgba(200,168,75,.25);color:#fff8c0;}
+  #shopActionBtn:disabled{opacity:.3;cursor:default;}
+
+  /* JOURNAL */
+  #journalPanel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:82vh;background:rgba(10,12,6,.97);border:2px solid #c8a84b;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 20px rgba(200,168,75,.1);display:none;z-index:81;font-family:'Cinzel',serif;animation:invSlide .2s ease-out;overflow:hidden;flex-direction:column;}
+  #journalHeader{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 10px;border-bottom:1px solid rgba(200,168,75,.3);background:rgba(200,168,75,.06);flex-shrink:0;}
+  #journalTitle{font-family:'Cinzel Decorative',serif;font-size:.95rem;color:#f0d878;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 12px rgba(200,168,75,.4);}
+  #journalClose{background:none;border:1px solid rgba(200,168,75,.3);color:#c8a84b;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.15em;padding:4px 10px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+  #journalClose:hover{background:rgba(200,168,75,.15);border-color:#c8a84b;color:#ffe878;}
+  #journalBody{overflow-y:auto;padding:16px 20px;flex:1;}
+  .journal-section-title{font-size:.6rem;color:#c8a84b;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;padding-bottom:4px;border-bottom:1px solid rgba(200,168,75,.2);}
+  .quest-entry{background:rgba(255,255,255,.03);border:1px solid rgba(200,168,75,.15);border-radius:2px;padding:12px 14px;margin-bottom:8px;}
+  .quest-entry.active{border-color:rgba(200,168,75,.4);}
+  .quest-entry.complete{border-color:rgba(80,200,80,.3);opacity:.75;}
+  .quest-name{font-size:.75rem;color:#f0d878;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+  .quest-badge{font-size:.5rem;padding:2px 7px;border-radius:10px;letter-spacing:.12em;text-transform:uppercase;}
+  .quest-badge.active{background:rgba(200,168,75,.18);color:#c8a84b;border:1px solid rgba(200,168,75,.3);}
+  .quest-badge.complete{background:rgba(80,200,80,.15);color:#60cc60;border:1px solid rgba(80,200,80,.25);}
+  .quest-badge.unstarted{background:rgba(140,140,140,.12);color:#888;border:1px solid rgba(140,140,140,.2);}
+  .quest-giver{font-size:.55rem;color:#8a7840;letter-spacing:.1em;font-style:italic;margin-bottom:6px;}
+  .quest-desc{font-size:.65rem;color:#b0a878;line-height:1.65;letter-spacing:.04em;}
+  .quest-objective{font-size:.62rem;margin-top:7px;display:flex;align-items:flex-start;gap:6px;}
+  .quest-objective-dot{flex-shrink:0;margin-top:2px;}
+  .quest-objective-text{color:#a0a878;line-height:1.5;}
+  .quest-objective.done .quest-objective-text{color:#60cc60;text-decoration:line-through;opacity:.7;}
+  #journalEmpty{font-size:.68rem;color:#5a5030;letter-spacing:.1em;font-style:italic;text-align:center;padding:30px 0;}
+  #journalGold{padding:9px 16px;border-top:1px solid rgba(200,168,75,.2);font-size:.65rem;color:#e8c84b;letter-spacing:.1em;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  #areaBanner{
+    position:fixed;left:0;right:0;top:38%;
+    display:flex;flex-direction:column;align-items:center;
+    pointer-events:none;z-index:87;opacity:0;transition:opacity 0.6s ease;
+  }
+  #areaBanner.show{opacity:1;}
+  #areaBannerSub{
+    font-family:'Cinzel',serif;font-size:clamp(.65rem,1.4vw,.85rem);
+    color:#c8a84b;letter-spacing:.45em;text-transform:uppercase;
+    text-shadow:0 0 20px rgba(200,168,75,.5);margin-bottom:.4em;
+  }
+  #areaBannerMain{
+    font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,3.5vw,2.6rem);
+    font-weight:700;color:#f0e8d0;letter-spacing:.12em;text-transform:uppercase;
+    text-shadow:0 0 30px rgba(240,220,180,.4),0 2px 4px rgba(0,0,0,.8);
+  }
+  #areaBannerLine{
+    width:220px;height:1px;margin-top:.6em;
+    background:linear-gradient(90deg,transparent,#c8a84b,transparent);opacity:.7;
+  }
   #levelUpFlash{position:fixed;inset:0;pointer-events:none;z-index:88;opacity:0;transition:opacity .3s;}
+
+  /* SAVE SYSTEM */
+  #saveToast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:rgba(12,18,8,.96);border:1px solid #c8a84b;
+    color:#f0d878;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.18em;
+    text-transform:uppercase;padding:10px 24px;pointer-events:none;
+    z-index:95;opacity:0;transition:opacity .4s;white-space:nowrap;
+    text-shadow:0 0 8px rgba(200,168,75,.4);
+    box-shadow:0 4px 24px rgba(0,0,0,.7);
+  }
+  #saveToast.show{opacity:1;}
+  #saveHint{
+    position:fixed;bottom:14px;left:16px;z-index:50;
+    color:#6a6030;font-family:'Cinzel',serif;font-size:.55rem;
+    letter-spacing:.14em;text-transform:uppercase;
+    pointer-events:none;display:none;
+  }
+  /* Continue button on intro screen */
+  #continueBtn{
+    font-size:clamp(.7rem,1.4vw,.95rem);color:#90c870;letter-spacing:.28em;
+    text-transform:uppercase;margin-top:1.4em;cursor:pointer;background:none;
+    border:1px solid rgba(144,200,112,.35);padding:10px 28px;
+    font-family:'Cinzel',serif;transition:all .2s;
+  }
+  #continueBtn:hover{background:rgba(144,200,112,.1);border-color:#90c870;color:#b0e890;}
+  #newGameBtn{
+    font-size:clamp(.65rem,1.3vw,.88rem);color:#c8a84b;letter-spacing:.25em;
+    text-transform:uppercase;margin-top:.6em;cursor:pointer;background:none;
+    border:none;font-family:'Cinzel',serif;opacity:.7;transition:opacity .2s;
+  }
+  #newGameBtn:hover{opacity:1;}
+  #deleteSaveBtn{
+    font-size:.5rem;color:#884040;letter-spacing:.2em;text-transform:uppercase;
+    margin-top:.4em;cursor:pointer;background:none;border:none;
+    font-family:'Cinzel',serif;opacity:.5;transition:opacity .2s;
+  }
+  #deleteSaveBtn:hover{opacity:1;color:#cc6060;}
 </style>
 </head>
 <body>
@@ -171,11 +291,17 @@
     <div class="title-sub">Souls of the Damned</div>
   </div>
   <div class="divider"></div>
-  <div class="press-enter">— Press Enter to Begin —</div>
+  <div id="introButtons" style="display:flex;flex-direction:column;align-items:center;gap:0;">
+    <!-- populated by JS depending on whether a save exists -->
+  </div>
 </div>
 
 <!-- GAME -->
 <div id="gameContainer"><canvas id="gameCanvas"></canvas></div>
+
+<!-- SAVE UI -->
+<div id="saveToast">💾 Game Saved</div>
+<div id="saveHint">[ F5 ] Save</div>
 
 <!-- HUD -->
 <div id="hud">
@@ -193,7 +319,7 @@
 <!-- MINIMAP -->
 <div id="minimap">
   <canvas id="minimapCanvas" width="130" height="100"></canvas>
-  <div id="minimapLabel">MAP</div>
+  <div id="minimapLabel">MAP &nbsp;·&nbsp; [I] Bag &nbsp;[J] Journal &nbsp;[F5] Save</div>
 </div>
 
 <!-- COMBAT PANEL -->
@@ -216,7 +342,7 @@
 <div id="dialogueBox" style="position:relative">
   <div id="dialogueInner">
     <div id="dialoguePortrait">
-      <div id="dialoguePortraitFace">🧙</div>
+      <canvas id="dialoguePortraitCanvas" width="88" height="88"></canvas>
       <div id="dialoguePortraitName">Aldric</div>
       <div id="dialoguePortraitTitle">Wandering Merchant</div>
     </div>
@@ -297,6 +423,53 @@
   <div id="invGold">🪙 Gold: <span id="invGoldAmt">0</span></div>
 </div>
 
+<!-- SHOP -->
+<div id="shopPanel" style="display:none">
+  <div id="shopHeader">
+    <div id="shopTitle">Mira's Market</div>
+    <div id="shopGold">🪙 <span id="shopGoldAmt">0</span> gold</div>
+    <button id="shopClose" onclick="closeShop()">✕ [ESC]</button>
+  </div>
+  <div id="shopTabs">
+    <button class="shop-tab active" id="shopTabBuy" onclick="switchShopTab('buy')">Buy</button>
+    <button class="shop-tab" id="shopTabSell" onclick="switchShopTab('sell')">Sell</button>
+  </div>
+  <div id="shopBody">
+    <div id="shopGrid"></div>
+    <div id="shopDetail">
+      <div id="shopDetailEmpty">Select an item</div>
+      <div id="shopDetailContent">
+        <div id="shopDetailCanvasWrap"><canvas id="shopDetailCanvas" width="72" height="72"></canvas></div>
+        <div id="shopDetailName"></div>
+        <div id="shopDetailRarity"></div>
+        <div id="shopDetailDesc"></div>
+        <div id="shopDetailStats"></div>
+        <div id="shopDetailPrice"></div>
+        <button id="shopActionBtn" onclick="shopDoAction()">Buy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JOURNAL -->
+<div id="journalPanel" style="display:none">
+  <div id="journalHeader">
+    <div id="journalTitle">📖 Journal</div>
+    <button id="journalClose" onclick="closeJournal()">✕ [J]</button>
+  </div>
+  <div id="journalBody">
+    <div id="journalQuestList"></div>
+  </div>
+  <div id="journalGold">🪙 Gold: <span id="journalGoldAmt">0</span></div>
+</div>
+
+<!-- AREA ANNOUNCEMENT BANNER -->
+<div id="areaBanner">
+  <div id="areaBannerSub">— Entering —</div>
+  <div id="areaBannerMain">The Verdant Plains</div>
+  <div id="areaBannerLine"></div>
+</div>
+
 <!-- DEATH OVERLAY -->
 <div id="overlay">
   <div id="overlayTitle"></div>
@@ -305,7 +478,6 @@
 </div>
 
 <script>
-'use strict';
 // ═══════════════════════════════════════════════════════════════
 //  INTRO
 // ═══════════════════════════════════════════════════════════════
@@ -316,15 +488,8 @@ const minimapEl=document.getElementById('minimap');
 let gameStarted=false;
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!gameStarted){
-    gameStarted=true;intro.classList.add('fade-out');
-    setTimeout(()=>{
-      intro.style.display='none';
-      gameContainer.style.display='block';
-      hudEl.style.display='block';
-      minimapEl.style.display='block';
-      startGame();
-    },1200);
+  if(e.key==='Enter'&&!gameStarted&&!hasSave()){
+    window._startFresh();
   }
 });
 
@@ -333,7 +498,7 @@ document.addEventListener('keydown',e=>{
 // ═══════════════════════════════════════════════════════════════
 const ITEMS={
   health_potion:{id:'health_potion',name:'Health Potion',icon:'🧪',rarity:'common',desc:'A crude vial of reddish liquid. Restores 4 HP.',stats:'+4 HP',usable:true,stackable:true,equipSlot:null,
-    use(p){const g=Math.min(4,p.maxHp-p.hp);p.hp+=g;return`You drink the potion, restoring ${g} HP.`;}},
+    use:function(p){const g=Math.min(4,p.maxHp-p.hp);p.hp+=g;return'You drink the potion, restoring '+g+' HP.';} },
   goblin_ear:{id:'goblin_ear',name:'Goblin Ear',icon:'👂',rarity:'common',desc:'A leathery green ear, still warm.',stats:'Worth: 2 gold',usable:false,stackable:true,equipSlot:null},
   rusty_dagger:{id:'rusty_dagger',name:'Rusty Dagger',icon:'🗡️',rarity:'common',desc:'A pitted blade wrapped in dirty leather.',stats:'+1 Attack',usable:false,stackable:false,equipSlot:'weapon',atkBonus:1},
   iron_sword:{id:'iron_sword',name:'Iron Sword',icon:'⚔️',rarity:'uncommon',desc:'A solid iron blade, recently sharpened.',stats:'+2 Attack',usable:false,stackable:false,equipSlot:'weapon',atkBonus:2},
@@ -342,6 +507,9 @@ const ITEMS={
   cave_crystal:{id:'cave_crystal',name:'Cave Crystal',icon:'💎',rarity:'uncommon',desc:'A glowing shard from a cavern crystal. Faintly warm.',stats:'Worth: 5 gold',usable:false,stackable:true,equipSlot:null},
   leather_vest:{id:'leather_vest',name:'Leather Vest',icon:'🛡️',rarity:'common',desc:'Rough-stitched leather, better than nothing.',stats:'+1 Defence',usable:false,stackable:false,equipSlot:'armour',defBonus:1},
   signet_ring:{id:'signet_ring',name:'Signet Ring',icon:'💍',rarity:'rare',desc:'An old ring bearing the seal of a forgotten lord. Resonates faintly with power.',stats:'+2 Max HP',usable:false,stackable:false,equipSlot:'ring',hpBonus:2},
+  pickaxe:{id:'pickaxe',name:'Iron Pickaxe',icon:'⛏️',rarity:'uncommon',desc:'A sturdy pickaxe found in a goblin chest. The head is well-forged. Something about it feels purposeful — like it was left here for someone.',stats:'Breaks rock walls',usable:false,stackable:false,equipSlot:null},
+  cartwheel:{id:'cartwheel',name:"Aldric's Cartwheel",icon:'🛞',rarity:'uncommon',desc:"A sturdy iron-rimmed cartwheel, clearly from a merchant's wagon. It still has the maker's mark of Aldric of the Plains stamped into the hub.",stats:'Quest item',usable:false,stackable:false,equipSlot:null},
+  bat_wing:{id:'bat_wing',name:'Bat Wing',icon:'🦇',rarity:'common',desc:'A leathery wing from a cave bat. Still faintly warm. Alchemists pay good coin for these.',stats:'Worth: 1 gold',usable:false,stackable:true,equipSlot:null},
 };
 
 const GOBLIN_LOOT=[
@@ -359,14 +527,13 @@ let inventory=Array(SLOTS).fill(null);
 let playerGold=0,invOpen=false,selectedSlot=null,currentInvTab='bag';
 const equipped={weapon:null,armour:null,ring:null}; // each = itemId or null
 
-function giveItem(id,qty=1){
+function giveItem(id,qty){
+  if(qty===undefined)qty=1;
   const def=ITEMS[id];if(!def)return;
   if(def.stackable){const e=inventory.findIndex(s=>s&&s.itemId===id);if(e!==-1){inventory[e].qty+=qty;if(invOpen)renderInventory();return true;}}
   const e=inventory.findIndex(s=>s===null);if(e===-1)return false;
   inventory[e]={itemId:id,qty};if(invOpen)renderInventory();return true;
 }
-setTimeout(()=>giveItem('health_potion',2),80);
-
 function rollLoot(){
   return GOBLIN_LOOT.filter(e=>Math.random()<e.chance).map(e=>({itemId:e.id,qty:Array.isArray(e.qty)?e.qty[0]+Math.floor(Math.random()*(e.qty[1]-e.qty[0]+1)):e.qty}));
 }
@@ -397,9 +564,15 @@ function renderInventory(){
     if(item){
       const def=ITEMS[item.itemId];
       slot.className=`inv-slot ${def.rarity}${selectedSlot===i?' selected':''}`;
-      slot.innerHTML=`<div class="item-icon">${def.icon}</div><div class="item-name">${def.name}</div>${def.stackable&&item.qty>1?`<div class="item-qty">×${item.qty}</div>`:''}`;
+      // Canvas portrait
+      const c=document.createElement('canvas');c.width=36;c.height=36;
+      drawItemPortrait(item.itemId,c);
+      slot.appendChild(c);
+      const nm=document.createElement('div');nm.className='item-name';nm.textContent=def.name;
+      slot.appendChild(nm);
+      if(def.stackable&&item.qty>1){const q=document.createElement('div');q.className='item-qty';q.textContent='×'+item.qty;slot.appendChild(q);}
       slot.onclick=()=>selectSlot(i);
-    }else slot.className='inv-slot empty';
+    }else{slot.className='inv-slot empty';}
     grid.appendChild(slot);
   }
 }
@@ -409,7 +582,14 @@ function selectSlot(i){
   const ec=document.getElementById('invDetailContent'),ee=document.getElementById('invDetailEmpty');
   if(!item){ec.style.display='none';ee.style.display='block';return;}
   const def=ITEMS[item.itemId];ec.style.display='flex';ee.style.display='none';
-  document.getElementById('invDetailIcon').textContent=def.icon;
+  // Draw portrait in detail area
+  let detCanvas=document.getElementById('invDetailIcon');
+  if(detCanvas.tagName!=='CANVAS'){
+    const c=document.createElement('canvas');c.id='invDetailIcon';c.width=72;c.height=72;
+    detCanvas.parentNode.replaceChild(c,detCanvas);detCanvas=c;
+  }
+  detCanvas.width=72;detCanvas.height=72;
+  drawItemPortrait(item.itemId,detCanvas);
   document.getElementById('invDetailName').textContent=def.name;
   document.getElementById('invDetailRarity').textContent=def.rarity.toUpperCase();
   document.getElementById('invDetailRarity').style.color={common:'#b0b0b0',uncommon:'#60dd60',rare:'#6080ff'}[def.rarity]||'#fff';
@@ -458,17 +638,22 @@ window.unequipSlot=function(slot){
 };
 
 function renderEquipTab(){
+  const slotLabels={weapon:'⚔',armour:'🛡',ring:'◈'};
   for(const slot of ['weapon','armour','ring']){
     const el=document.getElementById('eq'+slot.charAt(0).toUpperCase()+slot.slice(1));
     const nameEl=document.getElementById('eq'+slot.charAt(0).toUpperCase()+slot.slice(1)+'Name');
-    const icons={weapon:'🗡️',armour:'🛡️',ring:'💍'};
     if(equipped[slot]){
       const def=ITEMS[equipped[slot]];
-      el.innerHTML=`<div class="item-icon">${def.icon}</div><div class="item-name">${def.name}</div>`;
+      el.innerHTML='';
+      const c=document.createElement('canvas');c.width=36;c.height=36;
+      drawItemPortrait(equipped[slot],c);
+      el.appendChild(c);
+      const nm=document.createElement('div');nm.className='item-name';nm.textContent=def.name;
+      el.appendChild(nm);
       el.classList.add('occupied');
       nameEl.textContent=def.stats;
     }else{
-      el.innerHTML=`<span class="equip-slot-empty-icon">${icons[slot]}</span>`;
+      el.innerHTML='<span class="equip-slot-empty-icon">'+slotLabels[slot]+'</span>';
       el.classList.remove('occupied');
       nameEl.textContent='Empty';
     }
@@ -500,65 +685,637 @@ function toggleInventory(){
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  QUEST STATE
+// ═══════════════════════════════════════════════════════════════
+const quests={
+  cartwheel:{ state:'unstarted' } // unstarted | active | complete
+};
+function hasCartwheel(){ return inventory.some(s=>s&&s.itemId==='cartwheel'); }
+
+// ═══════════════════════════════════════════════════════════════
 //  DIALOGUE SYSTEM
 // ═══════════════════════════════════════════════════════════════
 const DIALOGUES={
   aldric:{
     name:'Aldric',title:'Wandering Merchant',face:'🧙',
-    root:{
-      text:"Ah, a traveller! Welcome to my humble camp. I've been parked here for three days waiting for the road to clear. What brings you to these parts?",
-      choices:[
-        {label:'Say hello',next:'hello'},
-        {label:'Ask about the area',next:'area'},
-        {label:'What should I do?',next:'advice'},
-        {label:'Farewell',next:null},
-      ]
+    getRootNode:function(){
+      if(quests.cartwheel.state==='complete'){
+        return {
+          text:"And off I go! Safe travels, friend. You've done me a great kindness today. Come find me on the road someday.",
+          choices:[{label:'Farewell',next:null}]
+        };
+      }
+      if(quests.cartwheel.state==='active'&&hasCartwheel()){
+        return {
+          text:"You found it! My cartwheel — I'd recognise that maker's mark anywhere. Here, take this gold. You've earned it, and more besides.",
+          choices:[{label:'Hand over the cartwheel',next:'quest_complete'},{label:'Farewell',next:null}]
+        };
+      }
+      if(quests.cartwheel.state==='active'){
+        return {
+          text:"Still no sign of my wheel? It'll be with that wretched Shaman, deep in the cave. He's been collecting things — wagon parts, tools, trinkets. A real hoarder. Watch yourself in there.",
+          choices:[{label:'Ask about the area',next:'area'},{label:'What should I do?',next:'advice'},{label:'Farewell',next:null}]
+        };
+      }
+      return {
+        text:"Ah, a traveller! Welcome. I've been stranded here three days — one of those blasted goblins made off with a cartwheel from my wagon. Without it I'm going nowhere. You look capable. Any chance you'd help?",
+        choices:[
+          {label:'Tell me more',next:'quest_offer'},
+          {label:'Ask about the area',next:'area'},
+          {label:'Farewell',next:null},
+        ]
+      };
     },
-    hello:{
-      text:"Ha! A polite one. Not many of those left in Elwyrn these days. The name's Aldric — merchant by trade, survivor by necessity. And you? Never mind, you look like a wanderer. We all are, after a fashion.",
-      choices:[{label:'Ask about the area',next:'area'},{label:'What should I do?',next:'advice'},{label:'Farewell',next:null}]
+    quest_offer:{
+      text:"The Goblin Shaman — big one, staff and robes, deep in the cave — he took it. My cartwheel. Iron-rimmed, maker's mark on the hub. Can't miss it. Bring it back and I'll pay you ten gold coins. I'd go myself but... well. I value my skin.",
+      choices:[{label:'I will find it',next:'quest_accept'},{label:'Farewell',next:null}]
+    },
+    quest_accept:{
+      text:"Ha! I knew it. Good luck in there, friend. The Shaman won't give it up willingly — nothing worth having ever comes easy. Kill him if you must.",
+      choices:[{label:'Farewell',next:null}],
+      onShow:function(){ quests.cartwheel.state='active'; }
+    },
+    quest_complete:{
+      text:"Magnificent! My wheel, at last. Here — ten gold coins, as promised. With this I can be on my way before nightfall. The road east leads to Ashwick village, or what's left of it. Perhaps you'll find more answers there than I can give.",
+      choices:[{label:'Farewell',next:null}],
+      onShow:function(){
+        quests.cartwheel.state='complete';
+        const idx=inventory.findIndex(function(s){return s&&s.itemId==='cartwheel';});
+        if(idx!==-1)inventory[idx]=null;
+        playerGold+=10;
+        if(window._updateHUD)window._updateHUD();
+        renderInventory();
+        if(window._spawnLootPop)window._spawnLootPop(0,0,'🪙 +10 Gold!');
+      }
     },
     area:{
-      text:"This is the Verdant Plains — peaceful enough on the surface. But see that rocky outcrop to the northeast? That cave runs deep. The locals call it the Goblin Warrens. Nasty creatures in there, green-skinned, foul-tempered. They've been raiding caravans for weeks. I'd steer clear if I were you... unless you're the brave sort.",
-      choices:[{label:'What should I do?',next:'advice'},{label:'Tell me more about goblins',next:'goblins'},{label:'Farewell',next:null}]
+      text:"This is the Verdant Plains — peaceful on the surface. That cave to the north runs deep into the Goblin Warrens. And east of here, past the rocks? The road leads to Ashwick. Ruined now, but worth a look.",
+      choices:[{label:'What should I do?',next:'advice'},{label:'Tell me about goblins',next:'goblins'},{label:'Farewell',next:null}]
     },
     advice:{
-      text:"My advice? Start small. A warrior is nothing without preparation. There are potions in your pack — good. The goblins in that cave are not mighty, but they are many. Kill a few, take their ears, level yourself up. With enough experience you'll grow stronger. And keep an eye out for equipment — a good blade changes everything.",
+      text:"My advice? Start small. Potions help. The goblins aren't mighty alone but the Shaman is different — he'll sense you coming, keep your distance until you're ready. And find yourself a weapon in that cave chest.",
       choices:[{label:'Ask about the area',next:'area'},{label:'Tell me about equipment',next:'equip'},{label:'Farewell',next:null}]
     },
     goblins:{
-      text:"Goblins are cowardly alone but bold in numbers. They carry rusty blades and sharp claws. Their shamans are the dangerous ones — those can curse a man's luck for a week. Kill those first if you find them. Oh, and they hoard cave crystals. Fetch me enough of those and I might be persuaded to trade something useful.",
+      text:"Goblins will spot you if you wander too close — they have sharp eyes, even in the dark. The Shaman hangs back and hexes from range. Kill him first if you can. He's the one who took my wheel.",
       choices:[{label:'What should I do?',next:'advice'},{label:'Farewell',next:null}]
     },
     equip:{
-      text:"Press I to open your inventory, then click the Equipment tab. Slot a weapon and you'll hit harder. Armour softens the blows coming back. I've seen adventurers neglect their kit and end up face-down in a ditch. Don't be that adventurer.",
+      text:"Press I to open your inventory, then the Equipment tab. Slot a weapon and you'll hit harder. Armour softens incoming blows. Don't neglect your kit.",
       choices:[{label:'Ask about the area',next:'area'},{label:'Farewell',next:null}]
     },
-  }
+  },
+
+  hamin:{
+    name:'Sergeant Hamin',title:'Gate Sergeant — Ashwick',face:'⚔',
+    getRootNode:function(){
+      if(gateUnlocked){
+        return {
+          text:"You've paid your toll. Gate's open — welcome to Ashwick. Don't cause trouble.",
+          choices:[{label:'Ask about the town',next:'town_open'},{label:'Farewell',next:null}]
+        };
+      }
+      if(playerGold>=15){
+        return {
+          text:"You look like you've been through the caves. Smart enough to survive, I suppose. Ashwick charges a toll — fifteen gold for entry. Keeps out the riff-raff. You've got the coin, by the look of you. Pay up?",
+          choices:[
+            {label:'Pay 15 gold to enter',next:'pay_toll'},
+            {label:'Ask about the town',next:'town_locked'},
+            {label:'Who are you?',next:'who'},
+            {label:'Farewell',next:null}
+          ]
+        };
+      }
+      return {
+        text:"Halt. Ashwick is a closed settlement. We charge a toll of fifteen gold for entry — keeps out vagabonds and worse. You don't look like you have it. Come back when you're not penniless.",
+        choices:[
+          {label:'Ask about the toll',next:'toll_info'},
+          {label:'Who are you?',next:'who'},
+          {label:'Ask about the town',next:'town_locked'},
+          {label:'Farewell',next:null}
+        ]
+      };
+    },
+    who:{
+      text:"Sergeant Hamin. Twelve years in the Ashwick garrison, three before that in the King's army. I've seen things that would put grey in your hair. Now I watch a gate. Don't ask me if I miss it.",
+      choices:[{label:'Pay toll (15 gold)',next:'pay_toll'},{label:'Ask about the town',next:'town_locked'},{label:'Farewell',next:null}]
+    },
+    toll_info:{
+      text:"Fifteen gold. Not negotiable. The town's been through hard times — the goblins have been raiding the eastern road for months. We need coin for the walls, for food, for repairs. If you want in, you pay like everyone else.",
+      choices:[{label:'Pay toll (15 gold)',next:'pay_toll'},{label:'Farewell',next:null}]
+    },
+    town_locked:{
+      text:"Ashwick was a prosperous market town once. The goblin raids hit us hard. Half the buildings are still ruined. But Mira keeps the market going — she'll buy and sell if you've got something worth trading. Pay the toll and find out for yourself.",
+      choices:[{label:'Pay toll (15 gold)',next:'pay_toll'},{label:'Farewell',next:null}]
+    },
+    town_open:{
+      text:"Ashwick. Market's open — Mira's stall is in the centre. Watch yourself after dark, the walls aren't fully repaired. East road is still dangerous.",
+      choices:[{label:'Farewell',next:null}]
+    },
+    pay_toll:{
+      text:'...',
+      choices:[],
+      onShow:function(){
+        if(playerGold>=15&&!gateUnlocked){
+          playerGold-=15;
+          gateUnlocked=true;
+          if(window._updateHUD)window._updateHUD();
+          renderInventory();
+          if(window._spawnLootPop)window._spawnLootPop(window._GATE_X||0,window._GATE_Y||0,'🚪 Gate Unlocked!');
+          DIALOGUES.hamin.pay_toll.text="Smart. Gold accepted. Gate's open — welcome to Ashwick. Mira's stall is straight ahead. Don't start fights inside the walls.";
+          DIALOGUES.hamin.pay_toll.choices=[{label:'Enter Ashwick',next:null}];
+        } else if(gateUnlocked){
+          DIALOGUES.hamin.pay_toll.text="Already paid. Gate's open, move along.";
+          DIALOGUES.hamin.pay_toll.choices=[{label:'Farewell',next:null}];
+        } else {
+          DIALOGUES.hamin.pay_toll.text="You don't have fifteen gold. I don't do credit. Come back when you can actually pay the toll — try the caves to the north, the goblins hoard coin.";
+          DIALOGUES.hamin.pay_toll.choices=[{label:'Ask about the toll',next:'toll_info'},{label:'Farewell',next:null}];
+        }
+      }
+    },
+  },
+
+  guard:{
+    name:'Gate Guard',title:'Ashwick Garrison',face:'🗡',
+    getRootNode:function(){
+      return {
+        text:gateUnlocked
+          ?"Gate's open. Move along."
+          :"Toll gate. Fifteen gold, speak to the Sergeant.",
+        choices:[{label:'Farewell',next:null}]
+      };
+    },
+  },
+
+  mira:{
+    name:'Mira',title:'Market Trader — Ashwick',face:'👩',
+    getRootNode:function(){
+      return {
+        text:"Welcome, traveller. I buy cave salvage and sell what supplies I can get my hands on. It's not much, but it keeps the town going. What'll it be?",
+        choices:[
+          {label:'Buy supplies',next:'buy'},
+          {label:'Sell items',next:'sell'},
+          {label:'Ask about Ashwick',next:'town'},
+          {label:'Farewell',next:null}
+        ]
+      };
+    },
+    buy:{
+      text:"Health potions are two gold each — brewed from river herbs, they're not fancy but they work. That's all I have stocked right now. More when the supply route is clear.",
+      choices:[
+        {label:'Buy Health Potion (2 gold)',next:'buy_potion'},
+        {label:'Farewell',next:null}
+      ]
+    },
+    buy_potion:{
+      text:null, // handled by onShow
+      choices:[{label:'Buy another',next:'buy'},{label:'Farewell',next:null}],
+      onShow:function(){
+        if(playerGold>=2){
+          playerGold-=2;
+          giveItem('health_potion',1);
+          if(window._updateHUD)window._updateHUD();
+          renderInventory();
+          DIALOGUES.mira.buy_potion.text='Sold. Here you go. That leaves you with '+playerGold+' gold.';
+          if(window._spawnLootPop)window._spawnLootPop(window._VILLAGE_OX||0,window._VILLAGE_OY||0,'🧪 Bought Potion!');
+        } else {
+          DIALOGUES.mira.buy_potion.text="You don't have enough gold. Potions are 2 gold each.";
+        }
+      }
+    },
+    sell:{
+      text:null, // built dynamically below
+      choices:[{label:'Farewell',next:null}],
+      onShow:function(){
+        var sellable=[
+          {id:'goblin_ear',   price:2,  name:'Goblin Ear'},
+          {id:'torn_cloth',   price:1,  name:'Torn Cloth'},
+          {id:'cave_crystal', price:5,  name:'Cave Crystal'},
+          {id:'bat_wing',     price:1,  name:'Bat Wing'},
+          {id:'rusty_dagger', price:3,  name:'Rusty Dagger'},
+        ];
+        var choices=[{label:'Farewell',next:null}];
+        var lines=['I\'ll take these off your hands:'];
+        for(var si=0;si<sellable.length;si++){
+          var s=sellable[si];
+          var slot=inventory.findIndex(function(inv){return inv&&inv.itemId===s.id;});
+          if(slot!==-1){
+            var qty=inventory[slot].qty;
+            var total=qty*s.price;
+            lines.push(s.name+' x'+qty+' — '+total+' gold');
+            (function(slotIdx,totalGold,itemName){
+              choices.unshift({label:'Sell all '+itemName,next:'sell_done',
+                onNext:function(){
+                  playerGold+=totalGold;
+                  inventory[slotIdx]=null;
+                  if(window._updateHUD)window._updateHUD();
+                  renderInventory();
+                }});
+            })(slot,total,s.name);
+          }
+        }
+        if(choices.length===1) lines=['Nothing you\'re carrying interests me right now.'];
+        DIALOGUES.mira.sell.text=lines.join('\n');
+        DIALOGUES.mira.sell.choices=choices;
+      }
+    },
+    sell_done:{
+      text:"Pleasure doing business. Anything else?",
+      choices:[{label:'Sell more',next:'sell'},{label:'Buy supplies',next:'buy'},{label:'Farewell',next:null}]
+    },
+    town:{
+      text:"Ashwick used to be a proper market town. Then the goblins came down from the caves, raided the eastern road, cut our supply lines. Most people left. A few of us stayed. Hamin keeps the walls up, I keep the trade going. Slowly getting back on our feet.",
+      choices:[{label:'Farewell',next:null}]
+    },
+  },
 };
 
 let dialogueOpen=false,dialogueNPC=null,dialogueNode=null;
+
+// ═══════════════════════════════════════════════════════════════
+//  NPC PORTRAIT SYSTEM
+//  Each NPC gets a unique procedural face drawn on the dialogue canvas.
+// ═══════════════════════════════════════════════════════════════
+var _portraitCanvas = null;
+var _portraitCtx    = null;
+
+function getPortraitCtx(){
+  if(!_portraitCanvas){
+    _portraitCanvas = document.getElementById('dialoguePortraitCanvas');
+    _portraitCtx    = _portraitCanvas.getContext('2d');
+  }
+  return _portraitCtx;
+}
+
+function drawPortrait(npcId){
+  var pc = getPortraitCtx();
+  var W = 88, H = 88;
+  pc.clearRect(0,0,W,H);
+
+  // Shared background — stone-effect gradient
+  var bg = pc.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'#1a1410'); bg.addColorStop(1,'#0d0a08');
+  pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+
+  // Dispatch to individual portrait function
+  var fn = portraits[npcId] || portraits['default'];
+  fn(pc, W, H);
+}
+
+var portraits = {
+  // ── ALDRIC — elderly merchant wizard ──────────────────────────
+  aldric: function(pc,W,H){
+    var cx=W/2, cy=H/2+4;
+    // Warm candlelight background tint
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(80,50,20,0.6)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+
+    // Robe shoulders — deep purple
+    pc.fillStyle='#3a2068'; pc.beginPath(); pc.ellipse(cx,H,34,22,0,Math.PI,0); pc.fill();
+    pc.fillStyle='#2a1450'; pc.fillRect(cx-34,H-10,68,10);
+
+    // Neck
+    pc.fillStyle='#c8845a'; pc.fillRect(cx-4,cy+12,8,10);
+
+    // Head — weathered, angular
+    pc.fillStyle='#d4956a'; pc.fillRect(cx-14,cy-18,28,30);
+    // Cheekbone shading
+    pc.fillStyle='rgba(0,0,0,0.15)';
+    pc.fillRect(cx-14,cy-4,6,14); pc.fillRect(cx+8,cy-4,6,14);
+    // Brow ridge
+    pc.fillStyle='#c8845a'; pc.fillRect(cx-13,cy-18,26,6);
+    pc.fillStyle='rgba(0,0,0,0.2)'; pc.fillRect(cx-13,cy-14,26,2);
+
+    // Long white beard
+    pc.fillStyle='#e0ddd8';
+    pc.beginPath(); pc.moveTo(cx-12,cy+8); pc.lineTo(cx-16,H-18); pc.lineTo(cx,H-14); pc.lineTo(cx+16,H-18); pc.lineTo(cx+12,cy+8); pc.closePath(); pc.fill();
+    pc.fillStyle='#ccc9c4';
+    pc.beginPath(); pc.moveTo(cx-8,cy+10); pc.lineTo(cx-10,H-20); pc.lineTo(cx,H-16); pc.closePath(); pc.fill();
+    // Moustache
+    pc.fillStyle='#d8d5d0';
+    pc.fillRect(cx-10,cy+6,20,4);
+    pc.fillStyle='#c8c5c0'; pc.fillRect(cx-3,cy+6,6,4);
+
+    // Eyes — wise, slightly squinting, amber
+    pc.fillStyle='#1a1008';
+    pc.fillRect(cx-10,cy-8,7,5); pc.fillRect(cx+3,cy-8,7,5);
+    pc.fillStyle='#c8900a';
+    pc.fillRect(cx-9,cy-7,5,3); pc.fillRect(cx+4,cy-7,5,3);
+    pc.fillStyle='#0a0806';
+    pc.fillRect(cx-8,cy-7,3,3); pc.fillRect(cx+5,cy-7,3,3);
+    // Eye whites / catch light
+    pc.fillStyle='rgba(255,255,255,0.5)';
+    pc.fillRect(cx-7,cy-7,1,1); pc.fillRect(cx+6,cy-7,1,1);
+    // Bushy eyebrows — white
+    pc.fillStyle='#e8e5e0';
+    pc.fillRect(cx-11,cy-11,8,3); pc.fillRect(cx+3,cy-11,8,3);
+
+    // Nose — bulbous
+    pc.fillStyle='#c07858'; pc.fillRect(cx-3,cy-4,6,7);
+    pc.beginPath(); pc.ellipse(cx,cy+2,5,4,0,0,Math.PI*2); pc.fill();
+
+    // Wizard hat — tall, slightly crooked
+    pc.fillStyle='#2a1450';
+    pc.beginPath();
+    pc.moveTo(cx-18,cy-18);
+    pc.lineTo(cx-4,cy-52);
+    pc.lineTo(cx+6,cy-52);
+    pc.lineTo(cx+18,cy-18);
+    pc.closePath(); pc.fill();
+    // Hat brim
+    pc.fillStyle='#3a2060';
+    pc.fillRect(cx-20,cy-19,40,5);
+    // Hat star detail
+    pc.fillStyle='#c8a020';
+    pc.fillRect(cx-1,cy-42,2,6); pc.fillRect(cx-3,cy-40,6,2);
+    // Hat highlight
+    pc.fillStyle='rgba(255,255,255,0.08)';
+    pc.fillRect(cx-2,cy-50,3,28);
+
+    // Wrinkles
+    pc.strokeStyle='rgba(0,0,0,0.2)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-14,cy-2); pc.lineTo(cx-10,cy+2); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+14,cy-2); pc.lineTo(cx+10,cy+2); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx-8,cy-16); pc.lineTo(cx-5,cy-14); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+8,cy-16); pc.lineTo(cx+5,cy-14); pc.stroke();
+
+    // Subtle vignette frame
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.55)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
+  // ── SGT HAMIN — grizzled militia sergeant ─────────────────────
+  hamin: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+
+    // Cool grey-blue tint — garrison stone walls
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(30,35,45,0.6)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+
+    // Mail hauberk shoulders — grey chainmail
+    pc.fillStyle='#707880';
+    pc.beginPath(); pc.ellipse(cx,H,36,20,0,Math.PI,0); pc.fill();
+    // Mail texture on shoulders
+    pc.fillStyle='#585f68';
+    for(var mi=0;mi<5;mi++)for(var mj=0;mj<2;mj++){
+      pc.fillRect(cx-30+mi*12,H-8+mj*4,5,3);
+      pc.fillRect(cx-24+mi*12,H-6+mj*4,5,3);
+    }
+    // Red sergeant's sash
+    pc.fillStyle='#8a1010';
+    pc.beginPath(); pc.ellipse(cx,H,36,20,0,Math.PI,0);
+    pc.fillRect(cx-36,H-14,72,6);
+    pc.fillStyle='#c8a020'; pc.fillRect(cx-36,H-14,72,1); pc.fillRect(cx-36,H-9,72,1);
+
+    // Neck — weathered skin, thick
+    pc.fillStyle='#b07850'; pc.fillRect(cx-5,cy+14,10,12);
+
+    // Head — square-jawed, battle-worn
+    pc.fillStyle='#c07858';
+    // Wider jaw
+    pc.fillRect(cx-15,cy+4,30,16);
+    // Cheeks / brow
+    pc.fillRect(cx-14,cy-16,28,22);
+    // Temple narrowing
+    pc.fillRect(cx-12,cy-24,24,10);
+
+    // Battle scar — diagonal across left cheek
+    pc.strokeStyle='rgba(80,40,20,0.7)'; pc.lineWidth=1.5;
+    pc.beginPath(); pc.moveTo(cx-12,cy-8); pc.lineTo(cx-6,cy+4); pc.stroke();
+    pc.strokeStyle='rgba(200,120,80,0.4)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-11,cy-8); pc.lineTo(cx-5,cy+4); pc.stroke();
+
+    // Five o'clock shadow / short beard
+    pc.fillStyle='rgba(50,35,25,0.45)';
+    pc.fillRect(cx-13,cy+4,26,16);
+    pc.fillRect(cx-8,cy,16,6);
+
+    // Eyes — hard, dark, slightly narrowed
+    pc.fillStyle='#1a1008';
+    pc.fillRect(cx-11,cy-10,8,5); pc.fillRect(cx+3,cy-10,8,5);
+    pc.fillStyle='#4a3820'; // dark brown iris
+    pc.fillRect(cx-10,cy-9,6,3); pc.fillRect(cx+4,cy-9,6,3);
+    pc.fillStyle='#0a0806';
+    pc.fillRect(cx-9,cy-9,4,3); pc.fillRect(cx+5,cy-9,4,3);
+    pc.fillStyle='rgba(255,255,255,0.4)';
+    pc.fillRect(cx-9,cy-9,1,1); pc.fillRect(cx+6,cy-9,1,1);
+    // Heavy brow ridge — dark, furrowed
+    pc.fillStyle='#2a1808';
+    pc.fillRect(cx-13,cy-14,11,4); pc.fillRect(cx+2,cy-14,11,4);
+    // Frown lines between brows
+    pc.strokeStyle='rgba(0,0,0,0.3)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-2,cy-14); pc.lineTo(cx-1,cy-10); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+2,cy-14); pc.lineTo(cx+1,cy-10); pc.stroke();
+
+    // Nose — broken, slightly crooked
+    pc.fillStyle='#a06840'; pc.fillRect(cx-3,cy-6,7,8);
+    pc.beginPath(); pc.ellipse(cx+1,cy+1,5,3,0.2,0,Math.PI*2); pc.fill();
+
+    // Mouth — thin-lipped, set hard
+    pc.fillStyle='#7a4830'; pc.fillRect(cx-7,cy+8,14,3);
+    pc.fillStyle='#5a3020'; pc.fillRect(cx-5,cy+9,10,1);
+
+    // Kettle helm — iron, worn
+    pc.fillStyle='#787f88';
+    // Helm cap
+    pc.beginPath(); pc.arc(cx,cy-20,16,Math.PI,0); pc.fill();
+    pc.fillRect(cx-16,cy-24,32,8);
+    // Wide brim
+    pc.fillStyle='#606870'; pc.fillRect(cx-20,cy-17,40,5);
+    // Helm highlight / dent
+    pc.fillStyle='#909aa4'; pc.fillRect(cx-8,cy-30,5,10);
+    pc.fillStyle='rgba(0,0,0,0.2)'; pc.fillRect(cx+2,cy-28,4,8); // dent shadow
+    // Nasal bar
+    pc.fillStyle='#686f78'; pc.fillRect(cx-1,cy-17,3,9);
+    // Red plume
+    pc.fillStyle='#aa1818';
+    pc.beginPath(); pc.moveTo(cx+8,cy-28); pc.lineTo(cx+14,cy-40); pc.lineTo(cx+10,cy-28); pc.closePath(); pc.fill();
+    pc.fillStyle='#cc2020';
+    pc.beginPath(); pc.moveTo(cx+9,cy-28); pc.lineTo(cx+14,cy-40); pc.lineTo(cx+11,cy-30); pc.closePath(); pc.fill();
+    // Chin strap
+    pc.fillStyle='#3a2810'; pc.fillRect(cx-15,cy-2,3,8); pc.fillRect(cx+12,cy-2,3,8);
+
+    // Ear (visible on right side)
+    pc.fillStyle='#b07850'; pc.fillRect(cx+14,cy-8,4,7);
+    pc.fillStyle='#a06840'; pc.fillRect(cx+15,cy-6,2,4);
+
+    // Vignette
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.6)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
+  // ── GUARD — younger militia soldier ───────────────────────────
+  guard: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(25,30,35,0.5)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+
+    // Gambeson shoulders
+    pc.fillStyle='#b09060';
+    pc.beginPath(); pc.ellipse(cx,H,34,20,0,Math.PI,0); pc.fill();
+    pc.fillStyle='#9a7a50';
+    for(var qi=0;qi<4;qi++) pc.fillRect(cx-34,H-8+qi*0,12,2);
+
+    // Neck
+    pc.fillStyle='#c8906a'; pc.fillRect(cx-5,cy+14,10,10);
+
+    // Head — young, round
+    pc.fillStyle='#d4956a';
+    pc.fillRect(cx-13,cy-14,26,28);
+    pc.fillRect(cx-11,cy-20,22,8);
+
+    // Eyes — alert, blue-grey
+    pc.fillStyle='#1a1008';
+    pc.fillRect(cx-10,cy-8,7,5); pc.fillRect(cx+3,cy-8,7,5);
+    pc.fillStyle='#5a7090';
+    pc.fillRect(cx-9,cy-7,5,3); pc.fillRect(cx+4,cy-7,5,3);
+    pc.fillStyle='#0a0c10';
+    pc.fillRect(cx-8,cy-7,3,3); pc.fillRect(cx+5,cy-7,3,3);
+    pc.fillStyle='rgba(255,255,255,0.5)';
+    pc.fillRect(cx-8,cy-7,1,1); pc.fillRect(cx+6,cy-7,1,1);
+    // Young brows — thin
+    pc.fillStyle='#5a4020';
+    pc.fillRect(cx-11,cy-12,9,2); pc.fillRect(cx+2,cy-12,9,2);
+
+    // Nose — straight, young
+    pc.fillStyle='#c07858'; pc.fillRect(cx-2,cy-3,5,6);
+    pc.beginPath(); pc.ellipse(cx,cy+2,4,3,0,0,Math.PI*2); pc.fill();
+
+    // Mouth — slight nervous set
+    pc.fillStyle='#8a5438'; pc.fillRect(cx-5,cy+8,11,3);
+
+    // Short light beard — first growth
+    pc.fillStyle='rgba(100,70,40,0.3)';
+    pc.fillRect(cx-11,cy+10,22,8);
+
+    // Kettle helm — simpler, newer
+    pc.fillStyle='#888f98';
+    pc.beginPath(); pc.arc(cx,cy-18,14,Math.PI,0); pc.fill();
+    pc.fillRect(cx-14,cy-22,28,6);
+    pc.fillStyle='#6e7580'; pc.fillRect(cx-17,cy-15,34,4);
+    pc.fillStyle='#9aa0aa'; pc.fillRect(cx-6,cy-26,4,8);
+    // Chin strap
+    pc.fillStyle='#3a2810'; pc.fillRect(cx-13,cy-2,3,6); pc.fillRect(cx+10,cy-2,3,6);
+
+    var vig=pc.createRadialGradient(cx,cy,18,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.55)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
+  // ── MIRA — market trader, middle-aged woman ───────────────────
+  mira: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(40,25,15,0.55)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+
+    // Dress/shawl
+    pc.fillStyle='#3a2880';
+    pc.beginPath(); pc.ellipse(cx,H,32,22,0,Math.PI,0); pc.fill();
+    pc.fillStyle='#8a4020'; pc.fillRect(cx-28,H-16,56,10); // shawl stripe
+
+    // Neck
+    pc.fillStyle='#d4956a'; pc.fillRect(cx-4,cy+14,8,10);
+
+    // Head — oval, kind face
+    pc.fillStyle='#d4956a';
+    pc.fillRect(cx-12,cy-16,24,30);
+    pc.fillRect(cx-10,cy-20,20,6);
+    // Cheek blush
+    pc.fillStyle='rgba(200,100,80,0.2)';
+    pc.beginPath(); pc.ellipse(cx-10,cy,5,4,0,0,Math.PI*2); pc.fill();
+    pc.beginPath(); pc.ellipse(cx+10,cy,5,4,0,0,Math.PI*2); pc.fill();
+
+    // Eyes — warm brown, kind, laughter lines at corners
+    pc.fillStyle='#1a1008';
+    pc.fillRect(cx-9,cy-8,7,5); pc.fillRect(cx+2,cy-8,7,5);
+    pc.fillStyle='#6a3a18'; // brown
+    pc.fillRect(cx-8,cy-7,5,3); pc.fillRect(cx+3,cy-7,5,3);
+    pc.fillStyle='#0d0806';
+    pc.fillRect(cx-7,cy-7,3,3); pc.fillRect(cx+4,cy-7,3,3);
+    pc.fillStyle='rgba(255,255,255,0.5)';
+    pc.fillRect(cx-7,cy-7,1,1); pc.fillRect(cx+5,cy-7,1,1);
+    // Laughter lines
+    pc.strokeStyle='rgba(0,0,0,0.15)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-10,cy-5); pc.lineTo(cx-13,cy); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+10,cy-5); pc.lineTo(cx+13,cy); pc.stroke();
+    // Eyebrows — arched, expressive
+    pc.fillStyle='#5a3820';
+    pc.beginPath(); pc.moveTo(cx-11,cy-12); pc.quadraticCurveTo(cx-7,cy-14,cx-3,cy-12); pc.lineWidth=2; pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+11,cy-12); pc.quadraticCurveTo(cx+7,cy-14,cx+3,cy-12); pc.stroke();
+
+    // Nose — soft
+    pc.fillStyle='#c07858'; pc.fillRect(cx-2,cy-4,5,7);
+    pc.beginPath(); pc.ellipse(cx,cy+2,4,3,0,0,Math.PI*2); pc.fill();
+
+    // Mouth — slight smile
+    pc.fillStyle='#a05040'; pc.fillRect(cx-6,cy+8,12,3);
+    pc.fillStyle='#c07060'; pc.fillRect(cx-5,cy+8,10,1);
+    // Smile lines
+    pc.fillStyle='rgba(0,0,0,0.12)';
+    pc.fillRect(cx-7,cy+7,2,4); pc.fillRect(cx+5,cy+7,2,4);
+
+    // Hair — dark brown, tied back under cloth
+    pc.fillStyle='#2a1808';
+    pc.fillRect(cx-14,cy-20,28,6);
+    pc.fillRect(cx-14,cy-16,3,18); pc.fillRect(cx+11,cy-16,3,18);
+    // Linen coif / head cloth — pale
+    pc.fillStyle='#d8d0b8'; pc.fillRect(cx-14,cy-22,28,8);
+    pc.fillStyle='#c8c0a8'; pc.fillRect(cx-14,cy-22,28,2);
+    // Cloth ties under chin
+    pc.fillStyle='#c8c0a8'; pc.fillRect(cx-12,cy+10,3,6); pc.fillRect(cx+9,cy+10,3,6);
+
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.5)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
+  // ── DEFAULT — generic silhouette ──────────────────────────────
+  'default': function(pc,W,H){
+    var cx=W/2, cy=H/2;
+    pc.fillStyle='#3a3028';
+    pc.beginPath(); pc.ellipse(cx,H,28,18,0,Math.PI,0); pc.fill();
+    pc.fillStyle='#c8845a'; pc.fillRect(cx-4,cy+12,8,8);
+    pc.fillStyle='#d4956a'; pc.beginPath(); pc.ellipse(cx,cy,14,18,0,0,Math.PI*2); pc.fill();
+    pc.fillStyle='#1a1008'; pc.fillRect(cx-7,cy-4,5,4); pc.fillRect(cx+2,cy-4,5,4);
+    var vig=pc.createRadialGradient(cx,cy,15,cx,cy,44);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.6)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+};
 
 function openDialogue(npcId){
   const npc=DIALOGUES[npcId];if(!npc)return;
   dialogueOpen=true;dialogueNPC=npcId;
   document.getElementById('dialogueBox').style.display='block';
-  document.getElementById('dialoguePortraitFace').textContent=npc.face;
+  drawPortrait(npcId);
   document.getElementById('dialoguePortraitName').textContent=npc.name;
   document.getElementById('dialoguePortraitTitle').textContent=npc.title;
   showDialogueNode('root');
 }
 function showDialogueNode(nodeId){
   const npc=DIALOGUES[dialogueNPC];
-  const node=npc[nodeId];if(!node)return;
+  const node=nodeId==='root'&&npc.getRootNode ? npc.getRootNode() : npc[nodeId];
+  if(!node)return;
   dialogueNode=nodeId;
-  document.getElementById('dialogueText').textContent=node.text;
+  if(node.onShow)node.onShow();
+  if(node.text!==null)document.getElementById('dialogueText').textContent=node.text||'...';
   const ch=document.getElementById('dialogueChoices');ch.innerHTML='';
-  for(const c of node.choices){
+  const choices=node.choices||[];
+  for(let ci=0;ci<choices.length;ci++){
+    const c=choices[ci];
     const btn=document.createElement('button');btn.className='dlg-btn';btn.textContent=c.label;
-    btn.onclick=()=>{
-      if(c.next===null){closeDialogue();}else{showDialogueNode(c.next);}
-    };
+    btn.onclick=(function(choice){
+      return function(){
+        if(choice.onNext)choice.onNext();
+        if(choice.next===null){closeDialogue();}else{showDialogueNode(choice.next);}
+      };
+    })(c);
     ch.appendChild(btn);
   }
 }
@@ -568,16 +1325,1199 @@ window.closeDialogue=function(){
 };
 
 // ═══════════════════════════════════════════════════════════════
-//  GAME
+//  SAVE / LOAD  (localStorage)
 // ═══════════════════════════════════════════════════════════════
-function startGame(){
+const SAVE_KEY='elwyrn_save_v1';
+
+function hasSave(){
+  try{return !!localStorage.getItem(SAVE_KEY);}catch(e){return false;}
+}
+
+function buildSave(){
+  const p=window._gamePlayer;
+  if(!p)return null;
+  return {
+    version:1,
+    savedAt:Date.now(),
+    // Player stats
+    player:{
+      x:p.x, y:p.y,
+      hp:p.hp, maxHp:p.maxHp,
+      level:p.level, xp:p.xp, xpNext:p.xpNext,
+      kills:p.kills||0,
+    },
+    // Zone
+    zone: window._currentZone||'plains',
+    // Inventory + gold + equipment
+    inventory: inventory.map(s=>s?{itemId:s.itemId,qty:s.qty}:null),
+    gold: playerGold,
+    equipped: {...equipped},
+    // World state
+    world:{
+      rocksState: window._encRocks ? window._encRocks.map(r=>r.broken) : [],
+      chestOpened: window._caveChest ? window._caveChest.opened : false,
+      goblinsAlive: window._goblins ? window._goblins.map(g=>g.alive) : [],
+    },
+    // Fog of war — store as compact base64 strings
+    fog:{
+      plains: window._fogPlains ? btoa(String.fromCharCode(...window._fogPlains)) : '',
+      cave:   window._fogCave   ? btoa(String.fromCharCode(...window._fogCave))   : '',
+    },
+  };
+}
+
+function saveGame(){
+  try{
+    const data=buildSave();
+    if(!data)return;
+    localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+    showSaveToast('💾 Game Saved');
+  }catch(e){
+    showSaveToast('⚠ Save Failed');
+    console.error('Save error:',e);
+  }
+}
+
+function loadSave(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw)return null;
+    return JSON.parse(raw);
+  }catch(e){
+    console.error('Load error:',e);
+    return null;
+  }
+}
+
+function deleteSave(){
+  try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+}
+
+// Called after startGame() sets up all the world objects
+function applySave(save){
+  if(!save)return;
+  const p=window._gamePlayer;
+  if(!p)return;
+
+  // Player
+  p.x=save.player.x; p.y=save.player.y;
+  p.hp=save.player.hp; p.maxHp=save.player.maxHp;
+  p.level=save.player.level; p.xp=save.player.xp;
+  p.xpNext=save.player.xpNext; p.kills=save.player.kills||0;
+
+  // Zone
+  if(window._setZone)window._setZone(save.zone);
+
+  // Inventory
+  for(let i=0;i<inventory.length;i++){
+    inventory[i]=save.inventory[i]?{...save.inventory[i]}:null;
+  }
+  playerGold=save.gold||0;
+  equipped.weapon=save.equipped.weapon||null;
+  equipped.armour=save.equipped.armour||null;
+  equipped.ring  =save.equipped.ring  ||null;
+
+  // World state — rocks
+  if(save.world.rocksState&&window._encRocks){
+    save.world.rocksState.forEach((broken,i)=>{
+      if(window._encRocks[i])window._encRocks[i].broken=broken;
+    });
+  }
+  // Chest
+  if(window._caveChest)window._caveChest.opened=save.world.chestOpened||false;
+  // Goblins
+  if(save.world.goblinsAlive&&window._goblins){
+    save.world.goblinsAlive.forEach((alive,i)=>{
+      if(window._goblins[i])window._goblins[i].alive=alive;
+    });
+  }
+
+  // Fog of war
+  if(save.fog&&window._fogPlains&&save.fog.plains){
+    try{
+      const decoded=atob(save.fog.plains);
+      for(let i=0;i<decoded.length&&i<window._fogPlains.length;i++)
+        window._fogPlains[i]=decoded.charCodeAt(i);
+    }catch(e){}
+  }
+  if(save.fog&&window._fogCave&&save.fog.cave){
+    try{
+      const decoded=atob(save.fog.cave);
+      for(let i=0;i<decoded.length&&i<window._fogCave.length;i++)
+        window._fogCave[i]=decoded.charCodeAt(i);
+    }catch(e){}
+  }
+
+  window._updateHUD&&window._updateHUD();
+  renderInventory();
+  // Resume correct zone audio
+  if(save.zone==='cave') Audio.crossfadeTo('cave');
+  else Audio.crossfadeTo('intro');
+}
+
+let _saveToastTimer=null;
+function showSaveToast(msg){
+  const t=document.getElementById('saveToast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(_saveToastTimer);
+  _saveToastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── INTRO SCREEN — show Continue button if save exists ──────
+(function setupIntroButtons(){
+  const wrap=document.getElementById('introButtons');
+  if(hasSave()){
+    const save=loadSave();
+    const dateStr=save?new Date(save.savedAt).toLocaleString():'';
+    const saveLv=save&&save.player?save.player.level:1;
+    wrap.innerHTML=`
+      <button id="continueBtn" onclick="window._startWithSave()">↩ Continue</button>
+      <div style="font-size:.52rem;color:#607050;letter-spacing:.1em;margin-top:.4em;">${dateStr} · Lv ${saveLv}</div>
+      <button id="newGameBtn" onclick="window._startFresh()">— New Game —</button>
+      <button id="deleteSaveBtn" onclick="window._confirmDelete()">✕ Delete Save</button>
+    `;
+  }else{
+    wrap.innerHTML=`<div class="press-enter">— Press Enter to Begin —</div>`;
+  }
+})();
+
+window._startWithSave=function(){
+  if(gameStarted)return;
+  gameStarted=true;
+  const save=loadSave();
+  intro.classList.add('fade-out');
+  setTimeout(()=>{
+    intro.style.display='none';
+    gameContainer.style.display='block';
+    hudEl.style.display='block';
+    minimapEl.style.display='block';
+    startGame(save);
+  },1200);
+};
+
+window._startFresh=function(){
+  if(gameStarted)return;
+  gameStarted=true;
+  intro.classList.add('fade-out');
+  setTimeout(()=>{
+    intro.style.display='none';
+    gameContainer.style.display='block';
+    hudEl.style.display='block';
+    minimapEl.style.display='block';
+    startGame(null);
+  },1200);
+};
+
+window._confirmDelete=function(){
+  if(confirm('Delete your saved game? This cannot be undone.')){
+    deleteSave();
+    // Rebuild intro buttons
+    const wrap=document.getElementById('introButtons');
+    wrap.innerHTML=`<div class="press-enter">— Press Enter to Begin —</div>`;
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  AUDIO ENGINE
+//  All sound synthesised via Web Audio API — no files needed.
+//  Two tracks:
+//    introMusic  — hopeful medieval theme with ominous undertone
+//    caveAmbience — dark cave drone with distant drips and whispers
+// ═══════════════════════════════════════════════════════════════
+const Audio = (function(){
+  var actx = null;
+  var introNodes   = [];
+  var caveNodes    = [];
+  var masterGain   = null;
+  var currentTrack = null;
+  var dripTimer    = null;
+  function getCtx(){
+    if(!actx){
+      actx = new (window.AudioContext||window.webkitAudioContext)();
+      masterGain = actx.createGain();
+      masterGain.gain.value = 0.7;
+      masterGain.connect(actx.destination);
+    }
+    return actx;
+  }
+
+  // ── UTILITY ─────────────────────────────────────────────────
+  function note(semitones, base){ if(base===undefined)base=220; return base * Math.pow(2, semitones/12); }
+  function ramp(param, val, t, dur){ param.linearRampToValueAtTime(val, t+dur); }
+
+  function makeOsc(ctx, type, freq, gain, dest, startT, stopT){
+    const osc = ctx.createOscillator();
+    const g   = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(gain, startT + 0.08);
+    g.gain.setValueAtTime(gain, stopT - 0.06);
+    g.gain.linearRampToValueAtTime(0, stopT);
+    osc.connect(g); g.connect(dest);
+    osc.start(startT); osc.stop(stopT);
+    return {osc, g};
+  }
+
+  function makeLFO(ctx, rate, depth, target){
+    const lfo = ctx.createOscillator();
+    const lfog = ctx.createGain();
+    lfo.frequency.value = rate;
+    lfog.gain.value = depth;
+    lfo.connect(lfog); lfog.connect(target);
+    lfo.start();
+    return {lfo, lfog};
+  }
+
+  function addReverb(ctx, impulseLen){
+    if(impulseLen===undefined)impulseLen=2.0;
+    const conv = ctx.createConvolver();
+    const sr = ctx.sampleRate;
+    const len = sr * impulseLen;
+    const buf = ctx.createBuffer(2, len, sr);
+    for(let c=0;c<2;c++){
+      const d = buf.getChannelData(c);
+      for(let i=0;i<len;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 2.5);
+    }
+    conv.buffer = buf;
+    return conv;
+  }
+
+  function fadeStop(nodes, dur){
+    if(dur===undefined)dur=1.5;
+    const ctx = getCtx();
+    const t = ctx.currentTime;
+    for(const n of nodes){
+      if(n.g){ try{ n.g.gain.setValueAtTime(n.g.gain.value,t); n.g.gain.linearRampToValueAtTime(0,t+dur); }catch(e){} }
+      if(n.lfo){ try{ n.lfo.stop(t+dur+0.1); }catch(e){} }
+      if(n.osc){ try{ n.osc.stop(t+dur+0.1); }catch(e){} }
+      if(n.src){ try{ n.src.stop(t+dur+0.1); }catch(e){} }
+    }
+  }
+
+  // ── INTRO THEME — Harmony (OSRS) close transcription ────────
+  // Harmony is in F major, 3/4 time, ~88 bpm, featuring a flute/
+  // oboe melody over harp arpeggios and soft string pads.
+  // Characteristic features: starts on C5, rises to F5, gentle
+  // dotted-rhythm sighs, recurring 3-note motif, warm and pastoral.
+  function playIntro(){
+    if(currentTrack==='intro') return;
+    currentTrack='intro';
+    fadeStop(introNodes, 0.1);
+    introNodes = [];
+    var C2=getCtx(); var now=C2.currentTime+0.05;
+    var rev=addReverb(C2,3.5); rev.connect(masterGain);
+    var rev2=addReverb(C2,1.2); rev2.connect(masterGain);
+
+    // Note frequencies — F major scale
+    var C3=130.81,D3=146.83,E3=164.81,F3=174.61,G3=196,A3=220,Bb3=233.08,C4=261.63;
+    var D4=293.66,E4=329.63,F4=349.23,G4=392,A4=440,Bb4=466.16,C5=523.25;
+    var D5=587.33,E5=659.25,F5=698.46,G5=784,A5=880;
+
+    // BPM 88, 3/4 — one beat = 0.682s, one bar = 2.045s
+    var BT=60/88;          // one beat
+    var BAR=BT*3;          // one 3/4 bar
+    var Q=BT, E=BT/2, DQ=BT*1.5, H=BT*2; // note lengths
+
+    // ── STRING PAD CHORDS ── (very soft, warm foundation)
+    var padF=C2.createBiquadFilter(); padF.type='lowpass'; padF.frequency.value=800; padF.connect(rev);
+    // Progression: F | Bb | C | F | Dm | Bb | C | F (repeating)
+    var prog=[
+      [F3,A3,C4,F4], [Bb3,D4,F4,Bb4], [C4,E4,G4,C5], [F3,A3,C4,F4],
+      [D3,F3,A3,D4], [Bb3,D4,F4,Bb4], [C4,E4,G4,C5], [F3,A3,C4,F4]
+    ];
+    var LOOPS=6;
+    for(var loop=0;loop<LOOPS;loop++){
+      for(var bi=0;bi<prog.length;bi++){
+        var t0=now+loop*8*BAR+bi*BAR;
+        for(var fi=0;fi<prog[bi].length;fi++){
+          var n=makeOsc(C2,'sine',prog[bi][fi],0.022,padF,t0,t0+BAR+0.4);
+          introNodes.push(n);
+        }
+      }
+    }
+
+    // ── HARP ARPEGGIOS ── (triangle wave, short decay, rippling 8th notes)
+    function harp(freq,t,vol){
+      var o=C2.createOscillator(), g=C2.createGain();
+      o.type='triangle'; o.frequency.value=freq;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.008);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.9);
+      var hp=C2.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=200;
+      o.connect(hp); hp.connect(g); g.connect(rev2); g.connect(masterGain);
+      o.start(t); o.stop(t+1.0);
+      introNodes.push({osc:o,g:g});
+    }
+    // Harp plays arpeggios on each chord — 6 notes per bar (2 per beat, 3/4)
+    var arpPats=[
+      [F3,A3,C4,F4,C4,A3],   // F
+      [Bb3,D4,F4,Bb4,F4,D4], // Bb
+      [C4,E4,G4,C5,G4,E4],   // C
+      [F3,A3,C4,F4,C4,A3],   // F
+      [D3,F3,A3,D4,A3,F3],   // Dm
+      [Bb3,D4,F4,Bb4,F4,D4], // Bb
+      [C4,E4,G4,C5,G4,E4],   // C
+      [F3,A3,C4,F4,C4,A3],   // F
+    ];
+    for(var loop=0;loop<LOOPS;loop++){
+      for(var bi=0;bi<arpPats.length;bi++){
+        for(var ni=0;ni<6;ni++){
+          harp(arpPats[bi][ni], now+loop*8*BAR+bi*BAR+ni*E, 0.065+Math.random()*0.015);
+        }
+      }
+    }
+
+    // ── FLUTE/OBOE MELODY ── (Harmony transcription)
+    // The actual Harmony melody note-for-note as closely as possible.
+    // Instrument: triangle wave + narrow bandpass for oboe/flute colour + vibrato
+    function flute(freq,t,dur,vol){
+      var o=C2.createOscillator(), g=C2.createGain();
+      var vib=C2.createOscillator(), vibG=C2.createGain();
+      o.type='triangle'; o.frequency.value=freq;
+      vib.frequency.value=5.8; vibG.gain.value=freq*0.010;
+      vib.connect(vibG); vibG.connect(o.frequency);
+      var bp=C2.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=freq*1.2; bp.Q.value=1.8;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(vol,t+0.05);
+      g.gain.setValueAtTime(vol,t+dur-0.08);
+      g.gain.linearRampToValueAtTime(0,t+dur);
+      o.connect(bp); bp.connect(g);
+      g.connect(rev); g.connect(masterGain);
+      o.start(t); o.stop(t+dur+0.05);
+      vib.start(t); vib.stop(t+dur+0.05);
+      introNodes.push({osc:o,g:g},{lfo:vib,g:vibG});
+    }
+
+    // Harmony melody — 8 bar phrase, note-accurate transcription
+    // Format: [freq, beat_offset_from_phrase_start, duration_in_beats]
+    // Bar numbers follow the OSRS Harmony structure
+    var mel=[
+      // Bar 1: C5 dotted quarter, D5 eighth, C5 quarter | pickup feel
+      [C5, 0,    DQ],
+      [D5, DQ,   E ],
+      [C5, DQ+E, Q ],
+      // Bar 2: F5 half, E5 quarter
+      [F5, BAR,        H ],
+      [E5, BAR+H,      Q ],
+      // Bar 3: D5 dotted quarter, C5 eighth, Bb4 quarter
+      [D5, BAR*2,      DQ],
+      [C5, BAR*2+DQ,   E ],
+      [Bb4,BAR*2+DQ+E, Q ],
+      // Bar 4: A4 dotted half (held)
+      [A4, BAR*3,      BAR],
+      // Bar 5: C5 dotted quarter, D5 eighth, C5 quarter
+      [C5, BAR*4,      DQ],
+      [D5, BAR*4+DQ,   E ],
+      [C5, BAR*4+DQ+E, Q ],
+      // Bar 6: F5 quarter, G5 eighth, F5 eighth, E5 quarter
+      [F5, BAR*5,      Q ],
+      [G5, BAR*5+Q,    E ],
+      [F5, BAR*5+Q+E,  E ],
+      [E5, BAR*5+Q+E+E,Q ],
+      // Bar 7: D5 dotted quarter, C5 eighth, Bb4 quarter
+      [D5, BAR*6,      DQ],
+      [C5, BAR*6+DQ,   E ],
+      [Bb4,BAR*6+DQ+E, Q ],
+      // Bar 8: C5 dotted half (resolve)
+      [C5, BAR*7,      BAR*1.4],
+
+      // Second phrase — starts bar 9 (slight variation, higher)
+      // Bar 9: F5 dotted quarter, G5 eighth, F5 quarter
+      [F5, BAR*8,        DQ],
+      [G5, BAR*8+DQ,     E ],
+      [F5, BAR*8+DQ+E,   Q ],
+      // Bar 10: A5 half, G5 quarter
+      [A5, BAR*9,        H ],
+      [G5, BAR*9+H,      Q ],
+      // Bar 11: F5 dotted quarter, E5 eighth, D5 quarter
+      [F5, BAR*10,       DQ],
+      [E5, BAR*10+DQ,    E ],
+      [D5, BAR*10+DQ+E,  Q ],
+      // Bar 12: C5 dotted half
+      [C5, BAR*11,       BAR],
+      // Bar 13-14: step down F5 E5 D5 C5
+      [F5, BAR*12,       Q ],
+      [E5, BAR*12+Q,     Q ],
+      [D5, BAR*12+Q*2,   Q ],
+      [C5, BAR*13,       Q ],
+      [D5, BAR*13+Q,     E ],
+      [E5, BAR*13+Q+E,   E ],
+      [F5, BAR*13+Q+E+E, Q ],
+      // Bar 15-16: final phrase back to home
+      [G5, BAR*14,       DQ],
+      [F5, BAR*14+DQ,    E ],
+      [E5, BAR*14+DQ+E,  Q ],
+      [F5, BAR*15,       BAR*1.8],
+    ];
+
+    // Play LOOPS repetitions of the 16-bar phrase
+    var PHRASE_LEN=BAR*16;
+    for(var loop=0;loop<LOOPS;loop++){
+      for(var mi=0;mi<mel.length;mi++){
+        var m=mel[mi];
+        flute(m[0], now+loop*PHRASE_LEN+m[1], m[2]*0.92, 0.14+Math.random()*0.025);
+      }
+    }
+
+    // ── BASS LINE ── (pizzicato feel — short plucked basses on beat 1)
+    function bass(freq,t){
+      var o=C2.createOscillator(), g=C2.createGain();
+      o.type='sine'; o.frequency.value=freq;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.055,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.6);
+      o.connect(g); g.connect(rev);
+      o.start(t); o.stop(t+0.65);
+      introNodes.push({osc:o,g:g});
+    }
+    var bassNotes=[F3,Bb3/2,C3,F3, D3,Bb3/2,C3,F3];
+    for(var loop=0;loop<LOOPS;loop++){
+      for(var bi=0;bi<8;bi++){
+        bass(bassNotes[bi], now+loop*8*BAR+bi*BAR);
+      }
+    }
+
+    // ── BELL SHIMMER ── (on phrase downbeats, very soft)
+    function shimmer(freq,t,vol){
+      var o=C2.createOscillator(), g=C2.createGain();
+      o.type='sine'; o.frequency.value=freq;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.001,t+3.8);
+      o.connect(g); g.connect(rev);
+      o.start(t); o.stop(t+4.0);
+      introNodes.push({osc:o,g:g});
+    }
+    for(var loop=0;loop<LOOPS;loop++){
+      shimmer(F5*2, now+loop*PHRASE_LEN,       0.04);
+      shimmer(C5*2, now+loop*PHRASE_LEN+BAR*4, 0.03);
+      shimmer(F5*2, now+loop*PHRASE_LEN+BAR*8, 0.035);
+      shimmer(C5*2, now+loop*PHRASE_LEN+BAR*12,0.03);
+    }
+  }
+
+  // ── CAVE AMBIENCE ────────────────────────────────────────────
+  // Layers: deep resonant drone, slow wind howl, random drip pings,
+  //         distant eerie whisper sweep, low rumble.
+  function playCave(){
+    if(currentTrack==='cave') return;
+    currentTrack='cave';
+    fadeStop(caveNodes, 0.1);
+    caveNodes = [];
+    const ctx = getCtx();
+    const now = ctx.currentTime + 0.05;
+
+    const rev = addReverb(ctx, 4.5); // long cave reverb
+    rev.connect(masterGain);
+
+    // ── DEEP CAVE DRONE — E1 + B1 + E2 ──
+    for(const [freq, vol] of [[41.2,0.06],[61.7,0.04],[82.4,0.035]]){
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      const f = ctx.createBiquadFilter();
+      o.type='sine'; o.frequency.value=freq;
+      f.type='lowpass'; f.frequency.value=200;
+      g.gain.value=0; g.gain.linearRampToValueAtTime(vol, now+4);
+      const lfo=ctx.createOscillator(), lfog=ctx.createGain();
+      lfo.frequency.value=0.07+Math.random()*0.05;
+      lfog.gain.value=vol*0.4;
+      lfo.connect(lfog); lfog.connect(g.gain);
+      o.connect(f); f.connect(g); g.connect(rev);
+      o.start(now); lfo.start(now);
+      caveNodes.push({osc:o,g},{lfo,g:lfog});
+    }
+
+    // ── WIND HOWL — filtered noise via oscillator bank ──
+    for(let i=0;i<4;i++){
+      const o  = ctx.createOscillator();
+      const g  = ctx.createGain();
+      const bf = ctx.createBiquadFilter();
+      o.type='sawtooth';
+      o.frequency.value = 55+i*33+Math.random()*20;
+      bf.type='bandpass'; bf.frequency.value=180+i*60; bf.Q.value=0.6;
+      g.gain.value=0; g.gain.linearRampToValueAtTime(0.018,now+6);
+      const lfo=ctx.createOscillator(), lfog=ctx.createGain();
+      lfo.frequency.value=0.04+i*0.013;
+      lfog.gain.value=0.01;
+      lfo.connect(lfog); lfog.connect(g.gain);
+      o.connect(bf); bf.connect(g); g.connect(rev);
+      o.start(now); lfo.start(now);
+      caveNodes.push({osc:o,g},{lfo,g:lfog});
+    }
+
+    // ── EERIE WHISPER SWEEP — slow pitch glide between dissonant intervals ──
+    const sweep = ctx.createOscillator();
+    const sweepG= ctx.createGain();
+    const sweepF= ctx.createBiquadFilter();
+    sweep.type='sine'; sweep.frequency.value=220;
+    sweepF.type='bandpass'; sweepF.frequency.value=600; sweepF.Q.value=8;
+    sweepG.gain.value=0; sweepG.gain.linearRampToValueAtTime(0.022,now+8);
+    // Slowly sweep frequency for unsettling effect
+    sweep.frequency.setValueAtTime(220,now);
+    sweep.frequency.linearRampToValueAtTime(233, now+12); // tritone approach
+    sweep.frequency.linearRampToValueAtTime(185, now+24);
+    sweep.frequency.linearRampToValueAtTime(220, now+36);
+    const swLFO=ctx.createOscillator(), swLG=ctx.createGain();
+    swLFO.frequency.value=0.11; swLG.gain.value=18;
+    swLFO.connect(swLG); swLG.connect(sweep.frequency);
+    sweep.connect(sweepF); sweepF.connect(sweepG); sweepG.connect(rev);
+    sweep.start(now); swLFO.start(now);
+    caveNodes.push({osc:sweep,g:sweepG},{lfo:swLFO,g:swLG});
+
+    // ── WATER DRIPS — random pings scheduled via setTimeout ──
+    function schedDrip(){
+      if(currentTrack!=='cave') return;
+      const c2=getCtx();
+      const t=c2.currentTime+0.05;
+      const freqs=[1200,900,1400,800,1600][Math.floor(Math.random()*5)];
+      const o=c2.createOscillator(), g=c2.createGain(), r2=addReverb(c2,1.5);
+      r2.connect(masterGain);
+      o.type='sine'; o.frequency.value=freqs;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.06,t+0.008);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.9);
+      o.connect(g); g.connect(r2);
+      o.start(t); o.stop(t+1.0);
+      const next=1800+Math.random()*4000;
+      dripTimer=setTimeout(schedDrip, next);
+    }
+    dripTimer=setTimeout(schedDrip, 800+Math.random()*2000);
+
+    // ── LOW RUMBLE — filtered noise bursts ──
+    function schedRumble(){
+      if(currentTrack!=='cave') return;
+      const c2=getCtx();
+      const t=c2.currentTime+0.1;
+      const bufLen=c2.sampleRate*1.2;
+      const buf=c2.createBuffer(1,bufLen,c2.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<bufLen;i++) d[i]=(Math.random()*2-1);
+      const src=c2.createBufferSource();
+      src.buffer=buf;
+      const f=c2.createBiquadFilter(); f.type='lowpass'; f.frequency.value=80;
+      const g=c2.createGain();
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.08+Math.random()*0.06,t+0.3);
+      g.gain.linearRampToValueAtTime(0,t+1.1);
+      src.connect(f); f.connect(g); g.connect(masterGain);
+      src.start(t); src.stop(t+1.2);
+      const next=6000+Math.random()*14000;
+      setTimeout(schedRumble, next);
+    }
+    setTimeout(schedRumble, 4000+Math.random()*6000);
+  }
+
+  // ── SOUND EFFECTS ────────────────────────────────────────────
+  function sfx(fn){
+    try{ var c=getCtx(); fn(c,c.currentTime+0.01); }catch(e){}
+  }
+
+  function playSwordSwing(){
+    sfx(function(c,t){
+      // Quick whoosh: filtered noise burst
+      var buf=c.createBuffer(1,c.sampleRate*0.18,c.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,1.4);
+      var src=c.createBufferSource(); src.buffer=buf;
+      var f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1800; f.Q.value=1.2;
+      var g=c.createGain(); g.gain.setValueAtTime(0.22,t); g.gain.linearRampToValueAtTime(0,t+0.18);
+      src.connect(f); f.connect(g); g.connect(masterGain);
+      src.start(t); src.stop(t+0.2);
+    });
+  }
+
+  function playHitFlesh(){
+    sfx(function(c,t){
+      // Dull thud: short noise burst, low frequency
+      var buf=c.createBuffer(1,c.sampleRate*0.09,c.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
+      var src=c.createBufferSource(); src.buffer=buf;
+      var f=c.createBiquadFilter(); f.type='lowpass'; f.frequency.value=400;
+      var g=c.createGain(); g.gain.setValueAtTime(0.35,t); g.gain.linearRampToValueAtTime(0,t+0.09);
+      src.connect(f); f.connect(g); g.connect(masterGain);
+      src.start(t); src.stop(t+0.1);
+      // Pitch blip
+      var o=c.createOscillator(), og=c.createGain();
+      o.type='square'; o.frequency.setValueAtTime(180,t); o.frequency.linearRampToValueAtTime(80,t+0.06);
+      og.gain.setValueAtTime(0.08,t); og.gain.linearRampToValueAtTime(0,t+0.07);
+      o.connect(og); og.connect(masterGain);
+      o.start(t); o.stop(t+0.08);
+    });
+  }
+
+  function playGoblinGrunt(){
+    sfx(function(c,t){
+      // Raspy pitched noise grunt
+      var o=c.createOscillator(), g=c.createGain();
+      var f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.value=320; f.Q.value=3;
+      o.type='sawtooth';
+      o.frequency.setValueAtTime(200+Math.random()*60,t);
+      o.frequency.linearRampToValueAtTime(140,t+0.15);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.18,t+0.02);
+      g.gain.linearRampToValueAtTime(0,t+0.18);
+      o.connect(f); f.connect(g); g.connect(masterGain);
+      o.start(t); o.stop(t+0.2);
+    });
+  }
+
+  function playGoblinDeath(){
+    sfx(function(c,t){
+      // Descending wail
+      var o=c.createOscillator(), g=c.createGain();
+      var f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.value=400; f.Q.value=2;
+      o.type='sawtooth';
+      o.frequency.setValueAtTime(380,t); o.frequency.linearRampToValueAtTime(80,t+0.45);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.22,t+0.03);
+      g.gain.linearRampToValueAtTime(0,t+0.48);
+      o.connect(f); f.connect(g); g.connect(masterGain);
+      o.start(t); o.stop(t+0.5);
+      // Crunch at the start
+      var buf=c.createBuffer(1,c.sampleRate*0.06,c.sampleRate);
+      var bd=buf.getChannelData(0);
+      for(var i=0;i<bd.length;i++) bd[i]=(Math.random()*2-1);
+      var src=c.createBufferSource(); src.buffer=buf;
+      var fg=c.createBiquadFilter(); fg.type='lowpass'; fg.frequency.value=600;
+      var gg=c.createGain(); gg.gain.setValueAtTime(0.3,t); gg.gain.linearRampToValueAtTime(0,t+0.06);
+      src.connect(fg); fg.connect(gg); gg.connect(masterGain);
+      src.start(t); src.stop(t+0.07);
+    });
+  }
+
+  function playPlayerHurt(){
+    sfx(function(c,t){
+      // Oof — low pitched blip + noise
+      var o=c.createOscillator(), g=c.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(280,t); o.frequency.linearRampToValueAtTime(180,t+0.12);
+      g.gain.setValueAtTime(0.12,t); g.gain.linearRampToValueAtTime(0,t+0.14);
+      o.connect(g); g.connect(masterGain);
+      o.start(t); o.stop(t+0.15);
+    });
+  }
+
+  function playChestOpen(){
+    sfx(function(c,t){
+      // Wooden creak then shimmer
+      var o=c.createOscillator(), g=c.createGain();
+      o.type='sawtooth'; o.frequency.setValueAtTime(120,t); o.frequency.linearRampToValueAtTime(200,t+0.3);
+      g.gain.setValueAtTime(0.1,t); g.gain.linearRampToValueAtTime(0,t+0.32);
+      var f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.value=300; f.Q.value=4;
+      o.connect(f); f.connect(g); g.connect(masterGain);
+      o.start(t); o.stop(t+0.33);
+      // Sparkle
+      var o2=c.createOscillator(), g2=c.createGain();
+      o2.type='sine'; o2.frequency.value=1200;
+      g2.gain.setValueAtTime(0,t+0.25); g2.gain.linearRampToValueAtTime(0.08,t+0.3);
+      g2.gain.exponentialRampToValueAtTime(0.001,t+0.9);
+      o2.connect(g2); g2.connect(masterGain);
+      o2.start(t+0.25); o2.stop(t+0.95);
+    });
+  }
+
+  function playLevelUp(){
+    sfx(function(c,t){
+      // Rising arpeggio C E G C
+      var notes=[261.63,329.63,392,523.25];
+      for(var i=0;i<notes.length;i++){
+        (function(freq,delay){
+          var o=c.createOscillator(), g=c.createGain();
+          o.type='triangle'; o.frequency.value=freq;
+          g.gain.setValueAtTime(0,t+delay);
+          g.gain.linearRampToValueAtTime(0.14,t+delay+0.04);
+          g.gain.exponentialRampToValueAtTime(0.001,t+delay+0.6);
+          o.connect(g); g.connect(masterGain);
+          o.start(t+delay); o.stop(t+delay+0.65);
+        })(notes[i], i*0.1);
+      }
+    });
+  }
+
+  function playRockBreak(){
+    sfx(function(c,t){
+      var buf=c.createBuffer(1,c.sampleRate*0.3,c.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,1.2);
+      var src=c.createBufferSource(); src.buffer=buf;
+      var f=c.createBiquadFilter(); f.type='lowpass'; f.frequency.value=800;
+      var g=c.createGain(); g.gain.setValueAtTime(0.4,t); g.gain.linearRampToValueAtTime(0,t+0.3);
+      src.connect(f); f.connect(g); g.connect(masterGain);
+      src.start(t); src.stop(t+0.32);
+    });
+  }
+
+  function stopAll(dur){
+    if(dur===undefined)dur=1.8;
+    currentTrack=null;
+    clearTimeout(dripTimer);
+    fadeStop(introNodes, dur);
+    fadeStop(caveNodes,  dur);
+    introNodes=[]; caveNodes=[];
+  }
+
+  function crossfadeTo(track){
+    if(track==='intro'){ fadeStop(caveNodes,2.0); caveNodes=[]; playIntro(); }
+    else if(track==='cave'){ fadeStop(introNodes,2.0); introNodes=[]; playCave(); }
+  }
+
+  // Browsers require a user gesture to start AudioContext.
+  // We'll start lazily on first interaction.
+  let started=false;
+  function startIntroOnInteraction(){
+    if(started)return; started=true;
+    playIntro();
+  }
+
+  return { playIntro, playCave, crossfadeTo, stopAll, startIntroOnInteraction,
+           sfxSwing:playSwordSwing, sfxHit:playHitFlesh, sfxGrunt:playGoblinGrunt,
+           sfxDeath:playGoblinDeath, sfxHurt:playPlayerHurt, sfxChest:playChestOpen,
+           sfxLevel:playLevelUp, sfxRock:playRockBreak };
+})();
+
+// Start music on first click or keydown (browser autoplay policy)
+document.addEventListener('keydown', function(){ Audio.startIntroOnInteraction(); }, {once:true});
+document.addEventListener('click',   function(){ Audio.startIntroOnInteraction(); }, {once:true});
+
+// ═══════════════════════════════════════════════════════════════
+//  JOURNAL SYSTEM
+// ═══════════════════════════════════════════════════════════════
+var journalOpen = false;
+// World state: gate and merchant
+var gateUnlocked = false;
+
+var QUEST_DEFS = [
+  {
+    id: 'cartwheel',
+    name: "Aldric's Cartwheel",
+    giver: 'Given by Aldric — Wandering Merchant',
+    desc: "A goblin shaman has stolen Aldric's cartwheel, stranding him on the Verdant Plains. Retrieve it from the depths of the Goblin Caves and return it to him.",
+    objectives: [
+      { text: 'Find the Goblin Shaman deep in the cave',
+        doneWhen: function(){ return window._goblins && window._goblins.some(function(g){ return g.shaman && !g.alive; }); } },
+      { text: 'Retrieve the Cartwheel',
+        doneWhen: function(){ return inventory.some(function(s){ return s && s.itemId==='cartwheel'; }) || (quests.cartwheel.state==='complete'); } },
+      { text: 'Return the Cartwheel to Aldric',
+        doneWhen: function(){ return quests.cartwheel.state==='complete'; } }
+    ]
+  }
+];
+
+function renderJournal(){
+  var list = document.getElementById('journalQuestList');
+  document.getElementById('journalGoldAmt').textContent = playerGold;
+  var activeQ=[], completeQ=[];
+  for(var qi=0;qi<QUEST_DEFS.length;qi++){
+    var qd=QUEST_DEFS[qi];
+    var state = quests[qd.id] ? quests[qd.id].state : 'unstarted';
+    if(state==='unstarted') continue;
+    if(state==='complete') completeQ.push({qd:qd,state:state});
+    else activeQ.push({qd:qd,state:state});
+  }
+  if(activeQ.length===0&&completeQ.length===0){
+    list.innerHTML='<div id="journalEmpty">No quests recorded yet.<br>Speak to characters in the world to begin your journey.</div>';
+    return;
+  }
+  var html='';
+  if(activeQ.length>0){
+    html+='<div class="journal-section-title">Active Quests</div>';
+    for(var ai=0;ai<activeQ.length;ai++) html+=buildQuestHTML(activeQ[ai].qd,activeQ[ai].state);
+  }
+  if(completeQ.length>0){
+    html+='<div class="journal-section-title" style="margin-top:14px">Completed Quests</div>';
+    for(var ci=0;ci<completeQ.length;ci++) html+=buildQuestHTML(completeQ[ci].qd,completeQ[ci].state);
+  }
+  list.innerHTML=html;
+}
+
+function buildQuestHTML(qd,state){
+  var bc=state==='complete'?'complete':'active';
+  var bt=state==='complete'?'&#10003; Complete':'Active';
+  var h='<div class="quest-entry '+bc+'">';
+  h+='<div class="quest-name">'+qd.name+'<span class="quest-badge '+bc+'">'+bt+'</span></div>';
+  h+='<div class="quest-giver">'+qd.giver+'</div>';
+  h+='<div class="quest-desc">'+qd.desc+'</div>';
+  for(var oi=0;oi<qd.objectives.length;oi++){
+    var obj=qd.objectives[oi];
+    var done=state==='complete'||obj.doneWhen();
+    h+='<div class="quest-objective'+(done?' done':'')+'"><span class="quest-objective-dot">'+(done?'&#10003;':'&#9702;')+'</span><span class="quest-objective-text">'+obj.text+'</span></div>';
+  }
+  h+='</div>';
+  return h;
+}
+
+window.closeJournal=function(){
+  journalOpen=false;
+  document.getElementById('journalPanel').style.display='none';
+};
+function toggleJournal(){
+  journalOpen=!journalOpen;
+  var p=document.getElementById('journalPanel');
+  if(journalOpen){ p.style.display='flex'; renderJournal(); }
+  else p.style.display='none';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ITEM PORTRAIT SYSTEM
+//  Each item gets a tiny procedural canvas portrait instead of an emoji.
+// ═══════════════════════════════════════════════════════════════
+var _itemPortraitCache = {};
+
+function drawItemPortrait(itemId, canvas){
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  // Dark background
+  ctx.fillStyle='#0e0c0a'; ctx.fillRect(0,0,W,H);
+  var fn = itemPortraits[itemId] || itemPortraits['default'];
+  fn(ctx, W, H);
+}
+
+// Get/create a cached 44x44 canvas for an item (used in inventory slots)
+function getItemCanvas(itemId){
+  if(!_itemPortraitCache[itemId]){
+    var c = document.createElement('canvas');
+    c.width = 44; c.height = 44;
+    drawItemPortrait(itemId, c);
+    _itemPortraitCache[itemId] = c;
+  }
+  return _itemPortraitCache[itemId];
+}
+
+var itemPortraits = {
+  health_potion: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    // Glow
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,W/2);
+    g.addColorStop(0,'rgba(200,40,40,0.35)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // Bottle body
+    ctx.fillStyle='#c83030'; ctx.beginPath(); ctx.ellipse(cx,cy+2,W*0.22,H*0.3,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e04040'; ctx.beginPath(); ctx.ellipse(cx-W*0.05,cy-H*0.04,W*0.1,H*0.14,0,0,Math.PI*2); ctx.fill();
+    // Neck
+    ctx.fillStyle='#a82020'; ctx.fillRect(cx-W*0.08,cy-H*0.32,W*0.16,H*0.12);
+    // Cork
+    ctx.fillStyle='#a07040'; ctx.fillRect(cx-W*0.07,cy-H*0.42,W*0.14,H*0.1);
+    // Highlight
+    ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.ellipse(cx-W*0.08,cy,W*0.05,H*0.1,0.4,0,Math.PI*2); ctx.fill();
+    // Cross symbol
+    ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.fillRect(cx-1,cy-H*0.08,2,H*0.16); ctx.fillRect(cx-W*0.08,cy-1,W*0.16,2);
+  },
+  goblin_ear: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#5a9a28';
+    ctx.beginPath(); ctx.moveTo(cx,cy-H*0.35); ctx.quadraticCurveTo(cx+W*0.45,cy-H*0.1,cx+W*0.3,cy+H*0.3); ctx.quadraticCurveTo(cx,cy+H*0.4,cx-W*0.3,cy+H*0.3); ctx.quadraticCurveTo(cx-W*0.45,cy-H*0.1,cx,cy-H*0.35); ctx.fill();
+    ctx.fillStyle='#4a8a20'; ctx.beginPath(); ctx.ellipse(cx,cy+H*0.05,W*0.18,H*0.25,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#3a7018'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.35); ctx.lineTo(cx+W*0.08,cy+H*0.1); ctx.lineWidth=1.5; ctx.stroke();
+    ctx.strokeStyle='#3a7018'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(cx-W*0.1,cy); ctx.lineTo(cx+W*0.1,cy); ctx.stroke();
+    ctx.strokeStyle='rgba(0,0,0,0.2)'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.35); ctx.quadraticCurveTo(cx+W*0.45,cy-H*0.1,cx+W*0.3,cy+H*0.3); ctx.lineWidth=1; ctx.stroke();
+  },
+  rusty_dagger: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    // Blade
+    ctx.fillStyle='#808890'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.42); ctx.lineTo(cx+W*0.12,cy+H*0.15); ctx.lineTo(cx,cy+H*0.1); ctx.lineTo(cx-W*0.12,cy+H*0.15); ctx.closePath(); ctx.fill();
+    // Rust patches
+    ctx.fillStyle='rgba(160,80,20,0.6)'; ctx.fillRect(cx-W*0.08,cy-H*0.1,W*0.07,W*0.07); ctx.fillRect(cx+W*0.02,cy-H*0.25,W*0.06,W*0.05);
+    // Blade highlight
+    ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.42); ctx.lineTo(cx+W*0.04,cy+H*0.1); ctx.lineTo(cx,cy+H*0.08); ctx.closePath(); ctx.fill();
+    // Guard
+    ctx.fillStyle='#605040'; ctx.fillRect(cx-W*0.22,cy+H*0.12,W*0.44,H*0.07);
+    // Handle
+    ctx.fillStyle='#3a2810'; ctx.fillRect(cx-W*0.1,cy+H*0.19,W*0.2,H*0.24);
+    ctx.fillStyle='#5a4020'; ctx.fillRect(cx-W*0.07,cy+H*0.21,W*0.05,H*0.2);
+    // Pommel
+    ctx.fillStyle='#504030'; ctx.beginPath(); ctx.ellipse(cx,cy+H*0.42,W*0.12,H*0.07,0,0,Math.PI*2); ctx.fill();
+  },
+  iron_sword: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#9098a8'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.44); ctx.lineTo(cx+W*0.1,cy+H*0.12); ctx.lineTo(cx,cy+H*0.08); ctx.lineTo(cx-W*0.1,cy+H*0.12); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.moveTo(cx,cy-H*0.44); ctx.lineTo(cx+W*0.04,cy+H*0.08); ctx.lineTo(cx,cy+H*0.06); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(0,0,0,0.2)'; ctx.beginPath(); ctx.moveTo(cx-W*0.02,cy-H*0.44); ctx.lineTo(cx-W*0.1,cy+H*0.12); ctx.lineTo(cx,cy+H*0.08); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#707888'; ctx.fillRect(cx-W*0.25,cy+H*0.1,W*0.5,H*0.07);
+    ctx.fillStyle='#c8a020'; ctx.fillRect(cx-W*0.03,cy+H*0.15,W*0.06,H*0.02);
+    ctx.fillStyle='#4a3820'; ctx.fillRect(cx-W*0.08,cy+H*0.17,W*0.16,H*0.22);
+    ctx.fillStyle='#6a5030'; for(var i=0;i<3;i++) ctx.fillRect(cx-W*0.05,cy+H*(0.19+i*0.07),W*0.1,H*0.04);
+    ctx.fillStyle='#c8a020'; ctx.beginPath(); ctx.ellipse(cx,cy+H*0.42,W*0.1,H*0.07,0,0,Math.PI*2); ctx.fill();
+  },
+  leather_vest: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#6a4820'; ctx.beginPath(); ctx.moveTo(cx-W*0.32,cy-H*0.1); ctx.lineTo(cx-W*0.38,cy+H*0.4); ctx.lineTo(cx+W*0.38,cy+H*0.4); ctx.lineTo(cx+W*0.32,cy-H*0.1); ctx.quadraticCurveTo(cx,cy-H*0.5,cx-W*0.32,cy-H*0.1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#7a5830'; ctx.fillRect(cx-W*0.28,cy-H*0.05,W*0.56,H*0.38);
+    ctx.fillStyle='#5a3810'; ctx.fillRect(cx-W*0.03,cy-H*0.4,W*0.06,H*0.8);
+    for(var i=0;i<4;i++){ ctx.fillStyle=i%2===0?'#c8a020':'#a08020'; ctx.beginPath(); ctx.ellipse(cx,cy-H*0.2+i*H*0.18,W*0.04,H*0.03,0,0,Math.PI*2); ctx.fill(); }
+    ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fillRect(cx-W*0.28,cy-H*0.05,W*0.12,H*0.38);
+  },
+  torn_cloth: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#5a4830';
+    ctx.beginPath(); ctx.moveTo(cx-W*0.35,cy-H*0.3); ctx.lineTo(cx+W*0.3,cy-H*0.35); ctx.lineTo(cx+W*0.38,cy+H*0.2); ctx.lineTo(cx+W*0.1,cy+H*0.38); ctx.lineTo(cx-W*0.28,cy+H*0.32); ctx.lineTo(cx-W*0.4,cy-H*0.05); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#4a3820'; ctx.strokeStyle='#3a2810'; ctx.lineWidth=1;
+    for(var i=0;i<3;i++){ ctx.beginPath(); ctx.moveTo(cx-W*0.2+i*W*0.15,cy-H*0.3); ctx.lineTo(cx-W*0.25+i*W*0.15,cy+H*0.35); ctx.stroke(); }
+    ctx.strokeStyle='rgba(0,0,0,0.3)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(cx+W*0.1,cy+H*0.38); ctx.lineTo(cx+W*0.25,cy+H*0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+W*0.3,cy+H*0.2); ctx.lineTo(cx+W*0.48,cy+H*0.3); ctx.stroke();
+  },
+  gold_coin: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    var g=ctx.createRadialGradient(cx,cy,2,cx,cy,W*0.35);
+    g.addColorStop(0,'#ffe880'); g.addColorStop(0.6,'#c8a020'); g.addColorStop(1,'#806010');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,W*0.35,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#a08010'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(cx,cy,W*0.31,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#806010'; ctx.font='bold '+Math.floor(W*0.38)+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('G',cx+1,cy+1);
+    ctx.fillStyle='#ffe060'; ctx.fillText('G',cx,cy);
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    ctx.fillStyle='rgba(255,255,200,0.35)'; ctx.beginPath(); ctx.ellipse(cx-W*0.1,cy-W*0.1,W*0.1,W*0.06,-0.5,0,Math.PI*2); ctx.fill();
+  },
+  cave_crystal: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    var g=ctx.createRadialGradient(cx,cy,0,cx,cy,W/2);
+    g.addColorStop(0,'rgba(80,120,255,0.4)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    var shards=[[cx,cy+H*0.3,W*0.14,H*0.55],[cx-W*0.2,cy+H*0.3,W*0.11,H*0.42],[cx+W*0.18,cy+H*0.3,W*0.1,H*0.38]];
+    var cols=['#1840a8','#2060d8','#60a0ff'];
+    for(var i=0;i<shards.length;i++){
+      var s=shards[i];
+      ctx.fillStyle=cols[0]; ctx.beginPath(); ctx.moveTo(s[0]-s[2],s[1]); ctx.lineTo(s[0]+s[2],s[1]); ctx.lineTo(s[0]+s[2]*0.3,s[1]-s[3]); ctx.lineTo(s[0]-s[2]*0.3,s[1]-s[3]); ctx.closePath(); ctx.fill();
+      ctx.fillStyle=cols[1]; ctx.beginPath(); ctx.moveTo(s[0]-s[2]*0.5,s[1]); ctx.lineTo(s[0]+s[2]*0.5,s[1]); ctx.lineTo(s[0],s[1]-s[3]*0.85); ctx.closePath(); ctx.fill();
+      ctx.fillStyle=cols[2]; ctx.beginPath(); ctx.arc(s[0],s[1]-s[3]+3,2,0,Math.PI*2); ctx.fill();
+    }
+  },
+  bat_wing: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#2a1a2a';
+    ctx.beginPath(); ctx.moveTo(cx,cy+H*0.1); ctx.quadraticCurveTo(cx-W*0.45,cy-H*0.35,cx-W*0.42,cy+H*0.35); ctx.quadraticCurveTo(cx-W*0.2,cy+H*0.4,cx,cy+H*0.35); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#3a2a3a';
+    ctx.beginPath(); ctx.moveTo(cx,cy+H*0.1); ctx.quadraticCurveTo(cx+W*0.45,cy-H*0.35,cx+W*0.42,cy+H*0.35); ctx.quadraticCurveTo(cx+W*0.2,cy+H*0.4,cx,cy+H*0.35); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle='#5a3a5a'; ctx.lineWidth=0.8;
+    ctx.beginPath(); ctx.moveTo(cx,cy+H*0.1); ctx.quadraticCurveTo(cx-W*0.3,cy-H*0.1,cx-W*0.4,cy+H*0.3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy+H*0.1); ctx.quadraticCurveTo(cx+W*0.3,cy-H*0.1,cx+W*0.4,cy+H*0.3); ctx.stroke();
+    ctx.fillStyle='#1a101a'; ctx.beginPath(); ctx.ellipse(cx,cy,W*0.06,H*0.08,0,0,Math.PI*2); ctx.fill();
+  },
+  signet_ring: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    var g=ctx.createRadialGradient(cx,cy,4,cx,cy,W*0.32);
+    g.addColorStop(0,'#e8d060'); g.addColorStop(0.5,'#c8a820'); g.addColorStop(1,'#806010');
+    ctx.strokeStyle=g; ctx.lineWidth=W*0.14;
+    ctx.beginPath(); ctx.arc(cx,cy,W*0.28,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#2040a0'; ctx.beginPath(); ctx.ellipse(cx,cy-W*0.28,W*0.16,H*0.12,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#4060c0'; ctx.beginPath(); ctx.ellipse(cx-2,cy-W*0.3,W*0.08,H*0.06,-0.3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.beginPath(); ctx.ellipse(cx-W*0.08,cy-W*0.08,W*0.06,W*0.04,-0.5,0,Math.PI*2); ctx.fill();
+  },
+  pickaxe: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.strokeStyle='#7a5828'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(cx-W*0.3,cy+H*0.38); ctx.lineTo(cx+W*0.28,cy-H*0.3); ctx.stroke();
+    ctx.fillStyle='#808890';
+    ctx.beginPath(); ctx.moveTo(cx+W*0.28,cy-H*0.3); ctx.lineTo(cx+W*0.42,cy-H*0.44); ctx.lineTo(cx+W*0.44,cy-H*0.24); ctx.lineTo(cx+W*0.28,cy-H*0.22); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#9098a8';
+    ctx.beginPath(); ctx.moveTo(cx+W*0.28,cy-H*0.3); ctx.lineTo(cx+W*0.44,cy-H*0.24); ctx.lineTo(cx+W*0.38,cy-H*0.18); ctx.lineTo(cx+W*0.22,cy-H*0.22); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#606870'; ctx.fillRect(cx+W*0.18,cy-H*0.34,W*0.12,H*0.1);
+    ctx.fillStyle='rgba(255,255,255,0.2)';
+    ctx.beginPath(); ctx.moveTo(cx+W*0.28,cy-H*0.3); ctx.lineTo(cx+W*0.4,cy-H*0.42); ctx.lineTo(cx+W*0.42,cy-H*0.36); ctx.closePath(); ctx.fill();
+  },
+  cartwheel: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.strokeStyle='#6a4820'; ctx.lineWidth=W*0.12;
+    ctx.beginPath(); ctx.arc(cx,cy,W*0.36,0,Math.PI*2); ctx.stroke();
+    ctx.strokeStyle='#4a2808'; ctx.lineWidth=W*0.07;
+    for(var i=0;i<6;i++){
+      var a=i*Math.PI/3;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*W*0.3,cy+Math.sin(a)*W*0.3); ctx.stroke();
+    }
+    ctx.fillStyle='#3a1c08'; ctx.beginPath(); ctx.arc(cx,cy,W*0.1,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#5a3010'; ctx.beginPath(); ctx.arc(cx,cy,W*0.07,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.beginPath(); ctx.arc(cx-W*0.12,cy-W*0.12,W*0.06,0,Math.PI*2); ctx.fill();
+  },
+  'default': function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    ctx.fillStyle='#808080'; ctx.beginPath(); ctx.arc(cx,cy,W*0.32,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.beginPath(); ctx.ellipse(cx-W*0.1,cy-H*0.1,W*0.12,H*0.08,-0.4,0,Math.PI*2); ctx.fill();
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  SHOP SYSTEM
+// ═══════════════════════════════════════════════════════════════
+var shopOpen=false, shopTab='buy', shopSelectedId=null, shopSelectedSlot=null;
+
+var SHOP_SELLS=[
+  {itemId:'health_potion', price:2,  qty:99},
+];
+var SHOP_BUYS=[
+  {itemId:'goblin_ear',   price:2},
+  {itemId:'torn_cloth',   price:1},
+  {itemId:'cave_crystal', price:5},
+  {itemId:'bat_wing',     price:1},
+  {itemId:'rusty_dagger', price:3},
+  {itemId:'iron_sword',   price:5},
+  {itemId:'leather_vest', price:4},
+  {itemId:'gold_coin',    price:1},
+];
+
+function openShop(){
+  shopOpen=true; shopTab='buy'; shopSelectedId=null; shopSelectedSlot=null;
+  if(dialogueOpen)closeDialogue();
+  document.getElementById('shopPanel').style.display='flex';
+  renderShop();
+}
+window.closeShop=function(){
+  shopOpen=false;
+  document.getElementById('shopPanel').style.display='none';
+};
+window.switchShopTab=function(tab){
+  shopTab=tab; shopSelectedId=null; shopSelectedSlot=null;
+  document.getElementById('shopTabBuy').classList.toggle('active',tab==='buy');
+  document.getElementById('shopTabSell').classList.toggle('active',tab==='sell');
+  renderShop();
+};
+
+function renderShop(){
+  document.getElementById('shopGoldAmt').textContent=playerGold;
+  var grid=document.getElementById('shopGrid');
+  grid.innerHTML='';
+  // Clear detail
+  document.getElementById('shopDetailContent').style.display='none';
+  document.getElementById('shopDetailEmpty').style.display='block';
+
+  if(shopTab==='buy'){
+    for(var i=0;i<SHOP_SELLS.length;i++){
+      var entry=SHOP_SELLS[i];
+      var def=ITEMS[entry.itemId]; if(!def)continue;
+      var slot=document.createElement('div');
+      slot.className='shop-slot '+(def.rarity||'common')+(shopSelectedId===entry.itemId?' selected':'');
+      var c=getItemCanvas(entry.itemId);
+      var c2=document.createElement('canvas'); c2.width=36; c2.height=36;
+      drawItemPortrait(entry.itemId,c2);
+      slot.appendChild(c2);
+      var nm=document.createElement('div'); nm.className='slot-name'; nm.textContent=def.name;
+      var pr=document.createElement('div'); pr.className='slot-price'; pr.textContent=entry.price+'g';
+      slot.appendChild(nm); slot.appendChild(pr);
+      slot.onclick=(function(eid){return function(){selectShopItem(eid,null);};})(entry.itemId);
+      grid.appendChild(slot);
+    }
+  } else {
+    // Sell tab — show player's sellable items
+    var found=false;
+    for(var ii=0;ii<inventory.length;ii++){
+      var invSlot=inventory[ii]; if(!invSlot)continue;
+      var buyEntry=null;
+      for(var bi=0;bi<SHOP_BUYS.length;bi++){if(SHOP_BUYS[bi].itemId===invSlot.itemId){buyEntry=SHOP_BUYS[bi];break;}}
+      if(!buyEntry)continue;
+      found=true;
+      var def2=ITEMS[invSlot.itemId]; if(!def2)continue;
+      var slot2=document.createElement('div');
+      slot2.className='shop-slot '+(def2.rarity||'common')+(shopSelectedSlot===ii?' selected':'');
+      var c3=document.createElement('canvas'); c3.width=36; c3.height=36;
+      drawItemPortrait(invSlot.itemId,c3);
+      slot2.appendChild(c3);
+      var nm2=document.createElement('div'); nm2.className='slot-name'; nm2.textContent=def2.name;
+      var pr2=document.createElement('div'); pr2.className='slot-price'; pr2.textContent='+'+buyEntry.price+'g';
+      var qt=document.createElement('div'); qt.className='slot-qty'; qt.textContent='x'+invSlot.qty;
+      slot2.appendChild(nm2); slot2.appendChild(pr2); slot2.appendChild(qt);
+      slot2.onclick=(function(slotIdx,bEntry){return function(){selectShopSlot(slotIdx,bEntry);};})(ii,buyEntry);
+      grid.appendChild(slot2);
+    }
+    if(!found){
+      var empty=document.createElement('div');
+      empty.style.cssText='grid-column:1/-1;color:#5a5030;font-size:.64rem;font-style:italic;text-align:center;padding:20px;letter-spacing:.08em;';
+      empty.textContent="Nothing I want right now. Try exploring the caves.";
+      grid.appendChild(empty);
+    }
+  }
+}
+
+function selectShopItem(itemId, invSlotIdx){
+  shopSelectedId=itemId; shopSelectedSlot=invSlotIdx;
+  renderShop();
+  var def=ITEMS[itemId]; if(!def)return;
+  document.getElementById('shopDetailEmpty').style.display='none';
+  var dc=document.getElementById('shopDetailContent'); dc.style.display='flex';
+  // Draw portrait
+  var detCanvas=document.getElementById('shopDetailCanvas');
+  drawItemPortrait(itemId,detCanvas);
+  document.getElementById('shopDetailName').textContent=def.name;
+  var rc={common:'#b0b0b0',uncommon:'#60dd60',rare:'#6080ff'};
+  document.getElementById('shopDetailRarity').textContent=(def.rarity||'common').toUpperCase();
+  document.getElementById('shopDetailRarity').style.color=rc[def.rarity]||'#fff';
+  document.getElementById('shopDetailDesc').textContent=def.desc||'';
+  document.getElementById('shopDetailStats').textContent=def.stats||'';
+  // Price
+  var btn=document.getElementById('shopActionBtn');
+  if(shopTab==='buy'){
+    var entry=null; for(var i=0;i<SHOP_SELLS.length;i++){if(SHOP_SELLS[i].itemId===itemId){entry=SHOP_SELLS[i];break;}}
+    if(entry){
+      document.getElementById('shopDetailPrice').textContent='Cost: '+entry.price+' gold  (you have: '+playerGold+')';
+      btn.textContent='Buy for '+entry.price+'g';
+      btn.disabled=(playerGold<entry.price);
+    }
+  } else {
+    var be=null; for(var j=0;j<SHOP_BUYS.length;j++){if(SHOP_BUYS[j].itemId===itemId){be=SHOP_BUYS[j];break;}}
+    if(be&&invSlotIdx!==null){
+      var qty2=inventory[invSlotIdx]?inventory[invSlotIdx].qty:0;
+      document.getElementById('shopDetailPrice').textContent='Sell for: +'+be.price+' gold each  (qty: '+qty2+')';
+      btn.textContent='Sell all for '+(be.price*qty2)+'g';
+      btn.disabled=false;
+    }
+  }
+}
+
+function selectShopSlot(slotIdx, buyEntry){
+  shopSelectedSlot=slotIdx;
+  shopSelectedId=inventory[slotIdx]?inventory[slotIdx].itemId:null;
+  if(shopSelectedId) selectShopItem(shopSelectedId, slotIdx);
+}
+
+window.shopDoAction=function(){
+  if(shopTab==='buy'&&shopSelectedId){
+    var entry=null; for(var i=0;i<SHOP_SELLS.length;i++){if(SHOP_SELLS[i].itemId===shopSelectedId){entry=SHOP_SELLS[i];break;}}
+    if(entry&&playerGold>=entry.price){
+      playerGold-=entry.price;
+      giveItem(shopSelectedId,1);
+      if(window._updateHUD)window._updateHUD();
+      selectShopItem(shopSelectedId,null); // refresh detail with new gold
+      renderShop();
+      if(window._spawnLootPop){var p=window._spawnLootPop; p(0,0,'Bought '+ITEMS[shopSelectedId].name+'!');}
+    }
+  } else if(shopTab==='sell'&&shopSelectedSlot!==null){
+    var invS=inventory[shopSelectedSlot]; if(!invS)return;
+    var be=null; for(var j=0;j<SHOP_BUYS.length;j++){if(SHOP_BUYS[j].itemId===invS.itemId){be=SHOP_BUYS[j];break;}}
+    if(be){
+      playerGold+=be.price*invS.qty;
+      inventory[shopSelectedSlot]=null;
+      shopSelectedSlot=null; shopSelectedId=null;
+      if(window._updateHUD)window._updateHUD();
+      renderInventory();
+      renderShop();
+    }
+  }
+};
+
+function startGame(pendingSave){
   const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
   const mmCanvas=document.getElementById('minimapCanvas'),mmCtx=mmCanvas.getContext('2d');
 
   function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',()=>{resize();vignetteGrad=null;});
+  resize();window.addEventListener('resize',()=>{resize();lightCanvas=null;}); // lightCanvas=null forces lighting canvases to rebuild on resize
 
   const PLAYER_SPD=3.2,ENGAGE_R=55,TALK_R=70;
+  const BAT_ENGAGE_R=50;
+
+  // ── DAY / NIGHT CYCLE ──────────────────────────────────────
+  // Full cycle = 10 real minutes. dayPhase 0=noon, 0.5=midnight
+  const DAY_CYCLE_MS = 10 * 60 * 1000;
+  let dayPhase = 0.05; // start just past dawn
+
+  function updateDayNight(){
+    dayPhase = ((Date.now() % DAY_CYCLE_MS) / DAY_CYCLE_MS);
+  }
+  // Returns 0 (noon) → 1 (midnight) brightness factor
+  function nightDark(){
+    // cos curve: 0 at noon (phase=0 or 1), 1 at midnight (phase=0.5)
+    return 0.5 - 0.5*Math.cos(dayPhase*Math.PI*2);
+  }
+  function skyColour(){
+    const d=nightDark();
+    const r=Math.round(20+60*(1-d));
+    const g=Math.round(30+80*(1-d));
+    const b=Math.round(40+100*(1-d));
+    return `rgb(${r},${g},${b})`;
+  }
 
   // ── ZONES ──────────────────────────────────────────────────
   let currentZone='plains';
@@ -594,13 +2534,149 @@ function startGame(){
   // Caravan / NPC near spawn
   const CARAVAN_POS  ={x:PLAINS.W/2-200,y:PLAINS.H/2-120};
   const NPC_POS      ={x:PLAINS.W/2-160,y:PLAINS.H/2-80};
+  // Village east of the enclosure, past the breakable rocks
+  const VILLAGE_OX   = PLAINS.W/2 + 2200;
+  const VILLAGE_OY   = PLAINS.H/2;
+  const GATE_X       = VILLAGE_OX - 220;
+  const GATE_Y       = VILLAGE_OY;
+  window._GATE_X=GATE_X; window._GATE_Y=GATE_Y;
+  window._VILLAGE_OX=VILLAGE_OX; window._VILLAGE_OY=VILLAGE_OY;
+  // Palisade
+  const PAL_W=520, PAL_H=440;
+  const PAL={x:VILLAGE_OX-PAL_W/2, y:VILLAGE_OY-PAL_H/2, w:PAL_W, h:PAL_H};
+  // NPC positions
+  const GUARD1_POS   ={x:GATE_X-30, y:GATE_Y-50};
+  const GUARD2_POS   ={x:GATE_X-30, y:GATE_Y+50};
+  const MERCHANT_POS ={x:VILLAGE_OX+30, y:VILLAGE_OY-10};
+  // roadTrees built later, after ENC and PAD are declared
 
   const cCOLS=Math.ceil(CAVE.W/CAVE.TILE)+1,cROWS=Math.ceil(CAVE.H/CAVE.TILE)+1;
   const caveFloor=new Uint8Array(cCOLS*cROWS);
   for(let i=0;i<caveFloor.length;i++)caveFloor[i]=Math.random()*4|0;
   const CAVE_EXIT={x:200,y:200};
 
-  // ── CAVE OBSTRUCTIONS + COLLISION ──────────────────────────
+  // ── STARTING ENCLOSURE ─────────────────────────────────────
+  const SPX=PLAINS.W/2, SPY=PLAINS.H/2;
+  const ENC_W=480, ENC_H=400;
+  const ENC={x:SPX-ENC_W/2, y:SPY-ENC_H/2, w:ENC_W, h:ENC_H};
+
+  // Cave entrance is INSIDE the north wall of the pen — reachable from spawn
+  // Override the cave entrance position to sit just inside the north wall
+  CAVE_ENTRANCE.x = SPX + 60;
+  CAVE_ENTRANCE.y = ENC.y + 30; // just inside the north tree line
+
+  // Build organic double-row tree border.
+  // Strategy: walk each wall segment twice (inner + outer offset),
+  // plant trees every ~38px with random jitter so they feel natural.
+  const encTrees=[];
+  const TREE_SPACING=40;
+
+  function addOrganicWall(x1,y1,x2,y2,gapFracA,gapFracB){
+    const dx=x2-x1, dy=y2-y1;
+    const len=Math.sqrt(dx*dx+dy*dy);
+    // Perpendicular direction (inward offset for double row)
+    const nx=-dy/len, ny=dx/len;
+    const count=Math.ceil(len/TREE_SPACING)+1;
+    for(let row=0;row<2;row++){
+      const outset=(row===0?0:22); // outer row pushed out 22px
+      for(let i=0;i<=count;i++){
+        const frac=i/count;
+        if(frac>gapFracA&&frac<gapFracB)continue; // leave gap
+        const jx=(Math.random()-0.5)*14;
+        const jy=(Math.random()-0.5)*14;
+        const bx=x1+dx*frac - nx*outset + jx;
+        const by=y1+dy*frac - ny*outset + jy;
+        encTrees.push({x:bx, y:by, variant:Math.floor(Math.random()*3), r:16+Math.random()*6});
+      }
+    }
+  }
+
+  // North wall: gap where the cave entrance sits
+  const caveGapA=(CAVE_ENTRANCE.x - 44 - ENC.x)/ENC_W;
+  const caveGapB=(CAVE_ENTRANCE.x + 44 - ENC.x)/ENC_W;
+  addOrganicWall(ENC.x,ENC.y, ENC.x+ENC.w,ENC.y, caveGapA,caveGapB);
+
+  // South wall — solid
+  addOrganicWall(ENC.x,ENC.y+ENC.h, ENC.x+ENC.w,ENC.y+ENC.h, 1,1);
+
+  // West wall — solid
+  addOrganicWall(ENC.x,ENC.y, ENC.x,ENC.y+ENC.h, 1,1);
+
+  // East wall — gap in middle for the breakable rocks (frac 0.38–0.62)
+  addOrganicWall(ENC.x+ENC.w,ENC.y, ENC.x+ENC.w,ENC.y+ENC.h, 0.38,0.62);
+
+  // Outer ring — solid all the way around, BUT east side has a matching gap
+  // so once the rocks are broken the corridor is actually open
+  const PAD=28;
+  addOrganicWall(ENC.x-PAD,ENC.y-PAD, ENC.x+ENC.w+PAD,ENC.y-PAD, 1,1);             // outer north
+  addOrganicWall(ENC.x-PAD,ENC.y+ENC.h+PAD, ENC.x+ENC.w+PAD,ENC.y+ENC.h+PAD, 1,1); // outer south
+  addOrganicWall(ENC.x-PAD,ENC.y-PAD, ENC.x-PAD,ENC.y+ENC.h+PAD, 1,1);             // outer west
+  // Outer east — same gap fractions as inner east so the corridor is clear
+  addOrganicWall(ENC.x+ENC.w+PAD,ENC.y-PAD, ENC.x+ENC.w+PAD,ENC.y+ENC.h+PAD, 0.38,0.62);
+
+  // Dense corner clusters — prevent diagonal clipping through corners
+  const corners=[
+    {x:ENC.x,      y:ENC.y      },
+    {x:ENC.x+ENC.w,y:ENC.y      },
+    {x:ENC.x,      y:ENC.y+ENC.h},
+    {x:ENC.x+ENC.w,y:ENC.y+ENC.h},
+  ];
+  for(const c of corners){
+    for(let i=0;i<6;i++){
+      encTrees.push({
+        x:c.x+(Math.random()-0.5)*40,
+        y:c.y+(Math.random()-0.5)*40,
+        variant:Math.floor(Math.random()*3),
+        r:17+Math.random()*6,
+      });
+    }
+  }
+
+  // Breakable rocks sit in the corridor between inner and outer east walls
+  // centred at ENC.x+ENC.w + PAD/2 so they block but don't overlap either tree row
+  const ROCK_INTERACT_R=52;
+  const rockGapY1=ENC.y+ENC_H*0.38, rockGapY2=ENC.y+ENC_H*0.62;
+  const rockCentreY=(rockGapY1+rockGapY2)/2;
+  const rockX=ENC.x+ENC.w+PAD/2; // midpoint of the corridor
+  const encRocks=[
+    {x:rockX-2,  y:rockCentreY-68, broken:false},
+    {x:rockX+6,  y:rockCentreY-26, broken:false},
+    {x:rockX-4,  y:rockCentreY+18, broken:false},
+    {x:rockX+4,  y:rockCentreY+60, broken:false},
+  ];
+
+  function hasPickaxe(){return inventory.some(s=>s&&s.itemId==='pickaxe');}
+  const TREE_R=20;
+  window._encRocks=encRocks;
+
+  // Road-side trees — built here so ENC and PAD are fully defined
+  const roadTrees=[];
+  (function(){
+    var rng=7;
+    var roadStart=ENC.x+ENC.w+PAD+80;
+    var roadEnd  =GATE_X-100;
+    for(var rx=roadStart; rx<roadEnd; rx+=85+(Math.abs((rng=rng*1664525+1013904223|0))%35)){
+      // North-side tree: y = VILLAGE_OY - 52 to -70 (well clear of 16px road half-width)
+      var jy=(Math.abs((rng=rng*1664525+1013904223|0))%18);
+      var sz=14+(Math.abs((rng=rng*1664525+1013904223|0))%11);
+      var v=Math.abs((rng=rng*1664525+1013904223|0))%3;
+      roadTrees.push({x:rx, y:VILLAGE_OY-52-jy, r:sz, variant:v});
+      // South-side tree: y = VILLAGE_OY + 52 to +70
+      jy=(Math.abs((rng=rng*1664525+1013904223|0))%18);
+      sz=14+(Math.abs((rng=rng*1664525+1013904223|0))%11);
+      v=Math.abs((rng=rng*1664525+1013904223|0))%3;
+      roadTrees.push({x:rx+(Math.abs((rng=rng*1664525+1013904223|0))%18), y:VILLAGE_OY+52+jy, r:sz, variant:v});
+    }
+  })();
+
+  // ── CAVE CHEST ─────────────────────────────────────────────
+  // Single chest in the cave, placed in a visible spot
+  const caveChest={
+    x:CAVE.W/2+200, y:CAVE.H/2-180,
+    opened:false,
+    loot:['pickaxe','health_potion','gold_coin','gold_coin','gold_coin'],
+  };
+  window._caveChest=caveChest;
   const caveObstructions=[];
   for(let i=0;i<25;i++)caveObstructions.push({x:80+Math.random()*(CAVE.W-160),y:80+Math.random()*(CAVE.H-160),type:'boulder',r:10+Math.random()*18,seed:Math.random()});
   for(let i=0;i<30;i++)caveObstructions.push({x:60+Math.random()*(CAVE.W-120),y:60+Math.random()*(CAVE.H-120),type:'stalagmite',h:14+Math.random()*22,w:5+Math.random()*6,seed:Math.random()});
@@ -620,6 +2696,8 @@ function startGame(){
   const fogCols_c=Math.ceil(CAVE.W/FOG_TILE),   fogRows_c=Math.ceil(CAVE.H/FOG_TILE);
   const fogPlains=new Uint8Array(fogCols_p*fogRows_p);
   const fogCave  =new Uint8Array(fogCols_c*fogRows_c);
+  window._fogPlains=fogPlains;
+  window._fogCave=fogCave;
   const FOG_RADIUS=5; // tiles revealed around player
 
   function revealFog(px,py){
@@ -636,17 +2714,45 @@ function startGame(){
   }
 
   // ── GOBLINS ────────────────────────────────────────────────
+  // Each goblin has: hp, xp, detectR (aggro radius), lootFn
+  const GOBLIN_XP=15;
+  const SHAMAN_XP=30;
+  const DETECT_R=140; // pixels — goblins chase if player within this range
+
   const GDEFS=[
-    {name:'Goblin',dx:300,dy:200},{name:'Goblin',dx:900,dy:400},
-    {name:'Goblin',dx:1400,dy:300},{name:'Goblin Scout',dx:600,dy:900},
-    {name:'Goblin Scout',dx:1800,dy:700},{name:'Goblin',dx:2400,dy:500},
-    {name:'Goblin Shaman',dx:1200,dy:1400},
+    {name:'Goblin',      dx:300,  dy:200, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin',      dx:900,  dy:400, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin',      dx:1400, dy:300, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin Scout',dx:600,  dy:900, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin Scout',dx:1800, dy:700, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin',      dx:2400, dy:500, hp:10, xp:GOBLIN_XP, shaman:false},
+    {name:'Goblin Shaman',dx:1200,dy:1400,hp:18, xp:SHAMAN_XP, shaman:true},
   ];
   const goblins=GDEFS.map((g,i)=>({
-    id:i,name:g.name,x:g.dx,y:g.dy,hp:10,maxHp:10,alive:true,
-    walkFrame:0,walkTimer:0,idleTimer:Math.random()*120,idleDx:0,idleDy:0,hitFlash:0,
+    id:i, name:g.name, x:g.dx, y:g.dy,
+    hp:g.hp, maxHp:g.hp, xp:g.xp, alive:true,
+    shaman:g.shaman,
+    walkFrame:0, walkTimer:0,
+    idleTimer:Math.random()*120, idleDx:0, idleDy:0, hitFlash:0,
+    state:'idle', // 'idle' | 'chase' | 'retreat'
+    alertTimer:0,
   }));
-  const GOBLIN_XP=15;
+  window._goblins=goblins;
+
+  // ── BATS ───────────────────────────────────────────────────
+  const BAT_DEFS=[
+    {x:400,y:600},{x:800,y:1100},{x:1600,y:500},{x:2200,y:900},
+    {x:500,y:1800},{x:1900,y:1600},{x:2800,y:400},{x:700,y:2000},
+  ];
+  const bats=BAT_DEFS.map((b,i)=>({
+    id:i, x:b.x, y:b.y, hp:2, maxHp:2, alive:true,
+    angle:Math.random()*Math.PI*2,
+    orbitR:30+Math.random()*60,
+    orbitSpd:(Math.random()<.5?1:-1)*(0.025+Math.random()*0.02),
+    cx:b.x, cy:b.y, // orbit centre
+    hitFlash:0, walkFrame:0, walkTimer:0,
+    idleDx:0, idleDy:0, idleTimer:Math.random()*80,
+  }));
 
   // ── PLAYER ─────────────────────────────────────────────────
   const player={
@@ -674,6 +2780,7 @@ function startGame(){
   }
 
   function showLevelUp(){
+    Audio.sfxLevel();
     const fl=document.getElementById('levelUpFlash');
     fl.style.background='radial-gradient(ellipse at center,rgba(60,200,255,.25) 0%,transparent 70%)';
     fl.style.opacity='1';setTimeout(()=>fl.style.opacity='0',600);
@@ -695,10 +2802,14 @@ function startGame(){
 
   // ── INPUT ──────────────────────────────────────────────────
   const keys={};
+  document.getElementById('saveHint').style.display='block';
   document.addEventListener('keydown',e=>{
+    // F5 — save game (prevent browser refresh)
+    if(e.key==='F5'){e.preventDefault();saveGame();return;}
     const k=e.key.toLowerCase();
-    if(k==='i'&&gameStarted&&!dialogueOpen){if(!inCombat)toggleInventory();return;}
-    if(k==='escape'){if(invOpen){closeInventory();return;}if(dialogueOpen){closeDialogue();return;}}
+    if(k==='j'&&gameStarted){if(!inCombat&&!dialogueOpen&&!shopOpen){toggleJournal();}return;}
+    if(k==='i'&&gameStarted&&!dialogueOpen&&!shopOpen){if(!inCombat)toggleInventory();return;}
+    if(k==='escape'){if(shopOpen){closeShop();return;}if(journalOpen){closeJournal();return;}if(invOpen){closeInventory();return;}if(dialogueOpen){closeDialogue();return;}}
     keys[k]=true;
     if(inCombat){
       if(k==='1')combatAction('attack');if(k==='2')combatAction('heavy');
@@ -711,15 +2822,43 @@ function startGame(){
   const zoneFade=document.getElementById('zoneFade');
   const hudZone=document.getElementById('hudZone');
   let transitioning=false;
+
+  // Expose zone for save system
+  Object.defineProperty(window,'_currentZone',{get:()=>currentZone});
+  window._setZone=function(zone){
+    currentZone=zone;
+    if(zone==='cave'){hudZone.textContent='THE GOBLIN CAVES';hudZone.style.color='#8090c0';}
+    else{hudZone.textContent='THE VERDANT PLAINS';hudZone.style.color='#90b0d0';}
+  };
+  let bannerTimer=null;
+  function showAreaBanner(sub,main){
+    const el=document.getElementById('areaBanner');
+    document.getElementById('areaBannerSub').textContent=sub;
+    document.getElementById('areaBannerMain').textContent=main;
+    el.classList.add('show');
+    clearTimeout(bannerTimer);
+    bannerTimer=setTimeout(function(){el.classList.remove('show');},3200);
+  }
+
   function transitionTo(zone){
     if(transitioning)return;transitioning=true;
     zoneFade.classList.add('fading');
-    setTimeout(()=>{
+    Audio.crossfadeTo(zone==='cave'?'cave':'intro');
+    setTimeout(function(){
       currentZone=zone;
-      if(zone==='cave'){player.x=CAVE_EXIT.x+100;player.y=CAVE_EXIT.y+80;hudZone.textContent='THE GOBLIN CAVES';hudZone.style.color='#8090c0';}
-      else{player.x=CAVE_ENTRANCE.x;player.y=CAVE_ENTRANCE.y+60;hudZone.textContent='THE VERDANT PLAINS';hudZone.style.color='#90b0d0';}
+      if(zone==='cave'){
+        player.x=CAVE_EXIT.x+100;player.y=CAVE_EXIT.y+80;
+        hudZone.textContent='THE GOBLIN CAVES';hudZone.style.color='#8090c0';
+      }else{
+        player.x=CAVE_ENTRANCE.x;player.y=CAVE_ENTRANCE.y+60;
+        hudZone.textContent='THE VERDANT PLAINS';hudZone.style.color='#90b0d0';
+      }
       updateCamera();revealFog(player.x,player.y);
-      setTimeout(()=>{zoneFade.classList.remove('fading');transitioning=false;},500);
+      setTimeout(function(){
+        zoneFade.classList.remove('fading');transitioning=false;
+        if(zone==='cave') showAreaBanner('— Entering —','The Goblin Caves');
+        else showAreaBanner('— Returning to —','The Verdant Plains');
+      },500);
     },500);
   }
 
@@ -789,6 +2928,7 @@ function startGame(){
     el.style.left=(wx-cam.x-40+Math.random()*20)+'px';el.style.top=(wy-cam.y-20)+'px';
     document.body.appendChild(el);setTimeout(()=>el.remove(),2000);
   }
+  window._spawnLootPop=spawnLootPop;
 
   window.combatAction=function(type){
     if(!inCombat||!playerTurn||combatBusy)return;
@@ -811,18 +2951,30 @@ function startGame(){
     }
     const atkB=getAtkBonus();
     let dmg=0,hit=true;
-    if(type==='attack'){dmg=(Math.random()<.5?2:1)+atkB;addLog(`You slash for <b>${dmg}</b> damage!`,'player');}
-    else{if(Math.random()<.6){dmg=2+atkB;addLog(`Heavy strike! <b>${dmg}</b> damage!`,'player');}else{hit=false;addLog(`Your heavy blow swings wide!`,'miss');}}
-    if(hit&&dmg>0){enemy.hp=Math.max(0,enemy.hp-dmg);enemy.hitFlash=12;spawnDmg(enemy.x,enemy.y,dmg,false);}
+    if(type==='attack'){dmg=(Math.random()<.5?2:1)+atkB;addLog(`You slash for <b>${dmg}</b> damage!`,'player');Audio.sfxSwing();}
+    else{if(Math.random()<.6){dmg=2+atkB;addLog(`Heavy strike! <b>${dmg}</b> damage!`,'player');Audio.sfxSwing();}else{hit=false;addLog(`Your heavy blow swings wide!`,'miss');Audio.sfxSwing();}}
+    if(hit&&dmg>0){enemy.hp=Math.max(0,enemy.hp-dmg);enemy.hitFlash=12;spawnDmg(enemy.x,enemy.y,dmg,false);Audio.sfxHit();if(!enemy.isBat)Audio.sfxGrunt();}
     if(enemy.hp<=0){
       enemy.alive=false;addLog(`The ${enemy.name} collapses!`,'victory');
+      if(!enemy.isBat)Audio.sfxDeath(); else Audio.sfxHit();
       player.kills=(player.kills||0)+1;
       setTimeout(()=>{
-        const drops=rollLoot();applyLoot(drops);
+        // Determine drops
+        let drops=[];
+        if(enemy.isBat){
+          if(Math.random()<0.4) drops=[{itemId:'bat_wing',qty:1}];
+        } else if(enemy.shaman){
+          drops=rollLoot();
+          drops.push({itemId:'cartwheel',qty:1}); // guaranteed cartwheel
+        } else {
+          drops=rollLoot();
+        }
+        applyLoot(drops);
         const names=drops.map(d=>{const df=ITEMS[d.itemId];return df?`${df.icon}${d.qty>1?` ${d.qty}×`:''} ${df.name}`:''}).filter(Boolean);
         if(names.length){addLog(`Loot: ${names.join(', ')}`,'loot');spawnLootPop(enemy.x,enemy.y,'⬆ Loot!');}
-        addLog(`+${GOBLIN_XP} XP`,'xp');
-        awardXP(GOBLIN_XP);
+        const xpGain=enemy.xp||GOBLIN_XP;
+        addLog(`+${xpGain} XP`,'xp');
+        awardXP(xpGain);
         exitCombat();
       },1100);return;
     }
@@ -837,7 +2989,7 @@ function startGame(){
     const dmg=Math.max(0,rawDmg-defB);
     player.hp=Math.max(0,player.hp-dmg);player.hitFlash=16;
     spawnDmg(player.x,player.y,dmg>0?dmg:0,true);
-    if(dmg>0)addLog(`The ${enemy.name} claws you for <b>${dmg}</b> damage!`,'enemy');
+    if(dmg>0){addLog(`The ${enemy.name} claws you for <b>${dmg}</b> damage!`,'enemy');Audio.sfxHurt();}
     else addLog(`The ${enemy.name} strikes but your armour holds!`,'system');
     updateHUD();
     if(player.hp<=0){
@@ -850,16 +3002,102 @@ function startGame(){
 
   // ── COLLISION ──────────────────────────────────────────────
   function resolveCollision(nx,ny){
-    if(currentZone!=='cave')return{x:nx,y:ny};
     let rx=nx,ry=ny;
-    // World bounds
-    rx=Math.max(20,Math.min(CAVE.W-20,rx));
-    ry=Math.max(20,Math.min(CAVE.H-20,ry));
-    // Boulder collisions
-    for(const b of boulderColliders){
-      const dx=rx-b.x,dy=ry-b.y,d=Math.sqrt(dx*dx+dy*dy);
-      const minD=b.r+12;
-      if(d<minD&&d>0){const push=(minD-d)/d;rx+=dx*push;ry+=dy*push;}
+    if(currentZone==='cave'){
+      rx=Math.max(20,Math.min(CAVE.W-20,rx));
+      ry=Math.max(20,Math.min(CAVE.H-20,ry));
+      for(const b of boulderColliders){
+        const dx=rx-b.x,dy=ry-b.y,d=Math.sqrt(dx*dx+dy*dy);
+        const minD=b.r+12;
+        if(d<minD&&d>0){const push=(minD-d)/d;rx+=dx*push;ry+=dy*push;}
+      }
+    }else{
+      // Plains world bounds
+      rx=Math.max(20,Math.min(PLAINS.W-20,rx));
+      ry=Math.max(20,Math.min(PLAINS.H-20,ry));
+      // Run collision twice to prevent corner-clipping
+      for(let pass=0;pass<2;pass++){
+        for(const t of encTrees){
+          const dx=rx-t.x, dy=ry-t.y;
+          const d=Math.sqrt(dx*dx+dy*dy);
+          const minD=(t.r||TREE_R)+11;
+          if(d<minD&&d>0.01){
+            const push=(minD-d)/d;
+            rx+=dx*push; ry+=dy*push;
+          }
+        }
+        // Rock collisions (only unbroken)
+        for(const r of encRocks){
+          if(r.broken)continue;
+          const dx=rx-r.x, dy=ry-r.y;
+          const d=Math.sqrt(dx*dx+dy*dy);
+          const minD=26;
+          if(d<minD&&d>0.01){const push=(minD-d)/d;rx+=dx*push;ry+=dy*push;}
+        }
+        // Road tree collisions — trees are at ±52px+ from road centre
+        for(var rti=0;rti<roadTrees.length;rti++){
+          var rt=roadTrees[rti];
+          var dx=rx-rt.x, dy=ry-rt.y;
+          var d=Math.sqrt(dx*dx+dy*dy);
+          var minD=(rt.r||15)+10;
+          if(d<minD&&d>0.01){var push=(minD-d)/d;rx+=dx*push;ry+=dy*push;}
+        }
+        // Palisade wall collision
+        // Always block east/north/south walls. West wall has gate gap only when unlocked.
+        var palLeft  = PAL.x - 16;
+        var palRight = PAL.x + PAL.w + 16;
+        var palTop   = PAL.y - 16;
+        var palBot   = PAL.y + PAL.h + 16;
+        var GATE_GAP = 28; // half-width of gate opening in world pixels
+
+        // North wall
+        if(rx>PAL.x&&rx<PAL.x+PAL.w&&ry>palTop&&ry<PAL.y){
+          ry=palTop;
+        }
+        // South wall
+        if(rx>PAL.x&&rx<PAL.x+PAL.w&&ry>PAL.y+PAL.h&&ry<palBot){
+          ry=palBot;
+        }
+        // East wall
+        if(rx>PAL.x+PAL.w&&rx<palRight&&ry>PAL.y&&ry<PAL.y+PAL.h){
+          rx=palRight;
+        }
+        // West wall — has gate gap
+        if(rx>palLeft&&rx<PAL.x&&ry>PAL.y&&ry<PAL.y+PAL.h){
+          // Is the player in the gate gap?
+          var inGap = (ry>GATE_Y-GATE_GAP&&ry<GATE_Y+GATE_GAP);
+          if(!inGap){
+            // Solid wall — push player back out west
+            rx=palLeft;
+          } else if(!gateUnlocked){
+            // In the gap but gate is locked — block east movement only
+            if(rx>palLeft) rx=palLeft;
+          }
+          // If inGap && gateUnlocked — walk through freely
+        }
+        var VHUTS=[
+          {wx:VILLAGE_OX+40,  wy:VILLAGE_OY-160, hw:80, hh:60},
+          {wx:VILLAGE_OX+180, wy:VILLAGE_OY-110, hw:48, hh:38},
+          {wx:VILLAGE_OX+300, wy:VILLAGE_OY-170, hw:64, hh:50},
+          {wx:VILLAGE_OX+60,  wy:VILLAGE_OY+80,  hw:64, hh:50},
+          {wx:VILLAGE_OX+220, wy:VILLAGE_OY+100, hw:80, hh:60},
+          {wx:VILLAGE_OX+360, wy:VILLAGE_OY+50,  hw:48, hh:38},
+        ];
+        for(var hi2=0;hi2<VHUTS.length;hi2++){
+          var vh=VHUTS[hi2];
+          var left=vh.wx-vh.hw/2-10, right=vh.wx+vh.hw/2+10;
+          var top=vh.wy-vh.hh/2-10, bottom=vh.wy+vh.hh/2+10;
+          if(rx>left&&rx<right&&ry>top&&ry<bottom){
+            // Push out on nearest axis
+            var dL=rx-left, dR=right-rx, dT=ry-top, dB=bottom-ry;
+            var minPush=Math.min(dL,dR,dT,dB);
+            if(minPush===dL) rx=left;
+            else if(minPush===dR) rx=right;
+            else if(minPush===dT) ry=top;
+            else ry=bottom;
+          }
+        }
+      }
     }
     return{x:rx,y:ry};
   }
@@ -929,19 +3167,72 @@ function startGame(){
     mmCtx.strokeRect(0,0,MM_W,MM_H);
   }
 
+  // ── ORGANIC GRASS RENDERER ─────────────────────────────────
+  // Instead of uniform tiles we pre-bake a large offscreen grass texture
+  // using overlapping noise blobs of varying greens. No visible grid lines.
+  const GRASS_TEX_W=512, GRASS_TEX_H=512;
+  let grassTex=null;
+  function buildGrassTex(){
+    const oc=document.createElement('canvas');
+    oc.width=GRASS_TEX_W; oc.height=GRASS_TEX_H;
+    const oc2=oc.getContext('2d');
+    // Base fill
+    oc2.fillStyle='#3a7a1e'; oc2.fillRect(0,0,GRASS_TEX_W,GRASS_TEX_H);
+    // Scatter hundreds of soft blobs of varying greens
+    var greens=['#357018','#3d8020','#428518','#317218','#46901e','#2e6814','#3a7a1e','#4a8828'];
+    var rng=1; // deterministic pseudo-random
+    for(var i=0;i<1400;i++){
+      rng=(rng*16807+0)%2147483647;
+      var bx=(rng%GRASS_TEX_W);
+      rng=(rng*16807+0)%2147483647;
+      var by=(rng%GRASS_TEX_H);
+      rng=(rng*16807+0)%2147483647;
+      var br=8+((rng%28));
+      rng=(rng*16807+0)%2147483647;
+      var col=greens[rng%greens.length];
+      rng=(rng*16807+0)%2147483647;
+      var alpha=0.18+((rng%40)/100);
+      oc2.globalAlpha=alpha;
+      oc2.fillStyle=col;
+      oc2.beginPath();
+      oc2.ellipse(bx,by,br,br*0.6,0,0,Math.PI*2);
+      oc2.fill();
+    }
+    oc2.globalAlpha=1;
+    // Add sparse dark grass blades for texture
+    oc2.strokeStyle='rgba(0,0,0,0.08)';
+    oc2.lineWidth=1;
+    rng=42;
+    for(var j=0;j<300;j++){
+      rng=(rng*16807+0)%2147483647; var gx=rng%GRASS_TEX_W;
+      rng=(rng*16807+0)%2147483647; var gy=rng%GRASS_TEX_H;
+      rng=(rng*16807+0)%2147483647; var gl=4+rng%8;
+      oc2.beginPath();oc2.moveTo(gx,gy);oc2.lineTo(gx+(rng%6)-3,gy-gl);oc2.stroke();
+    }
+    grassTex=oc;
+  }
+  buildGrassTex();
+
   // ── WORLD DRAW — PLAINS ────────────────────────────────────
   const GRASS=['#3a7a1e','#3d8020','#40851f','#3c7c1d'];
   const DGRAS=['#2e6016','#316418','#336617','#2f6215'];
 
   function drawPlains(){
+    ctx.globalCompositeOperation='source-over'; // safety reset after cave lighting
     const T=PLAINS.TILE;
-    const sc=Math.floor(cam.x/T),ec=Math.ceil((cam.x+canvas.width)/T);
-    const sr=Math.floor(cam.y/T),er=Math.ceil((cam.y+canvas.height)/T);
-    for(let r=sr;r<=er;r++)for(let c=sc;c<=ec;c++){
-      const v=grassVar[Math.max(0,Math.min(pROWS-1,r))*pCOLS+Math.max(0,Math.min(pCOLS-1,c))];
-      const sx=c*T-cam.x,sy=r*T-cam.y;
-      ctx.fillStyle=GRASS[v];ctx.fillRect(sx,sy,T,T);
-      ctx.fillStyle=DGRAS[v];ctx.fillRect(sx,sy+T-1,T,1);ctx.fillRect(sx+T-1,sy,1,T);
+    // Sky-tinted background
+    ctx.fillStyle=skyColour();
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Tile the organic grass texture seamlessly across the viewport
+    // We offset the texture by cam position mod texture size so it scrolls
+    const ox=cam.x%GRASS_TEX_W;
+    const oy=cam.y%GRASS_TEX_H;
+    const cols=Math.ceil((canvas.width +GRASS_TEX_W)/GRASS_TEX_W)+1;
+    const rows=Math.ceil((canvas.height+GRASS_TEX_H)/GRASS_TEX_H)+1;
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        ctx.drawImage(grassTex, c*GRASS_TEX_W-ox, r*GRASS_TEX_H-oy);
+      }
     }
     for(const d of plainsDecos){
       const sx=d.x-cam.x,sy=d.y-cam.y;
@@ -950,13 +3241,212 @@ function startGame(){
     }
     drawCaravan();
     drawNPC();
+    drawEnclosureTrees();
+    drawEnclosureRocks();
     drawCaveEntrance();
+    drawRoadTrees();
+    drawPalisade();
+    drawGuardNPC(GUARD1_POS,'Sgt. Hamin','hamin');
+    drawGuardNPC(GUARD2_POS,'Guard','guard');
   }
 
   function drawDeco(type,variant,x,y){
     if(type==='flower'){ctx.fillStyle='#4a9a28';ctx.fillRect(x-1,y-5,2,6);ctx.fillStyle=['#e84080','#f5d020','#7090ff'][variant];ctx.beginPath();ctx.arc(x,y-7,3,0,Math.PI*2);ctx.fill();}
     else if(type==='stone'){ctx.fillStyle='#7a7a7a';ctx.beginPath();ctx.ellipse(x,y,7,5,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#999';ctx.beginPath();ctx.ellipse(x-1,y-1,4,3,0,0,Math.PI*2);ctx.fill();}
     else{ctx.fillStyle='#2a6010';ctx.beginPath();ctx.arc(x,y-5,9,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3a8018';ctx.beginPath();ctx.arc(x-4,y-8,6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(x+4,y-7,6,0,Math.PI*2);ctx.fill();}
+  }
+
+  function drawRoadTrees(){
+    // Road bed is at VILLAGE_OY ± 16px. Trees are offset ±52px so they never clip the road.
+    for(var ri=0;ri<roadTrees.length;ri++){
+      var t=roadTrees[ri];
+      var tx=t.x-cam.x, ty=t.y-cam.y;
+      if(tx<-40||tx>canvas.width+40||ty<-60||ty>canvas.height+30)continue;
+      var tr=t.r||16;
+      // Shadow
+      ctx.fillStyle='rgba(0,0,0,0.14)';ctx.beginPath();ctx.ellipse(tx,ty+5,tr*.9,tr*.3,0,0,Math.PI*2);ctx.fill();
+      // Trunk
+      ctx.fillStyle='#5a3a18';ctx.fillRect(tx-3,ty-6,6,tr*.6);
+      var greens=[['#1a4a08','#2a6010','#3a7818'],['#164008','#246010','#347018'],['#1e5208','#2e6a12','#3e7e1e']][t.variant%3];
+      var top=ty-tr*.35;
+      // Three-layer canopy
+      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(tx,top-tr*.5,tr,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(tx-tr*.22,top-tr*.78,tr*.82,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(tx+tr*.2,top-tr*.72,tr*.74,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(tx,top-tr*1.08,tr*.62,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(tx,top-tr*1.5,tr*.4,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  function drawPalisade(){
+    var px=PAL.x-cam.x, py=PAL.y-cam.y;
+    if(px>canvas.width+60||px+PAL.w<-60||py>canvas.height+60||py+PAL.h<-60)return;
+    var PLANK=14, TOP=8;
+    // Draw 4 walls of wooden stakes
+    // Helper: draw a section of palisade
+    function drawWallSection(x1,y1,x2,y2,isGate){
+      var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+      var planks=Math.floor(len/PLANK);
+      var px2=dx/len, py2=dy/len;
+      // Base beam
+      ctx.fillStyle='#4a3010'; ctx.fillRect(x1,y1-3,len,6);
+      for(var i=0;i<planks;i++){
+        var wx=x1+i*PLANK*px2, wy=y1+i*PLANK*py2;
+        if(isGate&&i>=planks/2-1&&i<=planks/2+1)continue;
+        // Stake
+        ctx.fillStyle=(i%2===0)?'#5a4018':'#523810';
+        ctx.fillRect(wx-PLANK/2+1,wy-TOP-16,PLANK-2,16+TOP);
+        // Pointed top
+        ctx.fillStyle='#4a3010';
+        ctx.beginPath();ctx.moveTo(wx-PLANK/2+1,wy-TOP-16);ctx.lineTo(wx,wy-TOP-24);ctx.lineTo(wx+PLANK/2-1,wy-TOP-16);ctx.closePath();ctx.fill();
+        // Wood grain
+        ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(wx-PLANK/2+3,wy-TOP-4);ctx.lineTo(wx-PLANK/2+3,wy-TOP-14);ctx.stroke();
+      }
+    }
+    // North wall
+    drawWallSection(px,py, px+PAL.w,py, false);
+    // South wall
+    drawWallSection(px,py+PAL.h, px+PAL.w,py+PAL.h, false);
+    // West wall (with gate gap)
+    drawWallSection(px,py, px,py+PAL.h, true);
+    // East wall
+    drawWallSection(px+PAL.w,py, px+PAL.w,py+PAL.h, false);
+
+    // Gate posts — flanking the gap
+    var gsy=GATE_Y-cam.y;
+    var gsx=GATE_X-cam.x-8;
+    for(var gi=0;gi<2;gi++){
+      var gy=gsy+(gi===0?-30:30);
+      ctx.fillStyle='#4a3010';ctx.fillRect(gsx-8,gy-36,16,38);
+      ctx.fillStyle='#3a2008';ctx.fillRect(gsx-8,gy-36,16,4);
+      ctx.fillStyle='#c8a020';ctx.fillRect(gsx-4,gy-20,8,4); // iron band
+    }
+    // Gate door (if locked)
+    if(!gateUnlocked){
+      ctx.fillStyle='#3a2808'; ctx.fillRect(gsx-6,gsy-28,12,56);
+      ctx.fillStyle='#5a4020'; ctx.fillRect(gsx-5,gsy-26,5,24); ctx.fillRect(gsx,gsy-26,5,24);
+      ctx.fillStyle='#5a4020'; ctx.fillRect(gsx-5,gsy+2,5,24); ctx.fillRect(gsx,gsy+2,5,24);
+      ctx.fillStyle='#c8a020'; ctx.beginPath();ctx.arc(gsx,gsy,4,0,Math.PI*2);ctx.fill();
+      // Locked sign
+      var dp=dist(player,{x:GATE_X,y:GATE_Y});
+      if(dp<120){
+        ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(gsx-32,gsy-62,64,16);
+        ctx.font='8px Cinzel,serif';ctx.textAlign='center';ctx.fillStyle='#ff9060';
+        ctx.fillText('Toll Gate — 15 🪙',gsx,gsy-52);ctx.textAlign='left';
+      }
+    } else {
+      // Open gate — draw as pushed back panels
+      ctx.fillStyle='#3a2808';ctx.fillRect(gsx-14,gsy-30,8,60);
+      ctx.fillStyle='#3a2808';ctx.fillRect(gsx+6,gsy-30,8,60);
+    }
+    // Torches on gate posts
+    var torchPulse=0.7+0.3*Math.sin(Date.now()/200);
+    ctx.globalAlpha=torchPulse*0.4;ctx.fillStyle='#ff9030';
+    ctx.beginPath();ctx.arc(gsx-8,gsy-40,6,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(gsx+8,gsy-40,6,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  }
+
+  function drawGuardNPC(pos,label,role){
+    var gx=pos.x-cam.x, gy=pos.y-cam.y;
+    if(gx<-30||gx>canvas.width+30||gy<-70||gy>canvas.height+30)return;
+    // Ground shadow
+    ctx.fillStyle='rgba(0,0,0,0.2)';ctx.beginPath();ctx.ellipse(gx,gy+2,9,3,0,0,Math.PI*2);ctx.fill();
+    // ── LEGS — leather breeches + wrapped greaves ──
+    ctx.fillStyle='#4a3820';ctx.fillRect(gx-5,gy-4,5,12);ctx.fillRect(gx,gy-4,5,12);
+    ctx.fillStyle='#5a4828';ctx.fillRect(gx-5,gy+2,5,6);ctx.fillRect(gx,gy+2,5,6);
+    ctx.fillStyle='#2a1a0a';ctx.fillRect(gx-6,gy+7,6,5);ctx.fillRect(gx,gy+7,6,5);
+    ctx.fillStyle='#806040';ctx.fillRect(gx-4,gy+8,2,2);ctx.fillRect(gx+2,gy+8,2,2);
+    // ── BODY — padded gambeson (quilted linen, cream/tan) ──
+    ctx.fillStyle='#b09060';ctx.fillRect(gx-7,gy-18,14,16);
+    ctx.fillStyle='#9a7a50';
+    for(var qi=0;qi<4;qi++)ctx.fillRect(gx-7,gy-18+qi*4,14,2);
+    ctx.fillStyle='#8a6a40';ctx.fillRect(gx-1,gy-18,2,16);
+    if(role==='hamin'){
+      // Sergeant wears mail hauberk over gambeson
+      ctx.fillStyle='#707880';ctx.fillRect(gx-7,gy-18,14,16);
+      ctx.fillStyle='#585f68';
+      for(var mi=0;mi<3;mi++)for(var mj=0;mj<4;mj++){ctx.fillRect(gx-6+mi*4,gy-17+mj*4,2,2);ctx.fillRect(gx-4+mi*4,gy-15+mj*4,2,2);}
+      // Sergeant sash
+      ctx.fillStyle='#8a1010';ctx.fillRect(gx-7,gy-13,14,4);
+      ctx.fillStyle='#c8a020';ctx.fillRect(gx-7,gy-13,14,1);ctx.fillRect(gx-7,gy-10,14,1);
+    }
+    // Belt
+    ctx.fillStyle='#2a1a08';ctx.fillRect(gx-7,gy-3,14,3);
+    ctx.fillStyle='#c8a020';ctx.fillRect(gx-2,gy-3,4,3);
+    // ── ARMS — gambeson sleeves ──
+    ctx.fillStyle=role==='hamin'?'#707880':'#b09060';
+    ctx.fillRect(gx-11,gy-17,4,12);ctx.fillRect(gx+7,gy-17,4,12);
+    ctx.fillStyle='#5a3a18';ctx.fillRect(gx-12,gy-6,5,6);ctx.fillRect(gx+7,gy-6,5,6);
+    // ── SCABBARD at hip ──
+    ctx.fillStyle='#2a1a08';ctx.fillRect(gx+7,gy-1,3,10);
+    ctx.fillStyle='#a08030';ctx.fillRect(gx+6,gy-4,5,3);
+    ctx.fillStyle='#808890';ctx.fillRect(gx+5,gy-2,7,2);
+    // ── SPEAR (left hand) ──
+    ctx.strokeStyle='#7a5828';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(gx-9,gy+8);ctx.lineTo(gx-9,gy-46);ctx.stroke();
+    ctx.fillStyle='#b0b8c0';ctx.beginPath();ctx.moveTo(gx-12,gy-46);ctx.lineTo(gx-9,gy-56);ctx.lineTo(gx-6,gy-46);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#808890';ctx.fillRect(gx-11,gy-48,5,3);
+    // ── NECK + HEAD ──
+    ctx.fillStyle='#c8845a';ctx.fillRect(gx-2,gy-20,5,4);
+    ctx.fillStyle='#d4956a';ctx.fillRect(gx-5,gy-30,11,12);
+    // ── KETTLE HELM — wide-brimmed open-faced, classic English militia ──
+    ctx.fillStyle='#888f98';
+    ctx.fillRect(gx-6,gy-32,12,6);
+    ctx.beginPath();ctx.arc(gx,gy-32,6,Math.PI,0);ctx.fill();
+    ctx.fillStyle='#6e7580';ctx.fillRect(gx-9,gy-28,18,3);  // wide flat brim
+    ctx.fillStyle='#a0a8b0';ctx.fillRect(gx-4,gy-34,4,3);   // highlight
+    ctx.fillStyle='#4a3018';ctx.fillRect(gx-5,gy-23,2,4);ctx.fillRect(gx+3,gy-23,2,4); // chin strap
+    if(role==='hamin'){
+      ctx.fillStyle='#707880';ctx.fillRect(gx-1,gy-28,2,6); // nasal bar
+      ctx.fillStyle='#cc2020';                               // red plume
+      ctx.beginPath();ctx.moveTo(gx+2,gy-36);ctx.lineTo(gx+6,gy-44);ctx.lineTo(gx+4,gy-36);ctx.closePath();ctx.fill();
+    }
+    // Eyes + beard stub
+    ctx.fillStyle='#1a1008';ctx.fillRect(gx-3,gy-26,2,2);ctx.fillRect(gx+1,gy-26,2,2);
+    ctx.fillStyle='#8a6040';ctx.fillRect(gx-2,gy-21,6,2);
+    // ── NAME + PROMPT ──
+    var inRange=dist(player,pos)<TALK_R+15;
+    ctx.font='600 9px Cinzel,serif';ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,0,0,0.85)';ctx.fillText(label,gx+1,gy-60);
+    ctx.fillStyle=role==='hamin'?'#ffd040':'#d0d8e0';ctx.fillText(label,gx,gy-61);
+    if(inRange&&!dialogueOpen){
+      var p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Talk',gx,gy-73);ctx.globalAlpha=1;
+    }
+    ctx.textAlign='left';
+  }
+
+  function drawMerchantNPC(){
+    if(!gateUnlocked)return;
+    var mx=MERCHANT_POS.x-cam.x, my=MERCHANT_POS.y-cam.y;
+    if(mx<-40||mx>canvas.width+40||my<-60||my>canvas.height+40)return;
+    // Stall
+    ctx.fillStyle='#5a3a10';ctx.fillRect(mx-20,my-4,40,12);
+    ctx.fillStyle='#c8a84b';ctx.fillRect(mx-22,my-8,44,6);
+    ctx.fillStyle='#8b6020';
+    for(var bi=0;bi<3;bi++)ctx.fillRect(mx-18+bi*14,my-20,4,16);
+    ctx.fillStyle='#d4a030';ctx.fillRect(mx-24,my-22,48,4);
+    // NPC
+    ctx.fillStyle='rgba(0,0,0,0.2)';ctx.beginPath();ctx.ellipse(mx,my+2,8,3,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#2a1860';ctx.fillRect(mx-5,my-6,10,10); // skirt
+    ctx.fillStyle='#3a2880';ctx.fillRect(mx-5,my-18,10,14);
+    ctx.fillStyle='#d4956a';ctx.fillRect(mx-2,my-20,5,4);
+    ctx.fillStyle='#d4956a';ctx.fillRect(mx-4,my-30,10,12);
+    ctx.fillStyle='#3a2010';ctx.fillRect(mx-4,my-30,10,4); // hair
+    // Shawl
+    ctx.fillStyle='#8a4020';ctx.fillRect(mx-7,my-18,14,8);
+    ctx.fillStyle='#1a1008';ctx.fillRect(mx-2,my-24,2,2);ctx.fillRect(mx+1,my-24,2,2);
+    // Name + prompt
+    ctx.font='600 9px Cinzel,serif';ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillText('Mira',mx+1,my-43);
+    ctx.fillStyle='#f0c860';ctx.fillText('Mira',mx,my-44);
+    if(dist(player,MERCHANT_POS)<TALK_R+15&&!dialogueOpen){
+      var p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Trade',mx,my-56);ctx.globalAlpha=1;
+    }
+    ctx.textAlign='left';
   }
 
   function drawCaravan(){
@@ -1044,17 +3534,235 @@ function startGame(){
     }
   }
 
-  // ── WORLD DRAW — CAVE ──────────────────────────────────────
+  function drawEnclosureTrees(){
+    for(const t of encTrees){
+      const tx=t.x-cam.x, ty=t.y-cam.y;
+      if(tx<-40||tx>canvas.width+40||ty<-50||ty>canvas.height+20)continue;
+      const tr=t.r||18;
+      // Shadow
+      ctx.fillStyle='rgba(0,0,0,0.15)';ctx.beginPath();ctx.ellipse(tx,ty+5,tr*0.85,tr*0.3,0,0,Math.PI*2);ctx.fill();
+      // Trunk — height proportional to tree size
+      const th=tr*0.55;
+      ctx.fillStyle='#5a3a18';ctx.fillRect(tx-3,ty-th*0.3,6,th*1.1);
+      ctx.fillStyle='#4a2e10';ctx.fillRect(tx-2,ty-th*0.2,3,th);
+      // Three foliage layers, sizes driven by tr
+      const greens=[
+        ['#1a4a08','#2a6010','#3a7818'],
+        ['#164008','#246010','#347018'],
+        ['#1e5208','#2e6a12','#3e7e1e'],
+      ][t.variant];
+      const r1=tr*1.05, r2=tr*0.82, r3=tr*0.6, r4=tr*0.4;
+      const top=ty-th*0.3;
+      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(tx,top-r1*0.55,r1,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(tx-r1*0.22,top-r1*0.8,r2,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(tx+r1*0.2,top-r1*0.75,r2*0.9,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(tx,top-r1*1.1,r3,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(tx,top-r1*1.5,r4,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  function drawEnclosureRocks(){
+    for(const r of encRocks){
+      if(r.broken)continue;
+      const rx=r.x-cam.x, ry=r.y-cam.y;
+      if(rx<-40||rx>canvas.width+40||ry<-40||ry>canvas.height+40)continue;
+      // Shadow
+      ctx.fillStyle='rgba(0,0,0,0.25)';ctx.beginPath();ctx.ellipse(rx,ry+4,22,8,0,0,Math.PI*2);ctx.fill();
+      // Main boulder
+      ctx.fillStyle='#5c5450';ctx.beginPath();ctx.ellipse(rx,ry,22,18,0.1,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#6e6866';ctx.beginPath();ctx.ellipse(rx-4,ry-4,15,12,-.1,0,Math.PI*2);ctx.fill();
+      // Crack lines — indicates it can be broken
+      ctx.strokeStyle='#3a3230';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(rx-6,ry-8);ctx.lineTo(rx+2,ry+4);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(rx+4,ry-6);ctx.lineTo(rx-2,ry+6);ctx.stroke();
+      ctx.fillStyle='#888480';ctx.beginPath();ctx.ellipse(rx-5,ry-5,6,4,-.2,0,Math.PI*2);ctx.fill();
+      // [ E ] prompt if nearby
+      const d=dist(player,r);
+      if(d<ROCK_INTERACT_R+15){
+        const pulse=0.6+0.4*Math.sin(Date.now()/220);
+        ctx.globalAlpha=pulse;ctx.font='bold 10px Cinzel,serif';ctx.textAlign='center';
+        ctx.fillStyle=hasPickaxe()?'#ffe0a0':'#ff9090';
+        ctx.fillText(hasPickaxe()?'[ E ] Break':'[ E ] Need Pickaxe',rx,ry-32);
+        ctx.textAlign='left';ctx.globalAlpha=1;
+      }
+    }
+  }
+
+  function drawCaveChest(){
+    const cx=caveChest.x-cam.x, cy=caveChest.y-cam.y;
+    if(cx<-60||cx>canvas.width+60||cy<-60||cy>canvas.height+60)return;
+    if(caveChest.opened){
+      // Open chest — flat lid
+      ctx.fillStyle='#3a2808';ctx.fillRect(cx-18,cy,36,20);
+      ctx.fillStyle='#5a4018';ctx.fillRect(cx-16,cy+2,32,16);
+      ctx.fillStyle='#3a2808';ctx.fillRect(cx-18,cy-4,36,8); // open lid flat
+      ctx.fillStyle='#6a5028';ctx.fillRect(cx-16,cy-3,32,6);
+      ctx.fillStyle='#c8a020';ctx.fillRect(cx-2,cy+8,4,4); // latch remnant
+      return;
+    }
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(cx,cy+22,22,7,0,0,Math.PI*2);ctx.fill();
+    // Chest body
+    ctx.fillStyle='#3a2808';ctx.fillRect(cx-18,cy,36,22);
+    ctx.fillStyle='#5a4018';ctx.fillRect(cx-16,cy+2,32,18);
+    // Wood planks
+    ctx.fillStyle='#4a3210';
+    ctx.fillRect(cx-16,cy+8,32,2);
+    ctx.fillRect(cx-16,cy+14,32,2);
+    // Iron bands
+    ctx.fillStyle='#606060';ctx.fillRect(cx-18,cy+6,36,3);ctx.fillRect(cx-18,cy+13,36,3);
+    // Lid
+    ctx.fillStyle='#3a2808';ctx.fillRect(cx-18,cy-10,36,12);
+    ctx.fillStyle='#5a4018';ctx.fillRect(cx-16,cy-8,32,10);
+    ctx.fillStyle='#606060';ctx.fillRect(cx-18,cy-3,36,3); // lid band
+    // Gold latch
+    ctx.fillStyle='#c8a020';ctx.fillRect(cx-4,cy-2,8,6);
+    ctx.fillStyle='#e8c040';ctx.fillRect(cx-2,cy-1,4,4);
+    // Glow — uncollected chest
+    const glow=0.4+0.3*Math.sin(Date.now()/400);
+    ctx.globalAlpha=glow;ctx.fillStyle='#c8a020';
+    ctx.beginPath();ctx.arc(cx,cy+4,28,0,Math.PI*2);
+    const chestGrd=ctx.createRadialGradient(cx,cy+4,0,cx,cy+4,28);
+    chestGrd.addColorStop(0,'rgba(200,160,32,0.35)');chestGrd.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=chestGrd;ctx.fill();
+    ctx.globalAlpha=1;
+    // Prompt
+    const cd=dist(player,caveChest);
+    if(cd<70){
+      const p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.font='bold 10px Cinzel,serif';ctx.textAlign='center';
+      ctx.fillStyle='#ffd060';ctx.fillText('[ E ] Open Chest',cx,cy-22);
+      ctx.textAlign='left';ctx.globalAlpha=1;
+    }
+  }
   const CAVE_FLOOR=['#1e1c1a','#201e1c','#221f1d','#1c1a18'];
   const CAVE_DARK =['#161412','#181614','#1a1714','#141210'];
-  let vignetteGrad=null;
-  function getVignette(){
-    if(!vignetteGrad||vignetteGrad._w!==canvas.width||vignetteGrad._h!==canvas.height){
-      vignetteGrad=ctx.createRadialGradient(canvas.width/2,canvas.height/2,canvas.height*.25,canvas.width/2,canvas.height/2,canvas.height*.85);
-      vignetteGrad.addColorStop(0,'rgba(0,0,0,0)');vignetteGrad.addColorStop(1,'rgba(0,0,0,0.72)');
-      vignetteGrad._w=canvas.width;vignetteGrad._h=canvas.height;
+
+  // ── LIGHTING SYSTEM ────────────────────────────────────────
+  // We use an offscreen "light map" canvas drawn with radial gradients,
+  // then composite it over the scene using 'destination-in' so only
+  // lit areas remain visible. Everything else is pure black.
+  var lightCanvas=null, lightCtx=null;
+  var darkCanvas=null,  darkCtx=null;
+  let lightFlicker=1.0, lightFlickerTarget=1.0, lightFlickerTimer=0;
+
+  function ensureLightCanvas(){
+    if(!lightCanvas||lightCanvas.width!==canvas.width||lightCanvas.height!==canvas.height){
+      lightCanvas=document.createElement('canvas');
+      lightCanvas.width=canvas.width; lightCanvas.height=canvas.height;
+      lightCtx=lightCanvas.getContext('2d');
+      darkCanvas=document.createElement('canvas');
+      darkCanvas.width=canvas.width; darkCanvas.height=canvas.height;
+      darkCtx=darkCanvas.getContext('2d');
     }
-    return vignetteGrad;
+  }
+
+  // Smoothly flicker the torch radius
+  function updateFlicker(){
+    lightFlickerTimer--;
+    if(lightFlickerTimer<=0){
+      lightFlickerTimer=4+Math.random()*10|0;
+      lightFlickerTarget=0.82+Math.random()*0.22; // 0.82–1.04
+    }
+    // Ease toward target
+    lightFlicker+=(lightFlickerTarget-lightFlicker)*0.18;
+  }
+
+  // Draw a soft radial light at screen-space (sx,sy) with given radius and colour
+  function paintLight(sx,sy,radius,innerAlpha,outerAlpha,color){
+    const grd=lightCtx.createRadialGradient(sx,sy,0,sx,sy,radius);
+    grd.addColorStop(0,   color.replace('A',innerAlpha));
+    grd.addColorStop(0.45,color.replace('A',innerAlpha*0.7));
+    grd.addColorStop(1,   color.replace('A',outerAlpha));
+    lightCtx.fillStyle=grd;
+    lightCtx.fillRect(sx-radius,sy-radius,radius*2,radius*2);
+  }
+
+  function drawCaveLighting(){
+    ensureLightCanvas();
+    updateFlicker();
+
+    const lc=lightCtx;
+    const W=lightCanvas.width, H=lightCanvas.height;
+
+    // Step 1: fill the light canvas with solid darkness
+    lc.globalCompositeOperation='source-over';
+    lc.fillStyle='rgba(0,0,0,0.92)';
+    lc.fillRect(0,0,W,H);
+
+    // Step 2: punch holes in the darkness where lights are,
+    // using 'destination-out' — higher alpha = bigger hole = more light
+    lc.globalCompositeOperation='destination-out';
+
+    const px=Math.round(player.x-cam.x), py=Math.round(player.y-cam.y);
+
+    // Player torch — warm, flickering radius
+    const torchR=Math.round(170*lightFlicker);
+    const gTorch=lc.createRadialGradient(px,py,0,px,py,torchR);
+    gTorch.addColorStop(0,   'rgba(0,0,0,1)');
+    gTorch.addColorStop(0.2, 'rgba(0,0,0,0.97)');
+    gTorch.addColorStop(0.5, 'rgba(0,0,0,0.7)');
+    gTorch.addColorStop(0.75,'rgba(0,0,0,0.3)');
+    gTorch.addColorStop(1,   'rgba(0,0,0,0)');
+    lc.fillStyle=gTorch;
+    lc.fillRect(px-torchR,py-torchR,torchR*2,torchR*2);
+
+    // Crystal ambient glow — small soft punch-outs
+    for(const o of floorObsLayer){
+      if(o.type!=='crystal')continue;
+      const cx=Math.round(o.x-cam.x), cy=Math.round(o.y-cam.y);
+      if(cx<-140||cx>W+140||cy<-140||cy>H+140)continue;
+      const pulse=0.4+0.6*Math.sin(Date.now()/700+o.seed*10);
+      const cr=Math.round(55+pulse*25);
+      const gC=lc.createRadialGradient(cx,cy,0,cx,cy,cr);
+      gC.addColorStop(0,  `rgba(0,0,0,${0.45*pulse})`);
+      gC.addColorStop(0.6,`rgba(0,0,0,${0.18*pulse})`);
+      gC.addColorStop(1,  'rgba(0,0,0,0)');
+      lc.fillStyle=gC;
+      lc.fillRect(cx-cr,cy-cr,cr*2,cr*2);
+    }
+
+    // Cave exit — natural light spilling in
+    const esx=Math.round(CAVE_EXIT.x-cam.x), esy=Math.round(CAVE_EXIT.y-cam.y);
+    if(esx>-100&&esx<W+100&&esy>-100&&esy<H+100){
+      const gE=lc.createRadialGradient(esx,esy+10,0,esx,esy+10,100);
+      gE.addColorStop(0,  'rgba(0,0,0,0.7)');
+      gE.addColorStop(0.5,'rgba(0,0,0,0.3)');
+      gE.addColorStop(1,  'rgba(0,0,0,0)');
+      lc.fillStyle=gE;
+      lc.fillRect(esx-100,esy-90,200,200);
+    }
+
+    // Unopened chest — golden glow beacon
+    if(!caveChest.opened){
+      const chx=Math.round(caveChest.x-cam.x), chy=Math.round(caveChest.y-cam.y);
+      if(chx>-80&&chx<W+80&&chy>-80&&chy<H+80){
+        const cpulse=0.4+0.4*Math.sin(Date.now()/400);
+        const gCh=lc.createRadialGradient(chx,chy,0,chx,chy,55);
+        gCh.addColorStop(0,  `rgba(0,0,0,${0.35*cpulse})`);
+        gCh.addColorStop(0.6,`rgba(0,0,0,${0.15*cpulse})`);
+        gCh.addColorStop(1,  'rgba(0,0,0,0)');
+        lc.fillStyle=gCh;lc.fillRect(chx-55,chy-55,110,110);
+      }
+    }
+
+    // Step 3: draw the darkness canvas over the main scene
+    ctx.drawImage(lightCanvas,0,0);
+
+    // Step 4: tint the lit area with warm amber — drawn additively only inside torch radius
+    // This gives the torch a colour cast rather than just revealing grey stone
+    ctx.save();
+    ctx.globalCompositeOperation='source-atop';
+    const gWarm=ctx.createRadialGradient(px,py,0,px,py,torchR);
+    gWarm.addColorStop(0,   'rgba(255,160,40,0.22)');
+    gWarm.addColorStop(0.35,'rgba(200,100,20,0.14)');
+    gWarm.addColorStop(0.65,'rgba(120,50,10,0.06)');
+    gWarm.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle=gWarm;
+    ctx.fillRect(px-torchR,py-torchR,torchR*2,torchR*2);
+    ctx.restore();
+    // Always reset to source-over — some browsers don't restore compositeOperation
+    ctx.globalCompositeOperation='source-over';
   }
 
   function drawCave(){
@@ -1127,7 +3835,6 @@ function startGame(){
   // ── DRAW PLAYER ────────────────────────────────────────────
   function drawPlayer(px,py,facing,frame,mov){
     const x=Math.round(px-cam.x),y=Math.round(py-cam.y);
-    if(currentZone==='cave'){ctx.globalAlpha=0.12;ctx.fillStyle='#c8a050';ctx.beginPath();ctx.arc(x,y,80,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
     ctx.fillStyle='rgba(0,0,0,0.26)';ctx.beginPath();ctx.ellipse(x,y+2,10,4,0,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=(player.hitFlash>0&&player.hitFlash%2===0)?0.35:1;
     const ls=mov?Math.sin(frame*Math.PI/4):0,as=mov?Math.sin(frame*Math.PI/4+Math.PI):0,oy=mov?Math.abs(Math.sin(frame*Math.PI/4))*-1.5:0;
@@ -1204,17 +3911,337 @@ function startGame(){
     ctx.textAlign='left';ctx.globalAlpha=1;
   }
 
+  // ── DRAW BAT ───────────────────────────────────────────────
+  function drawBat(b){
+    if(!b.alive)return;
+    const x=Math.round(b.x-cam.x),y=Math.round(b.y-cam.y);
+    if(x<-30||x>canvas.width+30||y<-30||y>canvas.height+30)return;
+    ctx.globalAlpha=(b.hitFlash>0&&b.hitFlash%2===0)?0.3:1;
+    const flap=Math.sin(Date.now()/80+b.angle*10);
+    // Body
+    ctx.fillStyle='#2a1a2a';ctx.beginPath();ctx.ellipse(x,y,5,4,0,0,Math.PI*2);ctx.fill();
+    // Wings — flapping
+    ctx.fillStyle='#3a2a3a';
+    ctx.beginPath();ctx.moveTo(x-2,y);ctx.quadraticCurveTo(x-12,y+flap*6-4,x-16,y-2+flap*2);ctx.quadraticCurveTo(x-10,y-4,x-2,y-1);ctx.fill();
+    ctx.beginPath();ctx.moveTo(x+2,y);ctx.quadraticCurveTo(x+12,y+flap*6-4,x+16,y-2+flap*2);ctx.quadraticCurveTo(x+10,y-4,x+2,y-1);ctx.fill();
+    // Eyes
+    ctx.fillStyle='#ff3030';ctx.fillRect(x-2,y-2,1,1);ctx.fillRect(x+1,y-2,1,1);
+    ctx.globalAlpha=1;
+    // Name + bar
+    const barW=28,barH=3,barX=x-barW/2,barY=y-14;
+    ctx.font='500 8px Cinzel,serif';ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText('Bat',x+1,barY-3);
+    ctx.fillStyle='#a060c0';ctx.fillText('Bat',x,barY-4);
+    ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(barX-1,barY-1,barW+2,barH+2);
+    ctx.fillStyle='#3a0000';ctx.fillRect(barX,barY,barW,barH);
+    ctx.fillStyle=b.hp>1?'#38c018':'#c81818';ctx.fillRect(barX,barY,barW*(b.hp/b.maxHp),barH);
+    ctx.textAlign='left';
+  }
+
+  // ── DRAW VILLAGE + ROAD ────────────────────────────────────
+  function drawVillageAndRoad(){
+    const ox=VILLAGE_OX, oy=VILLAGE_OY;
+
+    // Cobbled road — always draw if any part is on screen, regardless of village position
+    const roadStartX = ENC.x+ENC.w+PAD+20;
+    const roadEndX   = ox+380;
+    const roadCentreY= oy;
+    const COBBLE=22;
+
+    // Only draw if road has any screen overlap
+    const roadSx = roadStartX-cam.x;
+    const roadEx = roadEndX-cam.x;
+    if(roadEx>0 && roadSx<canvas.width){
+      // Road bed
+      ctx.fillStyle='#6e6560';
+      ctx.fillRect(roadSx, roadCentreY-cam.y-16, roadEndX-roadStartX, 32);
+      // Individual cobbles
+      for(let cx2=roadStartX; cx2<roadEndX; cx2+=COBBLE){
+        for(let row=0;row<2;row++){
+          const xoff = row===1 ? COBBLE/2 : 0;
+          const ry   = roadCentreY - 12 + row*14;
+          const scx  = cx2+xoff-cam.x;
+          const scy  = ry-cam.y;
+          if(scx<-COBBLE||scx>canvas.width+COBBLE)continue;
+          ctx.fillStyle = (Math.floor(cx2/COBBLE)+row)%2===0 ? '#7a7268' : '#6e6860';
+          ctx.fillRect(scx, scy, COBBLE-2, 12);
+          ctx.fillStyle='rgba(0,0,0,0.2)';
+          ctx.fillRect(scx+COBBLE-2,scy,2,12);
+          ctx.fillRect(scx,scy+10,COBBLE,2);
+        }
+      }
+    }
+
+    // Village content — only draw if village area is near screen
+    const sx=ox-cam.x;
+    if(sx<-700||sx>canvas.width+700)return;
+    var HUTS=[
+      {wx:ox+40,  wy:oy-160, type:'large',  rot:0},
+      {wx:ox+180, wy:oy-110, type:'small',  rot:0},
+      {wx:ox+300, wy:oy-170, type:'medium', rot:0},
+      {wx:ox+60,  wy:oy+80,  type:'medium', rot:0},
+      {wx:ox+220, wy:oy+100, type:'large',  rot:0},
+      {wx:ox+360, wy:oy+50,  type:'small',  rot:0},
+    ];
+    // Draw shadows first (flat rects, no movement)
+    for(var hi=0;hi<HUTS.length;hi++){
+      var h=HUTS[hi];
+      var hx=h.wx-cam.x, hy=h.wy-cam.y;
+      if(hx<-140||hx>canvas.width+140||hy<-160||hy>canvas.height+120)continue;
+      var hw=h.type==='large'?80:h.type==='medium'?64:48;
+      var hh=h.type==='large'?60:h.type==='medium'?50:38;
+      ctx.fillStyle='rgba(0,0,0,0.18)';
+      ctx.fillRect(hx-hw/2+6,hy-hh/2+6,hw,hh+6);
+    }
+    // Draw huts
+    for(var hi=0;hi<HUTS.length;hi++){
+      var h=HUTS[hi];
+      var hx=h.wx-cam.x, hy=h.wy-cam.y;
+      if(hx<-140||hx>canvas.width+140||hy<-160||hy>canvas.height+120)continue;
+      drawMedievalHut(hx,hy,h.type, h.wx, h.wy);
+    }
+    drawMerchantNPC();
+  }
+
+  // Medieval English timber-frame hut
+  // wx/wy are world-space coords used for deterministic decoration placement
+  function drawMedievalHut(x,y,type,wx,wy){
+    var w=type==='large'?80:type==='medium'?64:48;
+    var h=type==='large'?58:type==='medium'?48:38;
+    var roofH=type==='large'?38:type==='medium'?32:26;
+
+    // ── FOUNDATION / BASE ──
+    ctx.fillStyle='#5a5048';
+    ctx.fillRect(x-w/2-2, y+h/2-4, w+4, 8);
+
+    // ── PLASTER WALLS ──
+    // Main wall fill — aged cream/white plaster
+    ctx.fillStyle='#d4c8a8';
+    ctx.fillRect(x-w/2, y-h/2, w, h);
+    // Plaster variation — slightly darker patches (fixed using wx/wy)
+    ctx.fillStyle='#c4b898';
+    var patch1x = ((wx*7+wy*3)%w|0);
+    var patch1y = ((wx*3+wy*11)%(h-10)|0)+4;
+    ctx.fillRect(x-w/2+patch1x, y-h/2+patch1y, w/4|0, 10);
+    ctx.fillStyle='#c8bc9c';
+    var patch2x = ((wx*13+wy*7)%w|0);
+    var patch2y = ((wx*11+wy*5)%(h-8)|0)+2;
+    ctx.fillRect(x-w/2+patch2x, y-h/2+patch2y, w/5|0, 8);
+
+    // ── TIMBER FRAMING ──
+    ctx.fillStyle='#3a2810';
+    var tw=3; // timber width
+    // Corner posts
+    ctx.fillRect(x-w/2,     y-h/2, tw, h);
+    ctx.fillRect(x+w/2-tw,  y-h/2, tw, h);
+    // Horizontal rail at mid-height
+    ctx.fillRect(x-w/2, y-h/2+(h/2|0)-tw/2, w, tw);
+    // Top rail
+    ctx.fillRect(x-w/2, y-h/2, w, tw);
+    // Bottom rail
+    ctx.fillRect(x-w/2, y+h/2-tw, w, tw);
+    // Diagonal braces (fixed positions per house)
+    ctx.strokeStyle='#3a2810'; ctx.lineWidth=tw;
+    // Left brace
+    ctx.beginPath();
+    ctx.moveTo(x-w/2+tw, y-h/2+(h/2|0));
+    ctx.lineTo(x-w/2+(w/4|0), y-h/2+tw);
+    ctx.stroke();
+    // Right brace
+    ctx.beginPath();
+    ctx.moveTo(x+w/2-tw, y-h/2+(h/2|0));
+    ctx.lineTo(x+w/2-(w/4|0), y-h/2+tw);
+    ctx.stroke();
+    if(type!=='small'){
+      // Centre post
+      ctx.fillStyle='#3a2810';
+      ctx.fillRect(x-tw/2, y-h/2+(h/2|0), tw, h/2);
+      // Extra diagonal in upper panel
+      ctx.beginPath();
+      ctx.moveTo(x-w/4, y-h/2+tw);
+      ctx.lineTo(x, y-h/2+(h/2|0)-tw);
+      ctx.stroke();
+    }
+
+    // ── WINDOWS (with shutters) ──
+    ctx.fillStyle='#1a140e'; // dark interior
+    if(type==='small'){
+      // One small window
+      ctx.fillRect(x-8, y-h/4-6, 16, 12);
+      // Shutter left
+      ctx.fillStyle='#4a3020'; ctx.fillRect(x-8, y-h/4-6, 5, 12);
+      ctx.fillStyle='#5a3828'; ctx.fillRect(x-8, y-h/4-6, 5, 2);ctx.fillRect(x-8, y-h/4-6+5, 5, 2);
+      // Shutter right (slightly open/hanging)
+      ctx.fillStyle='#4a3020'; ctx.fillRect(x+3, y-h/4-4, 5, 10);
+    } else {
+      // Two windows
+      var winY = y-h/4-5;
+      ctx.fillStyle='#1a140e';
+      ctx.fillRect(x-w/3-7, winY, 14, 12);
+      ctx.fillRect(x+w/3-7, winY, 14, 12);
+      // Shutters left window
+      ctx.fillStyle='#4a3020';
+      ctx.fillRect(x-w/3-7, winY, 5, 12);
+      ctx.fillRect(x-w/3+2, winY, 5, 12);
+      // Shutters right window (one hanging open)
+      ctx.fillRect(x+w/3-7, winY, 5, 12);
+      ctx.fillStyle='#3a2818';
+      ctx.fillRect(x+w/3+2, winY-1, 4, 8); // hanging at angle
+      // Window cross-bar
+      ctx.fillStyle='#3a2810';
+      ctx.fillRect(x-w/3-7, winY+5, 14, 2);
+      ctx.fillRect(x-w/3+0, winY, 2, 12);
+      ctx.fillRect(x+w/3-7, winY+5, 14, 2);
+      ctx.fillRect(x+w/3+0, winY, 2, 12);
+    }
+
+    // ── DOOR ──
+    var doorW=type==='large'?16:12, doorH=type==='large'?22:18;
+    ctx.fillStyle='#0e0a06';
+    ctx.fillRect(x-doorW/2, y+h/2-doorH, doorW, doorH);
+    // Door frame
+    ctx.fillStyle='#3a2810'; ctx.lineWidth=2; ctx.strokeStyle='#3a2810';
+    ctx.strokeRect(x-doorW/2, y+h/2-doorH, doorW, doorH);
+    // Door planks
+    ctx.fillStyle='#5a4028';
+    ctx.fillRect(x-doorW/2+1, y+h/2-doorH+1, doorW/2-2, doorH-2);
+    ctx.fillStyle='#4a3820';
+    ctx.fillRect(x+1, y+h/2-doorH+1, doorW/2-2, doorH-2);
+    // Door handle
+    ctx.fillStyle='#c8a020';
+    ctx.beginPath();ctx.arc(x+doorW/2-4, y+h/2-doorH/2, 2, 0, Math.PI*2);ctx.fill();
+
+    // ── THATCHED ROOF ──
+    // Main roof shape — peaked
+    ctx.fillStyle='#7a6030';
+    ctx.beginPath();
+    ctx.moveTo(x-w/2-4,  y-h/2);
+    ctx.lineTo(x,         y-h/2-roofH);
+    ctx.lineTo(x+w/2+4,  y-h/2);
+    ctx.closePath(); ctx.fill();
+    // Thatch layers — horizontal stripes of slightly varied colour
+    var tRows=6;
+    for(var ti=0;ti<tRows;ti++){
+      var frac=(ti+1)/(tRows+1);
+      var rowY = y-h/2 - roofH*frac;
+      var halfW = (w/2+4)*(1-frac)*1.05;
+      ctx.fillStyle=ti%2===0?'#8a7038':'#7a6030';
+      ctx.fillRect(x-halfW, rowY, halfW*2, roofH/(tRows+1)+2);
+    }
+    // Roof ridge
+    ctx.fillStyle='#5a4820';
+    ctx.fillRect(x-4, y-h/2-roofH-2, 8, 6);
+    // Roof overhang edge darkening
+    ctx.fillStyle='rgba(0,0,0,0.15)';
+    ctx.beginPath();
+    ctx.moveTo(x-w/2-4, y-h/2);
+    ctx.lineTo(x-w/2+2, y-h/2+3);
+    ctx.lineTo(x+w/2-2, y-h/2+3);
+    ctx.lineTo(x+w/2+4, y-h/2);
+    ctx.closePath(); ctx.fill();
+
+    // ── CHIMNEY ──
+    var chimX = x+w/4;
+    var chimW = type==='large'?10:8;
+    ctx.fillStyle='#4a4038';
+    ctx.fillRect(chimX-chimW/2, y-h/2-roofH*0.7-14, chimW, 16);
+    ctx.fillStyle='#5a5048';
+    ctx.fillRect(chimX-chimW/2-2, y-h/2-roofH*0.7-14, chimW+4, 5);
+    // Chimney mortar lines
+    ctx.fillStyle='rgba(0,0,0,0.2)';
+    ctx.fillRect(chimX-chimW/2, y-h/2-roofH*0.7-10, chimW, 1);
+    ctx.fillRect(chimX-chimW/2, y-h/2-roofH*0.7-6, chimW, 1);
+
+    // ── GROUND WEEDS ──
+    ctx.strokeStyle='#2a5010'; ctx.lineWidth=1;
+    for(var vi=0;vi<4;vi++){
+      // Fixed positions using house world coords
+      var vx = x-w/2+4 + ((wx*7+vi*31)%(w-8)|0);
+      ctx.beginPath();
+      ctx.moveTo(vx, y+h/2);
+      ctx.quadraticCurveTo(vx-3, y+h/2-8, vx-1, y+h/2-14);
+      ctx.stroke();
+    }
+  }
+
+  // ── DAY/NIGHT OVERLAY ──────────────────────────────────────
+  function drawDayNightOverlay(){
+    const dark=nightDark();
+    if(dark<0.02)return; // full day — skip
+    // Tint the sky colour into the scene
+    ctx.globalCompositeOperation='multiply';
+    ctx.fillStyle=`rgba(${Math.round(10+20*(1-dark))},${Math.round(15+30*(1-dark))},${Math.round(30+50*(1-dark))},${dark*0.72})`;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.globalCompositeOperation='source-over';
+    // Star field at night
+    if(dark>0.5){
+      ctx.globalAlpha=(dark-0.5)*1.4;
+      ctx.fillStyle='#ffffff';
+      // deterministic stars based on screen offset — cheap, no array
+      const seed=Math.floor(cam.x/200)*1000+Math.floor(cam.y/200);
+      for(let i=0;i<40;i++){
+        const sx=((seed+i*73)%canvas.width+canvas.width)%canvas.width;
+        const sy=((seed*3+i*41)%canvas.height+canvas.height)%canvas.height;
+        const twinkle=0.6+0.4*Math.sin(Date.now()/800+i*1.3);
+        ctx.globalAlpha=(dark-0.5)*1.4*twinkle*0.8;
+        ctx.fillRect(sx,sy,1,1);
+      }
+      ctx.globalAlpha=1;
+    }
+  }
+
   // ── UPDATE GOBLINS ─────────────────────────────────────────
   function updateGoblins(){
     if(currentZone!=='cave')return;
     for(const g of goblins){
       if(!g.alive)continue;if(inCombat&&combatEnemy===g)continue;
-      g.idleTimer--;
-      if(g.idleTimer<=0){g.idleTimer=80+Math.random()*120;const a=Math.random()*Math.PI*2,spd=0.4+Math.random()*.5;g.idleDx=Math.cos(a)*spd;g.idleDy=Math.sin(a)*spd;}
-      g.x=Math.max(60,Math.min(CAVE.W-60,g.x+g.idleDx));g.y=Math.max(60,Math.min(CAVE.H-60,g.y+g.idleDy));
+      const d=dist(player,g);
+      // Detection logic
+      if(g.state==='idle'){
+        if(d<DETECT_R){ g.state='chase'; g.alertTimer=0; }
+        else{
+          // Idle wander
+          g.idleTimer--;
+          if(g.idleTimer<=0){
+            g.idleTimer=80+Math.random()*120;
+            const a=Math.random()*Math.PI*2,spd=g.shaman?0.3:0.5;
+            g.idleDx=Math.cos(a)*spd; g.idleDy=Math.sin(a)*spd;
+          }
+        }
+      }
+      if(g.state==='chase'){
+        if(d>DETECT_R*1.6){ g.state='idle'; g.idleDx=0; g.idleDy=0; }
+        else if(d>ENGAGE_R){
+          // Chase toward player — shaman hangs back a bit
+          const chaseSpd=g.shaman?0.9:1.6;
+          const dx=player.x-g.x, dy=player.y-g.y, dm=Math.sqrt(dx*dx+dy*dy)||1;
+          g.idleDx=(dx/dm)*chaseSpd; g.idleDy=(dy/dm)*chaseSpd;
+        }else{
+          // Close enough — will be engaged via E key
+          g.idleDx=0; g.idleDy=0;
+        }
+      }
+      g.x=Math.max(60,Math.min(CAVE.W-60,g.x+g.idleDx));
+      g.y=Math.max(60,Math.min(CAVE.H-60,g.y+g.idleDy));
       const mv=Math.abs(g.idleDx)+Math.abs(g.idleDy)>0.1;
       if(mv){g.walkTimer++;if(g.walkTimer>=10){g.walkTimer=0;g.walkFrame=(g.walkFrame+1)%8;}}else g.walkTimer=0;
       if(g.hitFlash>0)g.hitFlash--;
+    }
+  }
+
+  // ── UPDATE BATS ────────────────────────────────────────────
+  function updateBats(){
+    if(currentZone!=='cave')return;
+    for(const b of bats){
+      if(!b.alive)continue;if(inCombat&&combatEnemy===b)continue;
+      // Orbit their centre point erratically
+      b.angle+=b.orbitSpd+(Math.random()-0.5)*0.008;
+      b.x=b.cx+Math.cos(b.angle)*b.orbitR+(Math.random()-0.5)*4;
+      b.y=b.cy+Math.sin(b.angle)*b.orbitR*0.55+(Math.random()-0.5)*4;
+      b.x=Math.max(30,Math.min(CAVE.W-30,b.x));
+      b.y=Math.max(30,Math.min(CAVE.H-30,b.y));
+      b.walkTimer++;if(b.walkTimer>=6){b.walkTimer=0;b.walkFrame=(b.walkFrame+1)%4;}
+      if(b.hitFlash>0)b.hitFlash--;
     }
   }
 
@@ -1223,7 +4250,7 @@ function startGame(){
 
   function update(){
     if(!player.alive||transitioning)return;
-    const blocked=inCombat||invOpen||dialogueOpen;
+    const blocked=inCombat||invOpen||dialogueOpen||shopOpen||journalOpen;
     if(!blocked){
       moving=false;
       let nx=player.x,ny=player.y;
@@ -1233,13 +4260,12 @@ function startGame(){
       if(keys['d']||keys['arrowright']){nx+=PLAYER_SPD;player.facing='right';moving=true;}
 
       if(moving){
-        if(currentZone==='plains'){
-          player.x=Math.max(20,Math.min(PLAINS.W-20,nx));
-          player.y=Math.max(20,Math.min(PLAINS.H-20,ny));
-        }else{
-          const resolved=resolveCollision(nx,ny);
-          player.x=resolved.x;player.y=resolved.y;
-        }
+        const resolved=resolveCollision(nx,ny);
+        player.x=resolved.x;player.y=resolved.y;
+      } else if(currentZone==='plains'){
+        // Still clamp bounds when stationary
+        player.x=Math.max(20,Math.min(PLAINS.W-20,player.x));
+        player.y=Math.max(20,Math.min(PLAINS.H-20,player.y));
       }
 
       // Fog reveal
@@ -1250,11 +4276,60 @@ function startGame(){
         if(currentZone==='plains'){
           if(dist(player,CAVE_ENTRANCE)<70){transitionTo('cave');return;}
           if(dist(player,NPC_POS)<TALK_R&&!dialogueOpen){openDialogue('aldric');return;}
+          // Gate guards
+          if(dist(player,GUARD1_POS)<TALK_R&&!dialogueOpen){openDialogue('hamin');return;}
+          if(dist(player,GUARD2_POS)<TALK_R&&!dialogueOpen){openDialogue('guard');return;}
+          // Merchant (only inside gate)
+          if(gateUnlocked&&dist(player,MERCHANT_POS)<TALK_R&&!dialogueOpen&&!shopOpen){openShop();return;}
+          // Check breakable rocks
+          for(const r of encRocks){
+            if(r.broken)continue;
+            if(dist(player,r)<ROCK_INTERACT_R){
+              if(hasPickaxe()){
+                r.broken=true;
+                Audio.sfxRock();
+                spawnLootPop(r.x,r.y,'💥 Rock smashed!');
+              }else{
+                spawnLootPop(r.x,r.y,'Need a pickaxe...');
+              }
+              return;
+            }
+          }
         }else{
           if(dist(player,CAVE_EXIT)<80){transitionTo('plains');return;}
+          // Chest interaction
+          if(!caveChest.opened&&dist(player,caveChest)<60){
+            caveChest.opened=true;
+            for(const id of caveChest.loot){
+              if(id==='gold_coin'){playerGold+=1;}
+              else giveItem(id,1);
+            }
+            Audio.sfxChest();
+            spawnLootPop(caveChest.x,caveChest.y,'🎁 Chest opened!');
+            window._addLog&&window._addLog('You open the chest. Inside: ⛏️ Iron Pickaxe, 🧪 Potion, 🪙 3 Gold.','loot');
+            return;
+          }
+          // Engage goblins (E key)
           for(const g of goblins){
             if(!g.alive)continue;
             if(dist(player,g)<=ENGAGE_R){enterCombat(g);break;}
+          }
+          // Engage bats (E key)
+          if(!inCombat){
+            for(const b of bats){
+              if(!b.alive)continue;
+              if(dist(player,b)<=BAT_ENGAGE_R){enterCombat(b);break;}
+            }
+          }
+        }
+      }
+
+      // Auto-engage: chasing goblin that has closed to melee range
+      if(!inCombat&&currentZone==='cave'){
+        for(const g of goblins){
+          if(!g.alive)continue;
+          if(g.state==='chase'&&dist(player,g)<=ENGAGE_R+8){
+            enterCombat(g); break;
           }
         }
       }
@@ -1264,6 +4339,8 @@ function startGame(){
     else{player.walkFrame=0;player.walkTimer=0;}
     if(player.hitFlash>0)player.hitFlash--;
     updateGoblins();
+    updateBats();
+    updateDayNight();
     updateCamera();
   }
 
@@ -1272,15 +4349,19 @@ function startGame(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     if(currentZone==='plains'){
       drawPlains();
+      drawVillageAndRoad();
       drawPlayer(player.x,player.y,player.facing,player.walkFrame,moving);
+      drawDayNightOverlay();
     }else{
       drawCave();
       for(const o of floorObsLayer){if(o.type==='crystal')drawCrystalGlow(o);}
       const dynEnts=[
         {y:player.y,draw:()=>drawPlayer(player.x,player.y,player.facing,player.walkFrame,moving)},
         ...goblins.filter(g=>g.alive).map(g=>({y:g.y,draw:()=>drawGoblin(g)})),
+        ...bats.filter(b=>b.alive).map(b=>({y:b.y,draw:()=>drawBat(b)})),
+        {y:caveChest.y,draw:()=>drawCaveChest()},
       ];
-      dynEnts.sort((a,b)=>a.y-b.y);
+      dynEnts.sort((a,b2)=>a.y-b2.y);
       let di=0,si=0;
       while(di<dynEnts.length||si<floorObsLayer.length){
         const dY=di<dynEnts.length?dynEnts[di].y:Infinity;
@@ -1289,13 +4370,33 @@ function startGame(){
         else dynEnts[di++].draw();
       }
       for(const g of goblins)drawEngagePrompt(g);
-      ctx.fillStyle=getVignette();ctx.fillRect(0,0,canvas.width,canvas.height);
+      // Bat engage prompts
+      for(const b of bats){
+        if(!b.alive||inCombat)continue;
+        if(dist(player,b)>BAT_ENGAGE_R+15)continue;
+        const bx=Math.round(b.x-cam.x),by=Math.round(b.y-cam.y);
+        const p2=0.55+0.45*Math.sin(Date.now()/220);
+        ctx.globalAlpha=p2;ctx.font='bold 9px Cinzel,serif';ctx.textAlign='center';
+        ctx.fillStyle='#ff90ff';ctx.fillText('[ E ] Fight',bx,by-22);
+        ctx.textAlign='left';ctx.globalAlpha=1;
+      }
+      drawCaveLighting();
     }
     drawMinimap();
   }
 
-  // Initial reveal
+  // Initial reveal + apply save if one was passed
   revealFog(player.x,player.y);
+  if(pendingSave){
+    applySave(pendingSave);
+    revealFog(player.x,player.y);
+    if(window._currentZone==='cave') showAreaBanner('— Entering —','The Goblin Caves');
+    else showAreaBanner('— Entering —','The Verdant Plains');
+  } else {
+    giveItem('health_potion',2);
+    // Slight delay so banner appears after fade-in
+    setTimeout(function(){ showAreaBanner('— Entering —','The Verdant Plains'); },800);
+  }
   updateHUD();
 
   function loop(){update();render();requestAnimationFrame(loop);}
