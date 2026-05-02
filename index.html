@@ -32,27 +32,27 @@
   #gameCanvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
 
   /* HUD — left */
-  #hud{position:fixed;top:14px;left:16px;z-index:50;color:#e8d898;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;text-shadow:0 1px 4px rgba(0,0,0,.9);pointer-events:none;display:none;}
-  #hudName{margin-bottom:4px;font-size:.75rem;color:#f5e4a0;}
-  #playerHealthBar{width:130px;height:10px;background:#2a0000;border:1px solid #8b4040;border-radius:2px;overflow:hidden;}
-  #playerHealthFill{height:100%;width:100%;background:linear-gradient(90deg,#cc0000,#ff5050);border-radius:2px;transition:width .3s;}
-  #hudHP{font-size:.6rem;color:#ff9090;margin-top:2px;}
+  #hud{position:fixed;top:16px;left:18px;z-index:50;color:#f0e0a0;font-family:'Cinzel',serif;font-size:.92rem;letter-spacing:.1em;text-shadow:0 1px 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,.8);pointer-events:none;display:none;background:rgba(0,0,0,0.38);border:1px solid rgba(200,168,75,0.22);border-radius:4px;padding:10px 14px;}
+  #hudName{margin-bottom:6px;font-size:1.05rem;color:#ffe878;letter-spacing:.14em;text-shadow:0 0 14px rgba(255,232,120,.35),0 1px 4px rgba(0,0,0,1);}
+  #playerHealthBar{width:170px;height:13px;background:#2a0000;border:1px solid #aa5050;border-radius:3px;overflow:hidden;box-shadow:0 0 6px rgba(0,0,0,.7);}
+  #playerHealthFill{height:100%;width:100%;background:linear-gradient(90deg,#cc1010,#ff6060);border-radius:3px;transition:width .3s;}
+  #hudHP{font-size:.8rem;color:#ff9090;margin-top:3px;text-shadow:0 1px 4px rgba(0,0,0,.9);}
   /* XP bar */
-  #xpBarWrap{margin-top:5px;}
-  #xpBarLabel{font-size:.57rem;color:#90b8d0;letter-spacing:.1em;margin-bottom:2px;}
-  #xpBar{width:130px;height:7px;background:#0a1a2a;border:1px solid #305878;border-radius:2px;overflow:hidden;}
-  #xpBarFill{height:100%;width:0%;background:linear-gradient(90deg,#2090d0,#60d8ff);border-radius:2px;transition:width .4s;}
-  #hudLevel{font-size:.6rem;color:#60c8f0;margin-top:2px;}
-  #hudZone{font-size:.58rem;color:#90b0d0;margin-top:4px;letter-spacing:.12em;}
-  #invHint{position:fixed;top:14px;right:16px;z-index:50;color:#a09060;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.8);pointer-events:none;display:none;line-height:1.8;}
+  #xpBarWrap{margin-top:7px;}
+  #xpBarLabel{font-size:.72rem;color:#90c8e8;letter-spacing:.1em;margin-bottom:3px;}
+  #xpBar{width:170px;height:9px;background:#0a1a2a;border:1px solid #3a6888;border-radius:3px;overflow:hidden;box-shadow:0 0 6px rgba(0,0,0,.7);}
+  #xpBarFill{height:100%;width:0%;background:linear-gradient(90deg,#2090d0,#60d8ff);border-radius:3px;transition:width .4s;}
+  #hudLevel{font-size:.8rem;color:#60d8ff;margin-top:3px;text-shadow:0 0 10px rgba(96,216,255,.3);}
+  #hudZone{font-size:.74rem;color:#a8c8e8;margin-top:6px;letter-spacing:.14em;border-top:1px solid rgba(200,168,75,.18);padding-top:5px;}
+  #invHint{display:none;}
 
   /* MINIMAP */
-  #minimap{position:fixed;top:14px;right:16px;z-index:51;display:none;}
-  #minimapCanvas{border:1px solid rgba(200,168,75,.5);border-radius:2px;box-shadow:0 0 12px rgba(0,0,0,.7);}
-  #minimapLabel{font-family:'Cinzel',serif;font-size:.5rem;color:#c8a84b;letter-spacing:.15em;text-align:center;margin-top:3px;opacity:.7;}
-  #clockDial{margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:3px;}
-  #clockCanvas{border:1px solid rgba(200,168,75,.4);border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,.6);}
-  #clockLabel{font-family:'Cinzel',serif;font-size:.48rem;color:#c8a84b;letter-spacing:.12em;opacity:.75;}
+  #minimap{position:fixed;top:16px;right:18px;z-index:51;display:none;background:rgba(0,0,0,0.38);border:1px solid rgba(200,168,75,0.22);border-radius:4px;padding:8px 10px;}
+  #minimapCanvas{border:1px solid rgba(200,168,75,.6);border-radius:3px;box-shadow:0 0 16px rgba(0,0,0,.8);}
+  #minimapLabel{font-family:'Cinzel',serif;font-size:.62rem;color:#e8c84b;letter-spacing:.12em;text-align:center;margin-top:5px;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+  #clockDial{margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  #clockCanvas{border:1px solid rgba(200,168,75,.5);border-radius:50%;box-shadow:0 0 12px rgba(0,0,0,.7);}
+  #clockLabel{font-family:'Cinzel',serif;font-size:.6rem;color:#e8c84b;letter-spacing:.12em;text-shadow:0 1px 3px rgba(0,0,0,.8);}
 
   /* LEVEL-UP FLASH */
   #levelUpFlash{position:fixed;inset:0;pointer-events:none;z-index:88;opacity:0;background:radial-gradient(ellipse at center,rgba(60,200,255,.18) 0%,transparent 70%);}
@@ -321,10 +321,10 @@
 
 <!-- MINIMAP -->
 <div id="minimap">
-  <canvas id="minimapCanvas" width="130" height="100"></canvas>
+  <canvas id="minimapCanvas" width="160" height="120"></canvas>
   <div id="minimapLabel">MAP &nbsp;·&nbsp; [I] Bag &nbsp;[J] Journal &nbsp;[F5] Save</div>
   <div id="clockDial">
-    <canvas id="clockCanvas" width="60" height="60"></canvas>
+    <canvas id="clockCanvas" width="72" height="72"></canvas>
     <div id="clockLabel">MIDDAY</div>
   </div>
 </div>
@@ -549,6 +549,13 @@ function applyLoot(drops){
   for(const d of drops){if(d.itemId==='gold_coin'){playerGold+=d.qty;}else{giveItem(d.itemId,d.qty);}}
   if(invOpen)renderInventory();
 }
+function compactInventory(){
+  // Shift all non-null slots to the front, preserving order
+  const items=inventory.filter(s=>s!==null);
+  for(let i=0;i<inventory.length;i++) inventory[i]=items[i]||null;
+  if(invOpen)renderInventory();
+  if(selectedSlot!==null&&inventory[selectedSlot]===null) selectedSlot=null;
+}
 
 // Stat bonuses from equipped items
 function getAtkBonus(){let b=0;for(const slot of Object.values(equipped)){if(slot){const d=ITEMS[slot];if(d&&d.atkBonus)b+=d.atkBonus;}}return b;}
@@ -615,7 +622,7 @@ window.useSelectedItem=function(){
     const msg=def.use(window._gamePlayer);window._updateHUD&&window._updateHUD();
     window._addLog&&window._addLog(msg,'system');
     item.qty--;if(item.qty<=0)inventory[selectedSlot]=null;
-    selectedSlot=null;renderInventory();selectSlot(null);
+    selectedSlot=null;compactInventory();selectSlot(null);
   }
 };
 
@@ -633,7 +640,7 @@ window.equipSelectedItem=function(){
     inventory[selectedSlot]=null;
   }
   window._updateHUD&&window._updateHUD();
-  selectedSlot=null;renderInventory();
+  selectedSlot=null;compactInventory();
   document.getElementById('invDetailContent').style.display='none';
   document.getElementById('invDetailEmpty').style.display='block';
 };
@@ -752,7 +759,7 @@ const DIALOGUES={
         if(idx!==-1)inventory[idx]=null;
         playerGold+=10;
         if(window._updateHUD)window._updateHUD();
-        renderInventory();
+        compactInventory();
         if(window._spawnLootPop)window._spawnLootPop(0,0,'🪙 +10 Gold!');
       }
     },
@@ -852,6 +859,41 @@ const DIALOGUES={
           :"Toll gate. Fifteen gold, speak to the Sergeant.",
         choices:[{label:'Farewell',next:null}]
       };
+    },
+  },
+
+  shopkeeper:{
+    name:'Elara',title:'General Store — Ashwick',face:'🛒',
+    getRootNode:function(){
+      return {
+        text:"Welcome. Don't track mud on the floor — I only just swept it. I have potions, and I'll take cave salvage off your hands if you're looking to sell. What do you need?",
+        choices:[
+          {label:'Buy or sell',next:'trade'},
+          {label:'Ask about the store',next:'store'},
+          {label:'Ask about Ashwick',next:'town'},
+          {label:'Farewell',next:null}
+        ]
+      };
+    },
+    trade:{
+      text:"Right then. Take a look.",
+      choices:[{label:'Farewell',next:null}],
+      onShow:function(){
+        // Close dialogue and open shop
+        closeDialogue();
+        openShop('Elara');      }
+    },
+    store:{
+      text:"My family ran this store for three generations. Father sold tools, mother sold remedies. Now I sell whatever people need to survive. The raids thinned the stock considerably, but we manage. The potions I brew myself — river herbs, mostly. Not elegant, but they work.",
+      choices:[{label:'Ask about Ashwick',next:'town'},{label:'Buy or sell',next:'trade'},{label:'Farewell',next:null}]
+    },
+    town:{
+      text:"Ashwick is... recovering. Slowly. The goblins came down from the caves two seasons ago. Burned the mill, took everything not nailed down. Hamin held the gate — I'll give him that. We lost people, but the town survived. Whether it thrives again is another question.",
+      choices:[{label:'Ask about the caves',next:'caves'},{label:'Farewell',next:null}]
+    },
+    caves:{
+      text:"I wouldn't go in there without a good reason. But I know people do. There are crystals worth real coin if you can get them out unbroken — and goblin ears, bat wings... unpleasant work, but I'll pay fair. Just don't bring anything that's still moving.",
+      choices:[{label:'Buy or sell',next:'trade'},{label:'Farewell',next:null}]
     },
   },
 
@@ -960,7 +1002,7 @@ const DIALOGUES={
                   playerGold+=totalGold;
                   inventory[slotIdx]=null;
                   if(window._updateHUD)window._updateHUD();
-                  renderInventory();
+                  compactInventory();
                 }});
             })(slot,total,s.name);
           }
@@ -1199,7 +1241,43 @@ var portraits = {
     pc.fillStyle=vig; pc.fillRect(0,0,W,H);
   },
 
-  // ── EDMUND — weathered carpenter, middle-aged man ─────────────
+  shopkeeper: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(40,28,15,0.55)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+    // Blue-grey shopkeeper dress/apron
+    pc.fillStyle='#2a3858'; pc.beginPath(); pc.ellipse(cx,H,32,20,0,Math.PI,0); pc.fill();
+    pc.fillStyle='#d8c8a8'; pc.fillRect(cx-14,H-18,28,12);
+    pc.fillStyle='#d0906a'; pc.fillRect(cx-4,cy+14,8,10);
+    pc.fillStyle='#d0906a'; pc.fillRect(cx-12,cy-14,24,28); pc.fillRect(cx-10,cy-20,20,8);
+    // Cheek blush
+    pc.fillStyle='rgba(200,90,70,0.2)'; pc.beginPath(); pc.ellipse(cx-10,cy+2,5,3,0,0,Math.PI*2); pc.fill();
+    pc.beginPath(); pc.ellipse(cx+10,cy+2,5,3,0,0,Math.PI*2); pc.fill();
+    // Eyes — sharp, attentive grey
+    pc.fillStyle='#1a1008'; pc.fillRect(cx-9,cy-7,7,5); pc.fillRect(cx+2,cy-7,7,5);
+    pc.fillStyle='#5a6870'; pc.fillRect(cx-8,cy-6,5,3); pc.fillRect(cx+3,cy-6,5,3);
+    pc.fillStyle='#0a0c10'; pc.fillRect(cx-7,cy-6,3,3); pc.fillRect(cx+4,cy-6,3,3);
+    pc.fillStyle='rgba(255,255,255,0.5)'; pc.fillRect(cx-7,cy-6,1,1); pc.fillRect(cx+5,cy-6,1,1);
+    // Straight brows — no-nonsense
+    pc.fillStyle='#5a4030'; pc.fillRect(cx-11,cy-11,9,2); pc.fillRect(cx+2,cy-11,9,2);
+    // Nose
+    pc.fillStyle='#c07858'; pc.fillRect(cx-2,cy-4,5,6);
+    pc.beginPath(); pc.ellipse(cx,cy+1,4,3,0,0,Math.PI*2); pc.fill();
+    // Mouth — thin, composed
+    pc.fillStyle='#9a5040'; pc.fillRect(cx-5,cy+7,11,2);
+    // Hair — dark, tied back neatly
+    pc.fillStyle='#1a1008'; pc.fillRect(cx-12,cy-20,24,7);
+    pc.fillRect(cx+8,cy-18,5,16); // bun at side
+    // Simple cloth cap — pale blue
+    pc.fillStyle='#8098b8'; pc.fillRect(cx-12,cy-22,24,6);
+    pc.fillStyle='#6888a8'; pc.fillRect(cx-12,cy-22,24,2);
+    // Vignette
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.52)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
   townsman: function(pc,W,H){
     var cx=W/2, cy=H/2+2;
     var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
@@ -2326,26 +2404,94 @@ const Audio = (function(){
     plainsNodes=[];
   }
 
-  function stopAll(dur){
-    if(dur===undefined)dur=1.8;
-    currentTrack=null;
-    clearTimeout(dripTimer);
-    fadeStop(introNodes, dur);
-    fadeStop(caveNodes,  dur);
-    introNodes=[]; caveNodes=[];
+  // ── SHOP AMBIENCE ─────────────────────────────────────────
+  // Warm, cosy interior: soft creak of floorboards, distant wind outside,
+  // occasional settling timber, low fire crackle.
+  var shopNodes = [];
+  var creakTimer = null;
+
+  function playShopAmbience(){
+    if(shopNodes.length>0) return;
+    var ctx2=getCtx(); var now=ctx2.currentTime+0.1;
+
+    // Soft interior drone — muffled low hum of a small wooden room
+    var droneBuf=ctx2.createBuffer(2,ctx2.sampleRate*3,ctx2.sampleRate);
+    for(var ch=0;ch<2;ch++){
+      var dd=droneBuf.getChannelData(ch);
+      for(var i=0;i<dd.length;i++) dd[i]=(Math.random()*2-1)*0.5;
+    }
+    var dSrc=ctx2.createBufferSource(); dSrc.buffer=droneBuf; dSrc.loop=true;
+    var dF=ctx2.createBiquadFilter(); dF.type='lowpass'; dF.frequency.value=180;
+    var dG=ctx2.createGain(); dG.gain.value=0; dG.gain.linearRampToValueAtTime(0.022,now+3);
+    dSrc.connect(dF); dF.connect(dG); dG.connect(masterGain);
+    dSrc.start(now);
+    shopNodes.push({src:dSrc,g:dG});
+
+    // Gentle fire hiss — very subtle, no LFO
+    var fBuf=ctx2.createBuffer(1,ctx2.sampleRate*4,ctx2.sampleRate);
+    var fd=fBuf.getChannelData(0);
+    for(var i=0;i<fd.length;i++) fd[i]=(Math.random()*2-1);
+    var fSrc=ctx2.createBufferSource(); fSrc.buffer=fBuf; fSrc.loop=true;
+    var fF=ctx2.createBiquadFilter(); fF.type='bandpass'; fF.frequency.value=2200; fF.Q.value=0.6;
+    var fG=ctx2.createGain(); fG.gain.value=0; fG.gain.linearRampToValueAtTime(0.007,now+4);
+    fSrc.connect(fF); fF.connect(fG); fG.connect(masterGain);
+    fSrc.start(now);
+    shopNodes.push({src:fSrc,g:fG});
+
+    // Floorboard creaks — random short pitched tones
+    function schedCreak(){
+      if(shopNodes.length===0) return;
+      var c2=getCtx(); var t=c2.currentTime+0.05;
+      var o=c2.createOscillator(), g=c2.createGain();
+      var bf=c2.createBiquadFilter(); bf.type='bandpass'; bf.frequency.value=280+Math.random()*120; bf.Q.value=8;
+      o.type='sawtooth';
+      o.frequency.setValueAtTime(160+Math.random()*80,t);
+      o.frequency.linearRampToValueAtTime(100+Math.random()*40,t+0.2);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.10+Math.random()*0.05,t+0.02);
+      g.gain.linearRampToValueAtTime(0,t+0.25);
+      o.connect(bf); bf.connect(g); g.connect(masterGain);
+      o.start(t); o.stop(t+0.28);
+      creakTimer=setTimeout(schedCreak, 4000+Math.random()*9000);
+    }
+    creakTimer=setTimeout(schedCreak, 2000+Math.random()*4000);
+  }
+
+  function stopShopAmbience(dur){
+    if(dur===undefined) dur=1.2;
+    clearTimeout(creakTimer); creakTimer=null;
+    fadeStop(shopNodes,dur);
+    shopNodes=[];
   }
 
   function crossfadeTo(track){
     if(track==='intro'){
       fadeStop(caveNodes,2.0); caveNodes=[];
+      fadeStop(shopNodes,1.5); shopNodes=[];
+      clearTimeout(creakTimer); creakTimer=null;
       playIntro();
       playPlainsAmbience();
     } else if(track==='cave'){
       fadeStop(introNodes,2.0); introNodes=[];
+      fadeStop(shopNodes,1.0); shopNodes=[];
+      clearTimeout(creakTimer); creakTimer=null;
       stopPlainsAmbience(2.0);
       playCave();
+    } else if(track==='shop'){
+      fadeStop(introNodes,1.5); introNodes=[];
+      currentTrack=null; // allow playIntro to restart when returning from shop
+      stopPlainsAmbience(1.0);
+      playShopAmbience();
     }
   }
+
+  function stopAll(dur){
+    if(dur===undefined)dur=1.8;
+    currentTrack=null;
+    clearTimeout(dripTimer); clearTimeout(creakTimer);
+    fadeStop(introNodes,dur); fadeStop(caveNodes,dur); fadeStop(shopNodes,dur);
+    introNodes=[]; caveNodes=[]; shopNodes=[];
+  }
+
 
   // Browsers require a user gesture to start AudioContext.
   var started=false;
@@ -2359,7 +2505,9 @@ const Audio = (function(){
            sfxSwing:playSwordSwing, sfxHit:playHitFlesh, sfxGrunt:playGoblinGrunt,
            sfxDeath:playGoblinDeath, sfxHurt:playPlayerHurt, sfxChest:playChestOpen,
            sfxLevel:playLevelUp, sfxRock:playRockBreak,
-           stopPlainsAmbience:stopPlainsAmbience };
+           stopPlainsAmbience:stopPlainsAmbience,
+           playShopAmbience:playShopAmbience, stopShopAmbience:stopShopAmbience,
+           playPlainsAmbience:playPlainsAmbience };
 })();
 
 // Start music on first click or keydown (browser autoplay policy)
@@ -2665,9 +2813,10 @@ var SHOP_BUYS=[
   {itemId:'gold_coin',    price:1},
 ];
 
-function openShop(){
+function openShop(traderName){
   shopOpen=true; shopTab='buy'; shopSelectedId=null; shopSelectedSlot=null;
   if(dialogueOpen)closeDialogue();
+  document.getElementById('shopTitle').textContent=(traderName||'General Store')+'\'s Wares';
   document.getElementById('shopPanel').style.display='flex';
   renderShop();
 }
@@ -2797,7 +2946,7 @@ window.shopDoAction=function(){
       inventory[shopSelectedSlot]=null;
       shopSelectedSlot=null; shopSelectedId=null;
       if(window._updateHUD)window._updateHUD();
-      renderInventory();
+      compactInventory();
       renderShop();
     }
   }
@@ -2868,16 +3017,16 @@ function startGame(pendingSave){
   // Village east of the enclosure, past the breakable rocks
   const VILLAGE_OX   = PLAINS.W/2 + 2200;
   const VILLAGE_OY   = PLAINS.H/2;
-  const GATE_X       = VILLAGE_OX - 220;
+  // Palisade — gate sits exactly on the west face
+  const PAL_W=1100, PAL_H=900;
+  const PAL={x:VILLAGE_OX-PAL_W/2, y:VILLAGE_OY-PAL_H/2, w:PAL_W, h:PAL_H};
+  const GATE_X       = PAL.x;
   const GATE_Y       = VILLAGE_OY;
   window._GATE_X=GATE_X; window._GATE_Y=GATE_Y;
   window._VILLAGE_OX=VILLAGE_OX; window._VILLAGE_OY=VILLAGE_OY;
-  // Palisade
-  const PAL_W=1100, PAL_H=900;
-  const PAL={x:VILLAGE_OX-PAL_W/2, y:VILLAGE_OY-PAL_H/2, w:PAL_W, h:PAL_H};
-  // NPC positions
-  const GUARD1_POS   ={x:GATE_X-30, y:GATE_Y-50};
-  const GUARD2_POS   ={x:GATE_X-30, y:GATE_Y+50};
+  // NPC positions — guards stand just outside the west wall
+  const GUARD1_POS   ={x:GATE_X-40, y:GATE_Y-55};
+  const GUARD2_POS   ={x:GATE_X-40, y:GATE_Y+55};
   const MERCHANT_POS ={x:VILLAGE_OX+30, y:VILLAGE_OY-10};
   const TOWNSMAN_POS ={x:VILLAGE_OX-60, y:VILLAGE_OY+200};
   const TOWNSWOMAN_POS={x:VILLAGE_OX+180, y:VILLAGE_OY-240};
@@ -3175,9 +3324,23 @@ function startGame(pendingSave){
 
   // Expose zone for save system
   Object.defineProperty(window,'_currentZone',{get:()=>currentZone});
+  // ── SHOP INTERIOR ─────────────────────────────────────────
+  // The top-left house (wx: VILLAGE_OX-280, wy: VILLAGE_OY-310) is enterable.
+  // Interior is a small wooden room drawn on a fixed canvas area.
+  const SHOP_HUT_WX = VILLAGE_OX-280;
+  const SHOP_HUT_WY = VILLAGE_OY-310;
+  // Door centre in world space (bottom centre of hut)
+  const SHOP_DOOR_WX = SHOP_HUT_WX;
+  const SHOP_DOOR_WY = SHOP_HUT_WY + 80; // bottom face + half hh
+  const INTERIOR_W=480, INTERIOR_H=360;
+  // Interior player spawn (just inside the door at south)
+  const INTERIOR_ENTRY_X=INTERIOR_W/2, INTERIOR_ENTRY_Y=INTERIOR_H-50;
+  const INTERIOR_EXIT_X =INTERIOR_W/2, INTERIOR_EXIT_Y =INTERIOR_H-30;
+
   window._setZone=function(zone){
     currentZone=zone;
     if(zone==='cave'){hudZone.textContent='THE GOBLIN CAVES';hudZone.style.color='#8090c0';}
+    else if(zone==='shop'){hudZone.textContent='ASHWICK GENERAL STORE';hudZone.style.color='#d4b870';}
     else{hudZone.textContent='THE VERDANT PLAINS';hudZone.style.color='#90b0d0';}
   };
   let bannerTimer=null;
@@ -3188,6 +3351,32 @@ function startGame(pendingSave){
     el.classList.add('show');
     clearTimeout(bannerTimer);
     bannerTimer=setTimeout(function(){el.classList.remove('show');},3200);
+  }
+
+  function enterShopInterior(){
+    if(transitioning)return; transitioning=true;
+    zoneFade.classList.add('fading');
+    Audio.crossfadeTo('shop');
+    setTimeout(function(){
+      currentZone='shop';
+      player.x=INTERIOR_ENTRY_X; player.y=INTERIOR_ENTRY_Y;
+      hudZone.textContent='ASHWICK GENERAL STORE'; hudZone.style.color='#d4b870';
+      cam.x=0; cam.y=0;
+      showAreaBanner('— Entering —','The General Store');
+      setTimeout(function(){zoneFade.classList.remove('fading');transitioning=false;},400);
+    },400);
+  }
+  function exitShopInterior(){
+    if(transitioning)return; transitioning=true;
+    zoneFade.classList.add('fading');
+    Audio.crossfadeTo('intro');
+    setTimeout(function(){
+      currentZone='plains';
+      player.x=SHOP_DOOR_WX; player.y=SHOP_DOOR_WY+40;
+      hudZone.textContent='THE VERDANT PLAINS'; hudZone.style.color='#90b0d0';
+      showAreaBanner('— Returning to —','The Verdant Plains');
+      setTimeout(function(){zoneFade.classList.remove('fading');transitioning=false;},400);
+    },400);
   }
 
   function transitionTo(zone){
@@ -3296,7 +3485,7 @@ function startGame(pendingSave){
       if(si===-1){combatBusy=false;setButtons(true);return;}
       const effMax=player.maxHp+getHpBonus();
       const gain=Math.min(4,effMax-player.hp);player.hp+=gain;
-      inventory[si].qty--;if(inventory[si].qty<=0)inventory[si]=null;
+      inventory[si].qty--;if(inventory[si].qty<=0){inventory[si]=null;compactInventory();}
       updateHUD();if(invOpen)renderInventory();
       addLog(`You drink a potion, restoring ${gain} HP.`,'system');
       setTimeout(()=>enemyTurn(),850);return;
@@ -3360,8 +3549,20 @@ function startGame(pendingSave){
   }
 
   // ── COLLISION ──────────────────────────────────────────────
-  function resolveCollision(nx,ny){
+  function resolveCollision(nx,ny,ox,oy){
+    if(ox===undefined)ox=nx; if(oy===undefined)oy=ny;
     let rx=nx,ry=ny;
+    if(currentZone==='shop'){
+      // Clamp to interior bounds, counter blocks upper half
+      rx=Math.max(20,Math.min(INTERIOR_W-20,rx));
+      ry=Math.max(20,Math.min(INTERIOR_H-20,ry));
+      // Counter collision — horizontal bar across upper third
+      var ctrY=80, ctrH=18;
+      if(rx>60&&rx<INTERIOR_W-60&&ry>ctrY&&ry<ctrY+ctrH+14){
+        ry=ctrY+ctrH+14;
+      }
+      return{x:rx,y:ry};
+    }
     if(currentZone==='cave'){
       rx=Math.max(20,Math.min(CAVE.W-20,rx));
       ry=Math.max(20,Math.min(CAVE.H-20,ry));
@@ -3401,38 +3602,28 @@ function startGame(pendingSave){
           var minD=(rt.r||15)+10;
           if(d<minD&&d>0.01){var push=(minD-d)/d;rx+=dx*push;ry+=dy*push;}
         }
-        // Palisade wall collision
-        // Always block east/north/south walls. West wall has gate gap only when unlocked.
-        var palLeft  = PAL.x - 16;
-        var palRight = PAL.x + PAL.w + 16;
-        var palTop   = PAL.y - 16;
-        var palBot   = PAL.y + PAL.h + 16;
-        var GATE_GAP = 28; // half-width of gate opening in world pixels
+        // Palisade wall collision — bidirectional solid walls
+        // Use old position (ox/oy) to determine which side player came from.
+        var GATE_GAP = 40;
+        var palX0 = PAL.x, palX1 = PAL.x+PAL.w;
+        var palY0 = PAL.y, palY1 = PAL.y+PAL.h;
 
-        // North wall
-        if(rx>PAL.x&&rx<PAL.x+PAL.w&&ry>palTop&&ry<PAL.y){
-          ry=palTop;
-        }
-        // South wall
-        if(rx>PAL.x&&rx<PAL.x+PAL.w&&ry>PAL.y+PAL.h&&ry<palBot){
-          ry=palBot;
+        // West wall — gate gap at GATE_Y
+        if(((ox<palX0&&rx>=palX0)||(ox>=palX0&&rx<palX0))&&ry>palY0&&ry<palY1){
+          var inGap=(ry>GATE_Y-GATE_GAP&&ry<GATE_Y+GATE_GAP);
+          if(!inGap||(inGap&&!gateUnlocked)) rx=ox<palX0 ? palX0-2 : palX0+2;
         }
         // East wall
-        if(rx>PAL.x+PAL.w&&rx<palRight&&ry>PAL.y&&ry<PAL.y+PAL.h){
-          rx=palRight;
+        if(((ox<palX1&&rx>=palX1)||(ox>=palX1&&rx<palX1))&&ry>palY0&&ry<palY1){
+          rx=ox<palX1 ? palX1-2 : palX1+2;
         }
-        // West wall — has gate gap
-        if(rx>palLeft&&rx<PAL.x&&ry>PAL.y&&ry<PAL.y+PAL.h){
-          // Is the player in the gate gap?
-          var inGap = (ry>GATE_Y-GATE_GAP&&ry<GATE_Y+GATE_GAP);
-          if(!inGap){
-            // Solid wall — push player back out west
-            rx=palLeft;
-          } else if(!gateUnlocked){
-            // In the gap but gate is locked — block east movement only
-            if(rx>palLeft) rx=palLeft;
-          }
-          // If inGap && gateUnlocked — walk through freely
+        // North wall
+        if(((oy<palY0&&ry>=palY0)||(oy>=palY0&&ry<palY0))&&rx>palX0&&rx<palX1){
+          ry=oy<palY0 ? palY0-2 : palY0+2;
+        }
+        // South wall
+        if(((oy<palY1&&ry>=palY1)||(oy>=palY1&&ry<palY1))&&rx>palX0&&rx<palX1){
+          ry=oy<palY1 ? palY1-2 : palY1+2;
         }
         var VHUTS=[
           {wx:VILLAGE_OX-280, wy:VILLAGE_OY-310, hw:200, hh:160},
@@ -3465,7 +3656,33 @@ function startGame(pendingSave){
 
   function drawMinimap(){
     mmRedrawTimer++;
-    if(mmRedrawTimer%3!==0)return; // only redraw every 3 frames
+    if(mmRedrawTimer%3!==0)return;
+
+    // Shop interior — draw a simple room diagram
+    if(currentZone==='shop'){
+      mmCtx.fillStyle='#2a1a08'; mmCtx.fillRect(0,0,MM_W,MM_H);
+      // Room outline
+      var rx=MM_W*0.12, ry=MM_H*0.08, rw=MM_W*0.76, rh=MM_H*0.84;
+      mmCtx.fillStyle='#6a4820'; mmCtx.fillRect(rx,ry,rw,rh);
+      mmCtx.fillStyle='#3a2008'; mmCtx.strokeStyle='#c8a040'; mmCtx.lineWidth=1;
+      mmCtx.strokeRect(rx,ry,rw,rh);
+      // Counter
+      mmCtx.fillStyle='#4a3010';
+      mmCtx.fillRect(rx+rw*0.1, ry+rh*0.18, rw*0.8, rh*0.07);
+      // Door (south)
+      mmCtx.fillStyle='#1a1008';
+      mmCtx.fillRect(rx+rw*0.42, ry+rh*0.88, rw*0.16, rh*0.12);
+      // Player dot
+      var px=rx + (player.x/INTERIOR_W)*rw;
+      var py=ry + (player.y/INTERIOR_H)*rh;
+      mmCtx.fillStyle='#60d8ff';
+      mmCtx.beginPath(); mmCtx.arc(px,py,2,0,Math.PI*2); mmCtx.fill();
+      // Label
+      mmCtx.font='500 6px Cinzel,serif'; mmCtx.textAlign='center'; mmCtx.fillStyle='#c8a040';
+      mmCtx.fillText('GENERAL STORE',MM_W/2,MM_H-3); mmCtx.textAlign='left';
+      return;
+    }
+
     const isPlains=currentZone==='plains';
     const WW=isPlains?PLAINS.W:CAVE.W, HH=isPlains?PLAINS.H:CAVE.H;
     const scaleX=MM_W/WW, scaleY=MM_H/HH;
@@ -3614,24 +3831,23 @@ function startGame(pendingSave){
   }
 
   function drawRoadTrees(){
-    // Road bed is at VILLAGE_OY ± 16px. Trees are offset ±52px so they never clip the road.
     for(var ri=0;ri<roadTrees.length;ri++){
       var t=roadTrees[ri];
       var tx=t.x-cam.x, ty=t.y-cam.y;
-      if(tx<-40||tx>canvas.width+40||ty<-60||ty>canvas.height+30)continue;
-      var tr=t.r||16;
-      // Shadow
-      ctx.fillStyle='rgba(0,0,0,0.14)';ctx.beginPath();ctx.ellipse(tx,ty+5,tr*.9,tr*.3,0,0,Math.PI*2);ctx.fill();
-      // Trunk
+      if(tx<-60||tx>canvas.width+60||ty<-80||ty>canvas.height+30)continue;
+      var tr=(t.r||16)*1.4;
+      var swayPhase=(t.x*0.007+t.y*0.013);
+      var sway=Math.sin(Date.now()/1800+swayPhase)*tr*0.06;
+      var swayY=Math.cos(Date.now()/2200+swayPhase)*tr*0.03;
+      ctx.fillStyle='rgba(0,0,0,0.12)';ctx.beginPath();ctx.ellipse(tx+sway*0.3,ty+6,tr*.85,tr*.3,0,0,Math.PI*2);ctx.fill();
       ctx.fillStyle='#5a3a18';ctx.fillRect(tx-3,ty-6,6,tr*.6);
       var greens=[['#1a4a08','#2a6010','#3a7818'],['#164008','#246010','#347018'],['#1e5208','#2e6a12','#3e7e1e']][t.variant%3];
-      var top=ty-tr*.35;
-      // Three-layer canopy
-      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(tx,top-tr*.5,tr,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(tx-tr*.22,top-tr*.78,tr*.82,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(tx+tr*.2,top-tr*.72,tr*.74,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(tx,top-tr*1.08,tr*.62,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(tx,top-tr*1.5,tr*.4,0,Math.PI*2);ctx.fill();
+      var top=ty-tr*.35+swayY, cx2=tx+sway;
+      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(cx2,top-tr*.5,tr,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(cx2-tr*.22+sway*.3,top-tr*.78,tr*.82,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(cx2+tr*.2+sway*.25,top-tr*.72,tr*.74,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(cx2+sway*.5,top-tr*1.08,tr*.62,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(cx2+sway*.6,top-tr*1.5,tr*.4,0,Math.PI*2);ctx.fill();
     }
   }
 
@@ -3641,22 +3857,21 @@ function startGame(pendingSave){
     var PLANK=14, TOP=8;
     // Draw 4 walls of wooden stakes
     // Helper: draw a section of palisade
-    function drawWallSection(x1,y1,x2,y2,isGate){
+    function drawWallSection(x1,y1,x2,y2){
       var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
       var planks=Math.floor(len/PLANK);
       var px2=dx/len, py2=dy/len;
-      // Base beam
-      ctx.fillStyle='#4a3010'; ctx.fillRect(x1,y1-3,len,6);
+      var isHoriz=Math.abs(dx)>Math.abs(dy);
+      // Base beam — only for horizontal sections (looks wrong on vertical walls)
+      if(isHoriz){
+        ctx.fillStyle='#4a3010'; ctx.fillRect(x1,y1-3,len,6);
+      }
       for(var i=0;i<planks;i++){
         var wx=x1+i*PLANK*px2, wy=y1+i*PLANK*py2;
-        if(isGate&&i>=planks/2-1&&i<=planks/2+1)continue;
-        // Stake
         ctx.fillStyle=(i%2===0)?'#5a4018':'#523810';
         ctx.fillRect(wx-PLANK/2+1,wy-TOP-16,PLANK-2,16+TOP);
-        // Pointed top
         ctx.fillStyle='#4a3010';
         ctx.beginPath();ctx.moveTo(wx-PLANK/2+1,wy-TOP-16);ctx.lineTo(wx,wy-TOP-24);ctx.lineTo(wx+PLANK/2-1,wy-TOP-16);ctx.closePath();ctx.fill();
-        // Wood grain
         ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=1;
         ctx.beginPath();ctx.moveTo(wx-PLANK/2+3,wy-TOP-4);ctx.lineTo(wx-PLANK/2+3,wy-TOP-14);ctx.stroke();
       }
@@ -3665,37 +3880,48 @@ function startGame(pendingSave){
     drawWallSection(px,py, px+PAL.w,py, false);
     // South wall
     drawWallSection(px,py+PAL.h, px+PAL.w,py+PAL.h, false);
-    // West wall (with gate gap)
-    drawWallSection(px,py, px,py+PAL.h, true);
+    // West wall — gate gap centred on GATE_Y
+    // Draw north portion and south portion of west wall separately
+    var gateTopY    = GATE_Y-cam.y - 40; // 40px half-gap
+    var gateBotY    = GATE_Y-cam.y + 40;
+    // North section of west wall (py → gateTop)
+    if(gateTopY > py) drawWallSection(px,py, px,gateTopY, false);
+    // South section of west wall (gateBot → py+PAL.h)
+    if(gateBotY < py+PAL.h) drawWallSection(px,gateBotY, px,py+PAL.h, false);
     // East wall
     drawWallSection(px+PAL.w,py, px+PAL.w,py+PAL.h, false);
 
-    // Gate posts — flanking the gap
+    // Gate posts — on the west wall, flanking the gap
     var gsy=GATE_Y-cam.y;
-    var gsx=GATE_X-cam.x-8;
-    for(var gi=0;gi<2;gi++){
-      var gy=gsy+(gi===0?-30:30);
-      ctx.fillStyle='#4a3010';ctx.fillRect(gsx-8,gy-36,16,38);
-      ctx.fillStyle='#3a2008';ctx.fillRect(gsx-8,gy-36,16,4);
-      ctx.fillStyle='#c8a020';ctx.fillRect(gsx-4,gy-20,8,4); // iron band
-    }
+    var gsx=PAL.x-cam.x; // on the wall face
+    // Top post
+    ctx.fillStyle='#4a3010';ctx.fillRect(gsx-8,gsy-58,16,20);
+    ctx.fillStyle='#3a2008';ctx.fillRect(gsx-8,gsy-58,16,4);
+    ctx.fillStyle='#c8a020';ctx.fillRect(gsx-4,gsy-46,8,4);
+    // Bottom post
+    ctx.fillStyle='#4a3010';ctx.fillRect(gsx-8,gsy+38,16,20);
+    ctx.fillStyle='#3a2008';ctx.fillRect(gsx-8,gsy+38,16,4);
+    ctx.fillStyle='#c8a020';ctx.fillRect(gsx-4,gsy+46,8,4);
     // Gate door (if locked)
     if(!gateUnlocked){
-      ctx.fillStyle='#3a2808'; ctx.fillRect(gsx-6,gsy-28,12,56);
-      ctx.fillStyle='#5a4020'; ctx.fillRect(gsx-5,gsy-26,5,24); ctx.fillRect(gsx,gsy-26,5,24);
-      ctx.fillStyle='#5a4020'; ctx.fillRect(gsx-5,gsy+2,5,24); ctx.fillRect(gsx,gsy+2,5,24);
-      ctx.fillStyle='#c8a020'; ctx.beginPath();ctx.arc(gsx,gsy,4,0,Math.PI*2);ctx.fill();
-      // Locked sign
+      // Gate door spanning the gap
+      ctx.fillStyle='#3a2808'; ctx.fillRect(gsx-10,gsy-40,20,80);
+      ctx.fillStyle='#5a4020';
+      ctx.fillRect(gsx-9,gsy-38,9,36); ctx.fillRect(gsx,gsy-38,9,36);
+      ctx.fillRect(gsx-9,gsy+2, 9,36); ctx.fillRect(gsx,gsy+2, 9,36);
+      // Horizontal bar
+      ctx.fillStyle='#4a3010'; ctx.fillRect(gsx-10,gsy-4,20,6);
+      ctx.fillStyle='#c8a020'; ctx.beginPath();ctx.arc(gsx,gsy,5,0,Math.PI*2);ctx.fill();
+      // Toll sign when near
       var dp=dist(player,{x:GATE_X,y:GATE_Y});
-      if(dp<120){
-        ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(gsx-32,gsy-62,64,16);
-        ctx.font='8px Cinzel,serif';ctx.textAlign='center';ctx.fillStyle='#ff9060';
-        ctx.fillText('Toll Gate — 15 🪙',gsx,gsy-52);ctx.textAlign='left';
+      if(dp<160){
+        ctx.fillStyle='rgba(0,0,0,0.75)';ctx.fillRect(gsx-38,gsy-72,76,18);
+        ctx.font='bold 9px Cinzel,serif';ctx.textAlign='center';ctx.fillStyle='#ff9060';
+        ctx.fillText('Toll Gate — 15 🪙',gsx,gsy-60);ctx.textAlign='left';
       }
     } else {
-      // Open gate — draw as pushed back panels
-      ctx.fillStyle='#3a2808';ctx.fillRect(gsx-14,gsy-30,8,60);
-      ctx.fillStyle='#3a2808';ctx.fillRect(gsx+6,gsy-30,8,60);
+      ctx.fillStyle='#3a2808';ctx.fillRect(gsx-18,gsy-40,8,80);
+      ctx.fillStyle='#3a2808';ctx.fillRect(gsx+10,gsy-40,8,80);
     }
     // Torches on gate posts
     var torchPulse=0.7+0.3*Math.sin(Date.now()/200);
@@ -3894,27 +4120,32 @@ function startGame(pendingSave){
   function drawEnclosureTrees(){
     for(const t of encTrees){
       const tx=t.x-cam.x, ty=t.y-cam.y;
-      if(tx<-40||tx>canvas.width+40||ty<-50||ty>canvas.height+20)continue;
-      const tr=t.r||18;
+      if(tx<-60||tx>canvas.width+60||ty<-80||ty>canvas.height+30)continue;
+      const tr=(t.r||18)*1.45; // 45% larger than before
+      // Gentle sway — each tree has its own phase from its x/y seed
+      const swayPhase=(t.x*0.007+t.y*0.013);
+      const sway=Math.sin(Date.now()/1800+swayPhase)*tr*0.06;
+      const swayY=Math.cos(Date.now()/2200+swayPhase)*tr*0.03;
       // Shadow
-      ctx.fillStyle='rgba(0,0,0,0.15)';ctx.beginPath();ctx.ellipse(tx,ty+5,tr*0.85,tr*0.3,0,0,Math.PI*2);ctx.fill();
-      // Trunk — height proportional to tree size
+      ctx.fillStyle='rgba(0,0,0,0.14)';ctx.beginPath();ctx.ellipse(tx+sway*0.3,ty+6,tr*0.82,tr*0.28,0,0,Math.PI*2);ctx.fill();
+      // Trunk
       const th=tr*0.55;
       ctx.fillStyle='#5a3a18';ctx.fillRect(tx-3,ty-th*0.3,6,th*1.1);
       ctx.fillStyle='#4a2e10';ctx.fillRect(tx-2,ty-th*0.2,3,th);
-      // Three foliage layers, sizes driven by tr
+      // Foliage — sway offset applied to canopy position
       const greens=[
         ['#1a4a08','#2a6010','#3a7818'],
         ['#164008','#246010','#347018'],
         ['#1e5208','#2e6a12','#3e7e1e'],
       ][t.variant];
       const r1=tr*1.05, r2=tr*0.82, r3=tr*0.6, r4=tr*0.4;
-      const top=ty-th*0.3;
-      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(tx,top-r1*0.55,r1,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(tx-r1*0.22,top-r1*0.8,r2,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(tx+r1*0.2,top-r1*0.75,r2*0.9,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(tx,top-r1*1.1,r3,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(tx,top-r1*1.5,r4,0,Math.PI*2);ctx.fill();
+      const top=ty-th*0.3+swayY;
+      const cx2=tx+sway;
+      ctx.fillStyle=greens[0];ctx.beginPath();ctx.arc(cx2,top-r1*0.55,r1,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[1];ctx.beginPath();ctx.arc(cx2-r1*0.22+sway*0.4,top-r1*0.8,r2,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(cx2+r1*0.2+sway*0.3,top-r1*0.75,r2*0.9,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=greens[2];ctx.beginPath();ctx.arc(cx2+sway*0.5,top-r1*1.1,r3,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(cx2+sway*0.6,top-r1*1.5,r4,0,Math.PI*2);ctx.fill();
     }
   }
 
@@ -4208,7 +4439,7 @@ function startGame(pendingSave){
     const cc=document.getElementById('clockCanvas');
     if(!cc)return;
     const pc=cc.getContext('2d');
-    const W=60,H=60,cx=30,cy=30,R=26;
+    const W=72,H=72,cx=36,cy=36,R=32;
     pc.clearRect(0,0,W,H);
 
     const dark=nightDark();
@@ -4468,32 +4699,124 @@ function startGame(pendingSave){
 
     // Village content — only draw if village area is near screen
     const sx=ox-cam.x;
-    if(sx<-700||sx>canvas.width+700)return;
+    if(sx<-1100||sx>canvas.width+400)return;
+    // ── TOWN GROUND DETAILS ──────────────────────────────────
+    var sy=oy-cam.y, sxo=ox-cam.x;
+    // Hut centres in screen coords (match HUTS layout)
+    var hTL_sx=ox-280-cam.x, hTL_sy=oy-310-cam.y; // top-left xl (enterable shop)
+    var hTR_sx=ox+180-cam.x, hTR_sy=oy-310-cam.y; // top-right large
+    var hBL_sx=ox-280-cam.x, hBL_sy=oy+160-cam.y; // bottom-left large
+    var hBR_sx=ox+200-cam.x, hBR_sy=oy+200-cam.y; // bottom-right xl
+    // Town square — centred slightly east of VILLAGE_OX to be between the huts
+    var sqW=160, sqH=120;
+    ctx.fillStyle='#7a7060';
+    ctx.fillRect(sxo-sqW/2, sy-sqH/2, sqW, sqH);
+    ctx.fillStyle='#6e6454';
+    for(var sqx=0;sqx<sqW;sqx+=22){for(var sqy=0;sqy<sqH;sqy+=18){
+      ctx.fillRect(sxo-sqW/2+sqx, sy-sqH/2+sqy, 20, 16);
+    }}
+    ctx.strokeStyle='#5a5448'; ctx.lineWidth=3;
+    ctx.strokeRect(sxo-sqW/2, sy-sqH/2, sqW, sqH);
+    ctx.lineWidth=1; // reset to prevent bleed into hut drawing
+
+    // Dirt paths — connect square edge to outside each hut door
+    // Hut dimensions: xl=200w/160h, large=160w/130h
+    // Path connects to the door face (bottom centre of each hut)
+    ctx.fillStyle='#8a6a3a';
+    var pathW=20; // path width in pixels
+
+    // Gate → square (horizontal along road Y)
+    var gsx=PAL.x-cam.x;
+    if(sxo-sqW/2 > gsx) ctx.fillRect(gsx, sy-pathW/2, sxo-sqW/2-gsx, pathW);
+
+    // Square → top-left hut: hut bottom-right corner is hTL_sx+100, hTL_sy+80
+    // Path runs: right from square left edge, turning north up to hut bottom
+    var tlDoorX=hTL_sx, tlHutBot=hTL_sy+80;
+    // Horizontal segment from hut right side to square
+    ctx.fillRect(hTL_sx+100, tlHutBot-pathW/2, sxo-sqW/2-(hTL_sx+100), pathW);
+    // Vertical segment from hut bottom down to horizontal
+    ctx.fillRect(hTL_sx+100-pathW/2, tlHutBot, pathW, sy-sqH/2-tlHutBot);
+
+    // Square → top-right hut
+    var trHutLeft=hTR_sx-80, trHutBot=hTR_sy+65;
+    ctx.fillRect(sxo+sqW/2, trHutBot-pathW/2, trHutLeft-(sxo+sqW/2), pathW);
+    ctx.fillRect(trHutLeft-pathW/2, trHutBot, pathW, sy-sqH/2-trHutBot);
+
+    // Square → bottom-left hut
+    var blHutTop=hBL_sy-65, blHutRight=hBL_sx+100;
+    ctx.fillRect(blHutRight-pathW/2, sy+sqH/2, pathW, blHutTop-(sy+sqH/2));
+    ctx.fillRect(blHutRight, blHutTop-pathW/2, sxo-sqW/2-blHutRight, pathW);
+
+    // Square → bottom-right hut
+    var brHutTop=hBR_sy-80, brHutLeft=hBR_sx-100;
+    ctx.fillRect(sxo+sqW/2-pathW/2, sy+sqH/2, pathW, brHutTop-(sy+sqH/2));
+    ctx.fillRect(sxo+sqW/2, brHutTop-pathW/2, brHutLeft-(sxo+sqW/2), pathW);
+
     var HUTS=[
       {wx:ox-280, wy:oy-310, type:'xl'},
       {wx:ox+180, wy:oy-310, type:'large'},
       {wx:ox-280, wy:oy+160, type:'large'},
       {wx:ox+200, wy:oy+200, type:'xl'},
     ];
-    // Draw shadows first (flat rects, no movement)
+    // Draw shadows first
     for(var hi=0;hi<HUTS.length;hi++){
       var h=HUTS[hi];
       var hx=h.wx-cam.x, hy=h.wy-cam.y;
-      if(hx<-280||hx>canvas.width+280||hy<-240||hy>canvas.height+160)continue;
+      if(hx<-380||hx>canvas.width+380||hy<-480||hy>canvas.height+260)continue;
       var hw=h.type==='xl'?200:h.type==='large'?160:h.type==='medium'?120:80;
       var hh=h.type==='xl'?160:h.type==='large'?130:h.type==='medium'?100:70;
       ctx.fillStyle='rgba(0,0,0,0.2)';
       ctx.fillRect(hx-hw/2+8,hy-hh/2+8,hw,hh+8);
     }
-    // Draw huts
+
+    // ── HAY BALES — drawn before huts so huts overdraw them (correct depth) ──
+    function drawHayBale(bx,by){
+      ctx.fillStyle='rgba(0,0,0,0.18)';ctx.beginPath();ctx.ellipse(bx+4,by+4,20,8,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#c8a030';ctx.fillRect(bx-16,by-12,32,24);
+      ctx.fillStyle='#b89020';
+      for(var si2=0;si2<5;si2++) ctx.fillRect(bx-14+si2*7,by-12,3,24);
+      ctx.fillStyle='#6a4010'; ctx.lineWidth=1.5; ctx.strokeStyle='#6a4010';
+      ctx.beginPath();ctx.moveTo(bx-16,by-4);ctx.lineTo(bx+16,by-4);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(bx-16,by+5);ctx.lineTo(bx+16,by+5);ctx.stroke();
+      ctx.lineWidth=1; // reset
+      ctx.fillStyle='rgba(255,220,100,0.25)';ctx.fillRect(bx-14,by-12,28,6);
+    }
+    // Bales flanking the gate inside (against west wall)
+    var baleX=PAL.x-cam.x+50, baleY=oy-cam.y;
+    drawHayBale(baleX, baleY-52);
+    drawHayBale(baleX+30, baleY-46);
+    drawHayBale(baleX, baleY+52);
+    drawHayBale(baleX+30, baleY+46);
+    // Stack of 3 bales outside the top-left hut — placed to the right of the hut's east wall
+    // Hut east edge = hTL_sx + 100, bottom face = hTL_sy + 80
+    var hutEastX=hTL_sx+108, hutBottomY=hTL_sy+90;
+    drawHayBale(hutEastX, hutBottomY);
+    drawHayBale(hutEastX+30, hutBottomY+6);
+    drawHayBale(hutEastX+15, hutBottomY-22); // top of stack
+
+    // Draw huts (on top of hay bales)
     for(var hi=0;hi<HUTS.length;hi++){
       var h=HUTS[hi];
       var hx=h.wx-cam.x, hy=h.wy-cam.y;
-      if(hx<-280||hx>canvas.width+280||hy<-240||hy>canvas.height+160)continue;
+      if(hx<-380||hx>canvas.width+380||hy<-480||hy>canvas.height+260)continue;
       drawMedievalHut(hx,hy,h.type, h.wx, h.wy);
     }
     drawMerchantNPC();
-  }
+    // Door entry prompt for top-left hut
+    if(gateUnlocked){
+      var doorSx=SHOP_DOOR_WX-cam.x, doorSy=SHOP_DOOR_WY-cam.y;
+      if(Math.abs(doorSx)<canvas.width&&Math.abs(doorSy)<canvas.height){
+        var ddist=dist(player,{x:SHOP_DOOR_WX,y:SHOP_DOOR_WY});
+        if(ddist<70&&!dialogueOpen&&!shopOpen){
+          var p2=0.6+0.4*Math.sin(Date.now()/220);
+          ctx.globalAlpha=p2;ctx.font='bold 10px Cinzel,serif';ctx.textAlign='center';
+          ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Enter',doorSx,doorSy-20);
+          ctx.textAlign='left';ctx.globalAlpha=1;
+        }
+      }
+    }
+
+  } // end drawVillageAndRoad
 
   // Medieval English timber-frame hut
   // wx/wy are world-space coords used for deterministic decoration placement
@@ -4588,20 +4911,23 @@ function startGame(pendingSave){
     }
 
     // ── DOOR ──
-    var doorW=type==='large'?16:12, doorH=type==='large'?22:18;
+    var doorW=type==='xl'?34:type==='large'?28:type==='medium'?22:18;
+    var doorH=type==='xl'?52:type==='large'?44:type==='medium'?36:28;
     ctx.fillStyle='#0e0a06';
     ctx.fillRect(x-doorW/2, y+h/2-doorH, doorW, doorH);
-    // Door frame
-    ctx.fillStyle='#3a2810'; ctx.lineWidth=2; ctx.strokeStyle='#3a2810';
-    ctx.strokeRect(x-doorW/2, y+h/2-doorH, doorW, doorH);
+    // Door frame — use fillRect not strokeRect to avoid ctx.strokeStyle bleed
+    ctx.fillStyle='#3a2810';
+    ctx.fillRect(x-doorW/2,        y+h/2-doorH, 2, doorH);       // left
+    ctx.fillRect(x+doorW/2-2,      y+h/2-doorH, 2, doorH);       // right
+    ctx.fillRect(x-doorW/2,        y+h/2-doorH, doorW, 2);       // top
     // Door planks
     ctx.fillStyle='#5a4028';
-    ctx.fillRect(x-doorW/2+1, y+h/2-doorH+1, doorW/2-2, doorH-2);
+    ctx.fillRect(x-doorW/2+2, y+h/2-doorH+2, doorW/2-3, doorH-4);
     ctx.fillStyle='#4a3820';
-    ctx.fillRect(x+1, y+h/2-doorH+1, doorW/2-2, doorH-2);
+    ctx.fillRect(x+1, y+h/2-doorH+2, doorW/2-3, doorH-4);
     // Door handle
     ctx.fillStyle='#c8a020';
-    ctx.beginPath();ctx.arc(x+doorW/2-4, y+h/2-doorH/2, 2, 0, Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(x+doorW/2-5, y+h/2-doorH/2, 2, 0, Math.PI*2);ctx.fill();
 
     // ── THATCHED ROOF ──
     // Main roof shape — peaked
@@ -4654,6 +4980,132 @@ function startGame(pendingSave){
       ctx.quadraticCurveTo(vx-3, y+h/2-8, vx-1, y+h/2-14);
       ctx.stroke();
     }
+  }
+
+  function drawShopInterior(){
+    var W=INTERIOR_W, H=INTERIOR_H;
+    var cx=canvas.width/2-W/2, cy=canvas.height/2-H/2;
+    // Floor — wooden planks
+    ctx.fillStyle='#6a4820';ctx.fillRect(cx,cy,W,H);
+    ctx.fillStyle='#7a5828';
+    for(var pi=0;pi<W;pi+=18) ctx.fillRect(cx+pi,cy,17,H);
+    ctx.fillStyle='rgba(0,0,0,0.1)';
+    for(var pi=0;pi<W;pi+=18) ctx.fillRect(cx+pi+16,cy,2,H);
+    // Horizontal planking lines
+    ctx.fillStyle='rgba(0,0,0,0.06)';
+    for(var li=0;li<H;li+=40) ctx.fillRect(cx,cy+li,W,1);
+
+    // Walls — rough plaster, darker than outside
+    ctx.fillStyle='#9a8a6a';ctx.fillRect(cx,cy,W,30); // north wall
+    ctx.fillStyle='#8a7858';ctx.fillRect(cx,cy,12,H); // west wall
+    ctx.fillRect(cx+W-12,cy,12,H);                    // east wall
+    // Wall panels
+    ctx.fillStyle='#4a3010';
+    ctx.fillRect(cx,cy,W,4);ctx.fillRect(cx,cy+H-4,W,4);
+    ctx.fillRect(cx,cy,4,H);ctx.fillRect(cx+W-4,cy,4,H);
+
+    // Counter — across upper portion of room
+    var ctX=cx+60, ctY=cy+80, ctW=W-120, ctH=18;
+    ctx.fillStyle='#3a2210';ctx.fillRect(ctX,ctY,ctW,ctH+8);
+    ctx.fillStyle='#5a3a18';ctx.fillRect(ctX,ctY,ctW,ctH);
+    // Counter top planks
+    ctx.fillStyle='#6a4a22';
+    for(var cp=0;cp<ctW;cp+=22) ctx.fillRect(ctX+cp,ctY,20,ctH);
+    // Counter front edge
+    ctx.fillStyle='#2a1808';ctx.fillRect(ctX,ctY+ctH,ctW,4);
+
+    // Barrels (left side)
+    function drawBarrel(bx,by){
+      ctx.fillStyle='#4a3010';ctx.beginPath();ctx.ellipse(bx,by,14,18,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#3a2208';ctx.fillRect(bx-14,by-18,28,36);
+      ctx.fillStyle='#4a3010';ctx.fillRect(bx-14,by-18,28,36);
+      ctx.fillStyle='#6a4820';ctx.fillRect(bx-13,by-16,26,32);
+      ctx.fillStyle='#808890';ctx.fillRect(bx-14,by-8,28,3);ctx.fillRect(bx-14,by+4,28,3);
+      ctx.fillStyle='rgba(255,255,255,0.08)';ctx.fillRect(bx-6,by-14,5,28);
+      ctx.fillStyle='#5a4818';ctx.beginPath();ctx.ellipse(bx,by-18,14,5,0,0,Math.PI*2);ctx.fill();
+    }
+    drawBarrel(cx+30,cy+H-70);
+    drawBarrel(cx+62,cy+H-70);
+    drawBarrel(cx+46,cy+H-98); // stacked
+
+    // Crates (right side)
+    function drawCrate(bx,by,sz){
+      ctx.fillStyle='#6a4820';ctx.fillRect(bx-sz/2,by-sz/2,sz,sz);
+      ctx.fillStyle='#4a3010';ctx.strokeStyle='#4a3010';ctx.lineWidth=2;
+      ctx.strokeRect(bx-sz/2,by-sz/2,sz,sz);
+      ctx.beginPath();ctx.moveTo(bx-sz/2,by-sz/2);ctx.lineTo(bx+sz/2,by+sz/2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(bx+sz/2,by-sz/2);ctx.lineTo(bx-sz/2,by+sz/2);ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,0.06)';ctx.fillRect(bx-sz/2+2,by-sz/2+2,sz/3,sz/4);
+    }
+    drawCrate(cx+W-40,cy+H-60,36);
+    drawCrate(cx+W-40,cy+H-100,32);
+    drawCrate(cx+W-70,cy+H-64,28);
+
+    // Shelves on north wall behind counter
+    ctx.fillStyle='#4a3010';
+    ctx.fillRect(cx+80,cy+30,W-160,6);  // shelf 1
+    ctx.fillRect(cx+100,cy+50,W-200,5); // shelf 2
+    // Items on shelves (small bottles / jars)
+    var shelfItems=[
+      {x:cx+100,y:cy+28,c:'#c83030'},{x:cx+130,y:cy+28,c:'#3080c0'},
+      {x:cx+160,y:cy+28,c:'#c83030'},{x:cx+190,y:cy+28,c:'#30a040'},
+      {x:cx+W-110,y:cy+28,c:'#c83030'},{x:cx+W-140,y:cy+28,c:'#8030b0'},
+      {x:cx+120,y:cy+48,c:'#a06020'},{x:cx+150,y:cy+48,c:'#c83030'},
+      {x:cx+W-120,y:cy+48,c:'#30a040'},{x:cx+W-150,y:cy+48,c:'#c06020'},
+    ];
+    for(var ji=0;ji<shelfItems.length;ji++){
+      var it=shelfItems[ji];
+      ctx.fillStyle=it.c;ctx.beginPath();ctx.ellipse(it.x,it.y-5,4,6,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#2a1808';ctx.fillRect(it.x-2,it.y-12,4,5);
+    }
+
+    // Shopkeeper behind counter (simple sprite)
+    var kx=cx+W/2, ky=ctY-20;
+    ctx.fillStyle='rgba(0,0,0,0.15)';ctx.beginPath();ctx.ellipse(kx,ky+2,8,3,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#7a2818';ctx.fillRect(kx-8,ky-20,16,22); // body
+    ctx.fillStyle='#d8c8a8';ctx.fillRect(kx-7,ky-10,14,14); // apron
+    ctx.fillStyle='#d0906a';ctx.fillRect(kx-4,ky-23,8,5);   // neck
+    ctx.fillStyle='#d0906a';ctx.fillRect(kx-6,ky-33,12,12); // head
+    ctx.fillStyle='#c0b898';ctx.fillRect(kx-6,ky-35,12,6);  // coif
+    ctx.fillStyle='#1a1008';ctx.fillRect(kx-3,ky-27,2,2);ctx.fillRect(kx+1,ky-27,2,2);
+    ctx.fillStyle='#a05040';ctx.fillRect(kx-3,ky-22,6,2);
+    ctx.font='bold 9px Cinzel,serif';ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillText('Elara',kx+1,ky-42);
+    ctx.fillStyle='#f0d878';ctx.fillText('Elara',kx,ky-43);
+    // Talk prompt when near counter
+    var distToCounter=Math.abs(player.y-(80+18+14));
+    if(distToCounter<60&&player.y<160&&!dialogueOpen){
+      var p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Talk',kx,ky-56);ctx.globalAlpha=1;
+    }
+    ctx.textAlign='left';
+
+    // Door (south wall — centred)
+    var dw=34, dh=50;
+    var dx2=cx+W/2-dw/2, dy2=cy+H-dh;
+    ctx.fillStyle='#1a1008';ctx.fillRect(dx2,dy2,dw,dh);
+    ctx.fillStyle='#4a3018';ctx.fillRect(dx2+1,dy2+1,dw/2-2,dh-2);
+    ctx.fillStyle='#3a2810';ctx.fillRect(dx2+dw/2+1,dy2+1,dw/2-2,dh-2);
+    ctx.fillStyle='#c8a020';ctx.beginPath();ctx.arc(dx2+dw/2,dy2+dh/2,3,0,Math.PI*2);ctx.fill();
+    // Exit prompt
+    if(player.y>INTERIOR_H-80){
+      const p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.font='bold 10px Cinzel,serif';ctx.textAlign='center';
+      ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Exit',canvas.width/2,cy+H-10);
+      ctx.textAlign='left';ctx.globalAlpha=1;
+    }
+
+    // Player in interior — draw at their position relative to the room origin on screen
+    // Room draws with top-left at (cx, cy). Player position is 0..INTERIOR_W, 0..INTERIOR_H.
+    // So screen position = (cx + player.x, cy + player.y).
+    // drawPlayer uses (worldX - cam.x, worldY - cam.y), so set cam = worldPos - screenPos.
+    var ipx=cx+player.x, ipy=cy+player.y;
+    ctx.fillStyle='rgba(0,0,0,0.2)';ctx.beginPath();ctx.ellipse(ipx+2,ipy+3,13,5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(0,0,0,0.14)';ctx.beginPath();ctx.ellipse(ipx+1,ipy+1,8,3,0,0,Math.PI*2);ctx.fill();
+    var oldCamX=cam.x, oldCamY=cam.y;
+    cam.x=-cx; cam.y=-cy;
+    drawPlayer(player.x,player.y,player.facing,player.walkFrame,moving);
+    cam.x=oldCamX; cam.y=oldCamY;
   }
 
   // ── DAY/NIGHT OVERLAY ──────────────────────────────────────
@@ -4955,7 +5407,7 @@ function startGame(pendingSave){
       if(keys['d']||keys['arrowright']){nx+=PLAYER_SPD;player.facing='right';moving=true;}
 
       if(moving){
-        const resolved=resolveCollision(nx,ny);
+        const resolved=resolveCollision(nx,ny,player.x,player.y);
         player.x=resolved.x;player.y=resolved.y;
       } else if(currentZone==='plains'){
         // Still clamp bounds when stationary
@@ -4968,9 +5420,19 @@ function startGame(pendingSave){
 
       if(keys['e']){
         keys['e']=false;
+        if(currentZone==='shop'){
+          // Talk to shopkeeper when near counter
+          var distToCounter=Math.abs(player.y-(80+18+14));
+          if(distToCounter<60&&player.y<160&&!dialogueOpen){openDialogue('shopkeeper');return;}
+          // Exit through south door
+          if(player.y>INTERIOR_H-60){exitShopInterior();return;}
+          return;
+        }
         if(currentZone==='plains'){
           if(dist(player,CAVE_ENTRANCE)<70){transitionTo('cave');return;}
           if(dist(player,NPC_POS)<TALK_R&&!dialogueOpen){openDialogue('aldric');return;}
+          // Shop hut door entry
+          if(gateUnlocked&&dist(player,{x:SHOP_DOOR_WX,y:SHOP_DOOR_WY})<60){enterShopInterior();return;}
           // Engage bunnies
           for(const bn of bunnies){
             if(!bn.alive)continue;
@@ -4986,7 +5448,7 @@ function startGame(pendingSave){
           if(dist(player,GUARD1_POS)<TALK_R&&!dialogueOpen){openDialogue('hamin');return;}
           if(dist(player,GUARD2_POS)<TALK_R&&!dialogueOpen){openDialogue('guard');return;}
           // Merchant (only inside gate)
-          if(gateUnlocked&&dist(player,MERCHANT_POS)<TALK_R&&!dialogueOpen&&!shopOpen){openShop();return;}
+          if(gateUnlocked&&dist(player,MERCHANT_POS)<TALK_R&&!dialogueOpen&&!shopOpen){openShop('Mira');return;}
           // Check breakable rocks
           for(const r of encRocks){
             if(r.broken)continue;
@@ -5071,7 +5533,10 @@ function startGame(pendingSave){
   // ── RENDER ─────────────────────────────────────────────────
   function render(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(currentZone==='plains'){
+    if(currentZone==='shop'){
+      ctx.fillStyle='#1a1008';ctx.fillRect(0,0,canvas.width,canvas.height);
+      drawShopInterior();
+    } else if(currentZone==='plains'){
       drawPlains();
       drawVillageAndRoad();
       drawTownfolk();
