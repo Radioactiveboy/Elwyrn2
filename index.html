@@ -50,6 +50,9 @@
   #minimap{position:fixed;top:14px;right:16px;z-index:51;display:none;}
   #minimapCanvas{border:1px solid rgba(200,168,75,.5);border-radius:2px;box-shadow:0 0 12px rgba(0,0,0,.7);}
   #minimapLabel{font-family:'Cinzel',serif;font-size:.5rem;color:#c8a84b;letter-spacing:.15em;text-align:center;margin-top:3px;opacity:.7;}
+  #clockDial{margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  #clockCanvas{border:1px solid rgba(200,168,75,.4);border-radius:50%;box-shadow:0 0 10px rgba(0,0,0,.6);}
+  #clockLabel{font-family:'Cinzel',serif;font-size:.48rem;color:#c8a84b;letter-spacing:.12em;opacity:.75;}
 
   /* LEVEL-UP FLASH */
   #levelUpFlash{position:fixed;inset:0;pointer-events:none;z-index:88;opacity:0;background:radial-gradient(ellipse at center,rgba(60,200,255,.18) 0%,transparent 70%);}
@@ -320,6 +323,10 @@
 <div id="minimap">
   <canvas id="minimapCanvas" width="130" height="100"></canvas>
   <div id="minimapLabel">MAP &nbsp;·&nbsp; [I] Bag &nbsp;[J] Journal &nbsp;[F5] Save</div>
+  <div id="clockDial">
+    <canvas id="clockCanvas" width="60" height="60"></canvas>
+    <div id="clockLabel">MIDDAY</div>
+  </div>
 </div>
 
 <!-- COMBAT PANEL -->
@@ -510,6 +517,7 @@ const ITEMS={
   pickaxe:{id:'pickaxe',name:'Iron Pickaxe',icon:'⛏️',rarity:'uncommon',desc:'A sturdy pickaxe found in a goblin chest. The head is well-forged. Something about it feels purposeful — like it was left here for someone.',stats:'Breaks rock walls',usable:false,stackable:false,equipSlot:null},
   cartwheel:{id:'cartwheel',name:"Aldric's Cartwheel",icon:'🛞',rarity:'uncommon',desc:"A sturdy iron-rimmed cartwheel, clearly from a merchant's wagon. It still has the maker's mark of Aldric of the Plains stamped into the hub.",stats:'Quest item',usable:false,stackable:false,equipSlot:null},
   bat_wing:{id:'bat_wing',name:'Bat Wing',icon:'🦇',rarity:'common',desc:'A leathery wing from a cave bat. Still faintly warm. Alchemists pay good coin for these.',stats:'Worth: 1 gold',usable:false,stackable:true,equipSlot:null},
+  rabbit_meat:{id:'rabbit_meat',name:'Rabbit Meat',icon:'🥩',rarity:'common',desc:'A small cut of rabbit meat from the plains. Still warm. Could be cooked over a fire, or sold to a trader.',stats:'Worth: 2 gold',usable:false,stackable:true,equipSlot:null},
 };
 
 const GOBLIN_LOOT=[
@@ -847,8 +855,51 @@ const DIALOGUES={
     },
   },
 
+  townsman:{
+    name:'Edmund',title:'Ashwick Resident',face:'🪵',
+    getRootNode:function(){
+      return {
+        text:"Aye, still standing. Just about. The goblins took half the east quarter before Hamin held the wall. I lost two years of carpentry work that night. Starting again, piece by piece.",
+        choices:[
+          {label:'How long have you lived here?',next:'history'},
+          {label:'What do you know about the caves?',next:'caves'},
+          {label:'Farewell',next:null}
+        ]
+      };
+    },
+    history:{
+      text:"Born here, same as my father. Ashwick was proper prosperous once — three blacksmiths, a tannery, a mill on the east stream. Now look at it. Half rubble, half stubborn folk too proud to leave. I'm one of the stubborn ones.",
+      choices:[{label:'What about the caves?',next:'caves'},{label:'Farewell',next:null}]
+    },
+    caves:{
+      text:"The caves have been trouble since before my time. Old miners worked the crystal seams but went deeper than they should have. Woke something up. That's what my grandfather said. Don't go in alone.",
+      choices:[{label:'Farewell',next:null}]
+    },
+  },
+
+  townswoman:{
+    name:'Agnes',title:'Ashwick Resident',face:'🧺',
+    getRootNode:function(){
+      return {
+        text:"Oh! A visitor. We don't get many. Hamin's toll puts most people off, but I suppose the coin keeps the walls patched. I'm Agnes. I used to run the bakery — just bread for the family now, but old habits.",
+        choices:[
+          {label:'Tell me about Ashwick',next:'town'},
+          {label:'Do you know Mira?',next:'mira_topic'},
+          {label:'Farewell',next:null}
+        ]
+      };
+    },
+    town:{
+      text:"It's a shadow of what it was. But there's something stubborn in this soil. People stay. Edmund's rebuilding his workshop, Mira keeps the market going. Hamin swears the walls will hold. Maybe they will.",
+      choices:[{label:'Do you know Mira?',next:'mira_topic'},{label:'Farewell',next:null}]
+    },
+    mira_topic:{
+      text:"Mira's kept this town alive more than the walls have. Trades for anything useful, never turns anyone away. You should visit her stall if you've got anything from those caves.",
+      choices:[{label:'Farewell',next:null}]
+    },
+  },
+
   mira:{
-    name:'Mira',title:'Market Trader — Ashwick',face:'👩',
     getRootNode:function(){
       return {
         text:"Welcome, traveller. I buy cave salvage and sell what supplies I can get my hands on. It's not much, but it keeps the town going. What'll it be?",
@@ -1148,7 +1199,100 @@ var portraits = {
     pc.fillStyle=vig; pc.fillRect(0,0,W,H);
   },
 
-  // ── GUARD — younger militia soldier ───────────────────────────
+  // ── EDMUND — weathered carpenter, middle-aged man ─────────────
+  townsman: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(35,25,15,0.5)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+    // Rough linen shirt
+    pc.fillStyle='#9a8a6a'; pc.beginPath(); pc.ellipse(cx,H,32,20,0,Math.PI,0); pc.fill();
+    // Work apron
+    pc.fillStyle='#6a5030'; pc.fillRect(cx-16,H-16,32,10);
+    // Neck
+    pc.fillStyle='#c07858'; pc.fillRect(cx-4,cy+14,8,10);
+    // Head — strong jaw, lined face
+    pc.fillStyle='#c07858'; pc.fillRect(cx-13,cy-14,26,28);
+    pc.fillRect(cx-11,cy-20,22,8);
+    // Laugh lines
+    pc.strokeStyle='rgba(0,0,0,0.18)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-13,cy); pc.lineTo(cx-10,cy+8); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+13,cy); pc.lineTo(cx+10,cy+8); pc.stroke();
+    // Short brown beard
+    pc.fillStyle='rgba(80,50,20,0.55)'; pc.fillRect(cx-11,cy+6,22,12);
+    pc.fillStyle='rgba(100,65,25,0.35)'; pc.fillRect(cx-6,cy+2,12,6);
+    // Eyes — warm brown, tired
+    pc.fillStyle='#1a1008'; pc.fillRect(cx-10,cy-8,7,5); pc.fillRect(cx+3,cy-8,7,5);
+    pc.fillStyle='#5a3818'; pc.fillRect(cx-9,cy-7,5,3); pc.fillRect(cx+4,cy-7,5,3);
+    pc.fillStyle='#0a0806'; pc.fillRect(cx-8,cy-7,3,3); pc.fillRect(cx+5,cy-7,3,3);
+    pc.fillStyle='rgba(255,255,255,0.4)'; pc.fillRect(cx-8,cy-7,1,1); pc.fillRect(cx+6,cy-7,1,1);
+    // Bushy brows — dark brown
+    pc.fillStyle='#3a2208'; pc.fillRect(cx-11,cy-12,9,3); pc.fillRect(cx+2,cy-12,9,3);
+    // Nose — broad
+    pc.fillStyle='#b06840'; pc.fillRect(cx-3,cy-4,7,8);
+    pc.beginPath(); pc.ellipse(cx+1,cy+3,5,3,0,0,Math.PI*2); pc.fill();
+    // Mouth — closed, slight frown
+    pc.fillStyle='#7a4828'; pc.fillRect(cx-6,cy+8,12,3);
+    // Tousled dark hair with grey streaks
+    pc.fillStyle='#2a1a08'; pc.fillRect(cx-13,cy-20,26,8);
+    pc.fillStyle='#5a5040'; pc.fillRect(cx+4,cy-20,8,5); // grey streak
+    pc.fillRect(cx-12,cy-18,4,4);
+    // Sawdust in hair
+    pc.fillStyle='rgba(200,180,100,0.3)'; pc.fillRect(cx-8,cy-19,4,3); pc.fillRect(cx+5,cy-18,3,3);
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.55)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
+
+  // ── AGNES — stout kindly baker woman ──────────────────────────
+  townswoman: function(pc,W,H){
+    var cx=W/2, cy=H/2+2;
+    var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
+    bg.addColorStop(0,'rgba(35,20,10,0.5)'); bg.addColorStop(1,'rgba(0,0,0,0)');
+    pc.fillStyle=bg; pc.fillRect(0,0,W,H);
+    // Dress — warm earthy red
+    pc.fillStyle='#7a2818'; pc.beginPath(); pc.ellipse(cx,H,34,22,0,Math.PI,0); pc.fill();
+    // Cream apron
+    pc.fillStyle='#d8c8a8'; pc.fillRect(cx-14,H-18,28,12);
+    // Neck
+    pc.fillStyle='#d0906a'; pc.fillRect(cx-4,cy+14,9,10);
+    // Head — round, warm
+    pc.fillStyle='#d0906a';
+    pc.fillRect(cx-13,cy-14,26,30);
+    pc.fillRect(cx-11,cy-20,22,8);
+    // Rosy cheeks
+    pc.fillStyle='rgba(200,90,70,0.25)';
+    pc.beginPath(); pc.ellipse(cx-11,cy+2,6,4,0,0,Math.PI*2); pc.fill();
+    pc.beginPath(); pc.ellipse(cx+11,cy+2,6,4,0,0,Math.PI*2); pc.fill();
+    // Eyes — kind grey-green
+    pc.fillStyle='#1a1008'; pc.fillRect(cx-10,cy-7,7,5); pc.fillRect(cx+3,cy-7,7,5);
+    pc.fillStyle='#4a6040'; pc.fillRect(cx-9,cy-6,5,3); pc.fillRect(cx+4,cy-6,5,3);
+    pc.fillStyle='#0a0c08'; pc.fillRect(cx-8,cy-6,3,3); pc.fillRect(cx+5,cy-6,3,3);
+    pc.fillStyle='rgba(255,255,255,0.5)'; pc.fillRect(cx-8,cy-6,1,1); pc.fillRect(cx+5,cy-6,1,1);
+    // Smile wrinkles
+    pc.strokeStyle='rgba(0,0,0,0.12)'; pc.lineWidth=1;
+    pc.beginPath(); pc.moveTo(cx-12,cy-3); pc.lineTo(cx-14,cy+2); pc.stroke();
+    pc.beginPath(); pc.moveTo(cx+12,cy-3); pc.lineTo(cx+14,cy+2); pc.stroke();
+    // Soft brows
+    pc.fillStyle='#5a3818'; pc.fillRect(cx-11,cy-11,8,2); pc.fillRect(cx+3,cy-11,8,2);
+    // Nose — soft button
+    pc.fillStyle='#c07858'; pc.fillRect(cx-2,cy-3,5,6);
+    pc.beginPath(); pc.ellipse(cx+1,cy+2,4,3,0,0,Math.PI*2); pc.fill();
+    // Warm smile
+    pc.fillStyle='#a05040'; pc.fillRect(cx-7,cy+8,14,3);
+    pc.fillStyle='#c07060'; pc.fillRect(cx-6,cy+8,12,1);
+    // Flour dusted face
+    pc.fillStyle='rgba(240,230,210,0.2)'; pc.fillRect(cx-5,cy-5,4,4); pc.fillRect(cx+6,cy,3,3);
+    // Hair — grey-brown bun under white coif
+    pc.fillStyle='#c0b898'; pc.fillRect(cx-13,cy-22,26,8);
+    pc.fillStyle='#d8d0b8'; pc.fillRect(cx-13,cy-24,26,6);
+    pc.fillStyle='#c8c0a8'; pc.fillRect(cx-13,cy-24,26,2);
+    // Coif ties
+    pc.fillStyle='#c8c0a8'; pc.fillRect(cx-12,cy+10,3,7); pc.fillRect(cx+9,cy+10,3,7);
+    var vig=pc.createRadialGradient(cx,cy,20,cx,cy,46);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.5)');
+    pc.fillStyle=vig; pc.fillRect(0,0,W,H);
+  },
   guard: function(pc,W,H){
     var cx=W/2, cy=H/2+2;
     var bg=pc.createRadialGradient(cx,cy,0,cx,cy,44);
@@ -1354,9 +1498,16 @@ function buildSave(){
     equipped: {...equipped},
     // World state
     world:{
-      rocksState: window._encRocks ? window._encRocks.map(r=>r.broken) : [],
-      chestOpened: window._caveChest ? window._caveChest.opened : false,
-      goblinsAlive: window._goblins ? window._goblins.map(g=>g.alive) : [],
+      rocksState:    window._encRocks ? window._encRocks.map(r=>r.broken) : [],
+      chestOpened:   window._caveChest ? window._caveChest.opened : false,
+      goblinsAlive:  window._goblins ? window._goblins.map(g=>g.alive) : [],
+      crystalHarvested: window._caveObstructions
+        ? window._caveObstructions.filter(o=>o.type==='crystal').map(o=>!!o.harvested)
+        : [],
+      bunniesAlive:  window._bunnies ? window._bunnies.map(b=>b.alive) : [],
+      bunnyDeadAt:   window._bunnyDeadAt ? [...window._bunnyDeadAt] : [null,null],
+      gateUnlocked:  !!window._gateUnlocked,
+      questState:    typeof quests!=='undefined' ? JSON.parse(JSON.stringify(quests)) : {},
     },
     // Fog of war — store as compact base64 strings
     fog:{
@@ -1419,7 +1570,7 @@ function applySave(save){
 
   // World state — rocks
   if(save.world.rocksState&&window._encRocks){
-    save.world.rocksState.forEach((broken,i)=>{
+    save.world.rocksState.forEach(function(broken,i){
       if(window._encRocks[i])window._encRocks[i].broken=broken;
     });
   }
@@ -1427,9 +1578,36 @@ function applySave(save){
   if(window._caveChest)window._caveChest.opened=save.world.chestOpened||false;
   // Goblins
   if(save.world.goblinsAlive&&window._goblins){
-    save.world.goblinsAlive.forEach((alive,i)=>{
+    save.world.goblinsAlive.forEach(function(alive,i){
       if(window._goblins[i])window._goblins[i].alive=alive;
     });
+  }
+  // Crystal harvest state
+  if(save.world.crystalHarvested&&window._caveObstructions){
+    var crystals=window._caveObstructions.filter(function(o){return o.type==='crystal';});
+    save.world.crystalHarvested.forEach(function(harvested,i){
+      if(crystals[i])crystals[i].harvested=!!harvested;
+    });
+  }
+  // Bunnies — restore alive state and death timestamps
+  if(save.world.bunniesAlive&&window._bunnies){
+    save.world.bunniesAlive.forEach(function(alive,i){
+      if(window._bunnies[i])window._bunnies[i].alive=alive;
+    });
+  }
+  if(save.world.bunnyDeadAt&&window._bunnyDeadAt){
+    save.world.bunnyDeadAt.forEach(function(t,i){
+      window._bunnyDeadAt[i]=t;
+    });
+  }
+  // Gate
+  if(save.world.gateUnlocked)window._gateUnlocked=true;
+  // Quests — restore full quest state so completed quests stay completed
+  if(save.world.questState&&typeof quests!=='undefined'){
+    var qs=save.world.questState;
+    for(var qk in qs){
+      if(quests[qk])quests[qk].state=qs[qk].state;
+    }
   }
 
   // Fog of war
@@ -2043,6 +2221,111 @@ const Audio = (function(){
     });
   }
 
+  // ── PLAINS AMBIENCE ──────────────────────────────────────────
+  // Layered outdoor atmosphere: gentle wind, birdsong, rustling leaves.
+  // Runs alongside the intro music (separate gain chain, lower volume).
+  var plainsNodes = [];
+  var birdTimer = null;
+
+  function playPlainsAmbience(){
+    if(plainsNodes.length>0)return; // already running
+    var ctx2=getCtx();
+    var now=ctx2.currentTime+0.1;
+
+    // ── WIND — very soft low-passed noise ──
+    var windBuf=ctx2.createBuffer(2,ctx2.sampleRate*4,ctx2.sampleRate);
+    for(var ch=0;ch<2;ch++){
+      var wd=windBuf.getChannelData(ch);
+      for(var i=0;i<wd.length;i++)wd[i]=(Math.random()*2-1);
+    }
+    var windSrc=ctx2.createBufferSource();
+    windSrc.buffer=windBuf; windSrc.loop=true;
+    var wf=ctx2.createBiquadFilter(); wf.type='lowpass'; wf.frequency.value=320; wf.Q.value=0.6;
+    var wf2=ctx2.createBiquadFilter(); wf2.type='highpass'; wf2.frequency.value=60;
+    var wg=ctx2.createGain(); wg.gain.value=0;
+    wg.gain.linearRampToValueAtTime(0.055,now+5);
+    // Slow wind swell LFO
+    var wLFO=ctx2.createOscillator(), wLG=ctx2.createGain();
+    wLFO.frequency.value=0.06; wLG.gain.value=0.025;
+    wLFO.connect(wLG); wLG.connect(wg.gain);
+    windSrc.connect(wf); wf.connect(wf2); wf2.connect(wg); wg.connect(masterGain);
+    windSrc.start(now); wLFO.start(now);
+    plainsNodes.push({src:windSrc,g:wg},{lfo:wLFO,g:wLG});
+
+    // ── LEAF RUSTLE — medium-freq noise bursts on a slow LFO ──
+    var leafBuf=ctx2.createBuffer(1,ctx2.sampleRate*2,ctx2.sampleRate);
+    var ld=leafBuf.getChannelData(0);
+    for(var i=0;i<ld.length;i++)ld[i]=(Math.random()*2-1);
+    var leafSrc=ctx2.createBufferSource();
+    leafSrc.buffer=leafBuf; leafSrc.loop=true;
+    var lf=ctx2.createBiquadFilter(); lf.type='bandpass'; lf.frequency.value=1800; lf.Q.value=1.2;
+    var lg=ctx2.createGain(); lg.gain.value=0;
+    lg.gain.linearRampToValueAtTime(0.022,now+4);
+    // Rustle tremolo — irregular swell
+    var rLFO=ctx2.createOscillator(), rLG=ctx2.createGain();
+    rLFO.frequency.value=0.22; rLG.gain.value=0.018;
+    rLFO.connect(rLG); rLG.connect(lg.gain);
+    leafSrc.connect(lf); lf.connect(lg); lg.connect(masterGain);
+    leafSrc.start(now); rLFO.start(now);
+    plainsNodes.push({src:leafSrc,g:lg},{lfo:rLFO,g:rLG});
+
+    // ── BIRDSONG — random procedural chirps via setTimeout ──
+    function schedBird(){
+      if(plainsNodes.length===0||currentTrack!=='intro')return;
+      var c2=getCtx(); var t=c2.currentTime+0.05;
+      // Pick a random bird call pattern (3 types)
+      var type=Math.floor(Math.random()*3);
+      if(type===0){
+        // Short two-note chirp (robin-like)
+        var freqs=[1800+Math.random()*400, 2200+Math.random()*300];
+        for(var fi=0;fi<freqs.length;fi++){
+          (function(freq,delay){
+            var o=c2.createOscillator(), g=c2.createGain();
+            o.type='sine'; o.frequency.setValueAtTime(freq,t+delay);
+            o.frequency.linearRampToValueAtTime(freq*1.08,t+delay+0.06);
+            g.gain.setValueAtTime(0,t+delay); g.gain.linearRampToValueAtTime(0.04,t+delay+0.02);
+            g.gain.linearRampToValueAtTime(0,t+delay+0.1);
+            o.connect(g); g.connect(masterGain); o.start(t+delay); o.stop(t+delay+0.12);
+          })(freqs[fi],fi*0.14);
+        }
+      } else if(type===1){
+        // Longer warble (finch-like) — 4-6 rapid notes
+        var notes=3+Math.floor(Math.random()*4);
+        var baseF=1600+Math.random()*800;
+        for(var ni=0;ni<notes;ni++){
+          (function(i2){
+            var freq=baseF*(0.88+Math.random()*0.3);
+            var o2=c2.createOscillator(), g2=c2.createGain();
+            o2.type='triangle'; o2.frequency.value=freq;
+            var d=i2*0.08;
+            g2.gain.setValueAtTime(0,t+d); g2.gain.linearRampToValueAtTime(0.035,t+d+0.025);
+            g2.gain.linearRampToValueAtTime(0,t+d+0.07);
+            o2.connect(g2); g2.connect(masterGain); o2.start(t+d); o2.stop(t+d+0.09);
+          })(ni);
+        }
+      } else {
+        // Single sustained whistle (thrush-like)
+        var o3=c2.createOscillator(), g3=c2.createGain();
+        o3.type='sine';
+        o3.frequency.setValueAtTime(2400+Math.random()*400,t);
+        o3.frequency.linearRampToValueAtTime(1900+Math.random()*300,t+0.35);
+        g3.gain.setValueAtTime(0,t); g3.gain.linearRampToValueAtTime(0.038,t+0.06);
+        g3.gain.linearRampToValueAtTime(0,t+0.38);
+        o3.connect(g3); g3.connect(masterGain); o3.start(t); o3.stop(t+0.4);
+      }
+      var nextMs=2500+Math.random()*7000;
+      birdTimer=setTimeout(schedBird,nextMs);
+    }
+    birdTimer=setTimeout(schedBird,1000+Math.random()*3000);
+  }
+
+  function stopPlainsAmbience(dur){
+    if(dur===undefined)dur=1.5;
+    clearTimeout(birdTimer); birdTimer=null;
+    fadeStop(plainsNodes,dur);
+    plainsNodes=[];
+  }
+
   function stopAll(dur){
     if(dur===undefined)dur=1.8;
     currentTrack=null;
@@ -2053,22 +2336,30 @@ const Audio = (function(){
   }
 
   function crossfadeTo(track){
-    if(track==='intro'){ fadeStop(caveNodes,2.0); caveNodes=[]; playIntro(); }
-    else if(track==='cave'){ fadeStop(introNodes,2.0); introNodes=[]; playCave(); }
+    if(track==='intro'){
+      fadeStop(caveNodes,2.0); caveNodes=[];
+      playIntro();
+      playPlainsAmbience();
+    } else if(track==='cave'){
+      fadeStop(introNodes,2.0); introNodes=[];
+      stopPlainsAmbience(2.0);
+      playCave();
+    }
   }
 
   // Browsers require a user gesture to start AudioContext.
-  // We'll start lazily on first interaction.
-  let started=false;
+  var started=false;
   function startIntroOnInteraction(){
     if(started)return; started=true;
     playIntro();
+    playPlainsAmbience();
   }
 
   return { playIntro, playCave, crossfadeTo, stopAll, startIntroOnInteraction,
            sfxSwing:playSwordSwing, sfxHit:playHitFlesh, sfxGrunt:playGoblinGrunt,
            sfxDeath:playGoblinDeath, sfxHurt:playPlayerHurt, sfxChest:playChestOpen,
-           sfxLevel:playLevelUp, sfxRock:playRockBreak };
+           sfxLevel:playLevelUp, sfxRock:playRockBreak,
+           stopPlainsAmbience:stopPlainsAmbience };
 })();
 
 // Start music on first click or keydown (browser autoplay policy)
@@ -2081,6 +2372,8 @@ document.addEventListener('click',   function(){ Audio.startIntroOnInteraction()
 var journalOpen = false;
 // World state: gate and merchant
 var gateUnlocked = false;
+// Expose for save/load
+Object.defineProperty(window,'_gateUnlocked',{get:function(){return gateUnlocked;},set:function(v){gateUnlocked=v;}});
 
 var QUEST_DEFS = [
   {
@@ -2324,6 +2617,27 @@ var itemPortraits = {
     ctx.fillStyle='#5a3010'; ctx.beginPath(); ctx.arc(cx,cy,W*0.07,0,Math.PI*2); ctx.fill();
     ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.beginPath(); ctx.arc(cx-W*0.12,cy-W*0.12,W*0.06,0,Math.PI*2); ctx.fill();
   },
+  rabbit_meat: function(ctx,W,H){
+    var cx=W/2,cy=H/2;
+    // Base meat colour
+    ctx.fillStyle='#b04030';
+    ctx.beginPath();ctx.ellipse(cx,cy+H*0.05,W*0.35,H*0.28,0.2,0,Math.PI*2);ctx.fill();
+    // Marbling
+    ctx.fillStyle='#c85040';
+    ctx.beginPath();ctx.ellipse(cx-W*0.08,cy,W*0.2,H*0.16,-0.1,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#d06050';
+    ctx.beginPath();ctx.ellipse(cx+W*0.06,cy-H*0.04,W*0.12,H*0.1,0.3,0,Math.PI*2);ctx.fill();
+    // Fat streaks
+    ctx.fillStyle='rgba(240,200,160,0.5)';
+    ctx.beginPath();ctx.moveTo(cx-W*0.2,cy-H*0.04);ctx.lineTo(cx+W*0.15,cy+H*0.06);ctx.lineWidth=2;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-W*0.1,cy+H*0.1);ctx.lineTo(cx+W*0.2,cy+H*0.02);ctx.stroke();
+    // Dark edges / shadow
+    ctx.strokeStyle='rgba(0,0,0,0.35)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.ellipse(cx,cy+H*0.05,W*0.35,H*0.28,0.2,0,Math.PI*2);ctx.stroke();
+    // Highlight
+    ctx.fillStyle='rgba(255,180,140,0.25)';
+    ctx.beginPath();ctx.ellipse(cx-W*0.12,cy-H*0.08,W*0.1,H*0.07,-0.3,0,Math.PI*2);ctx.fill();
+  },
   'default': function(ctx,W,H){
     var cx=W/2,cy=H/2;
     ctx.fillStyle='#808080'; ctx.beginPath(); ctx.arc(cx,cy,W*0.32,0,Math.PI*2); ctx.fill();
@@ -2344,6 +2658,7 @@ var SHOP_BUYS=[
   {itemId:'torn_cloth',   price:1},
   {itemId:'cave_crystal', price:5},
   {itemId:'bat_wing',     price:1},
+  {itemId:'rabbit_meat',  price:2},
   {itemId:'rusty_dagger', price:3},
   {itemId:'iron_sword',   price:5},
   {itemId:'leather_vest', price:4},
@@ -2498,24 +2813,40 @@ function startGame(pendingSave){
   const PLAYER_SPD=3.2,ENGAGE_R=55,TALK_R=70;
   const BAT_ENGAGE_R=50;
 
-  // ── DAY / NIGHT CYCLE ──────────────────────────────────────
-  // Full cycle = 10 real minutes. dayPhase 0=noon, 0.5=midnight
-  const DAY_CYCLE_MS = 10 * 60 * 1000;
-  let dayPhase = 0.05; // start just past dawn
+  const DAY_MS   = 30 * 60 * 1000;
+  const NIGHT_MS = 10 * 60 * 1000;
+  const CYCLE_MS = DAY_MS + NIGHT_MS;
+  // Always start at early morning (phase 0.08 = just after dawn) regardless of real clock
+  // We store an epoch offset so the cycle starts from here
+  const _cycleStart = Date.now() - CYCLE_MS * 0.08;
+
+  let dayPhase = 0.08;
 
   function updateDayNight(){
-    dayPhase = ((Date.now() % DAY_CYCLE_MS) / DAY_CYCLE_MS);
+    const t = (Date.now() - _cycleStart) % CYCLE_MS;
+    dayPhase = t / CYCLE_MS;
   }
-  // Returns 0 (noon) → 1 (midnight) brightness factor
+
+  // Returns 0.0 (full bright noon) → 1.0 (full dark midnight)
   function nightDark(){
-    // cos curve: 0 at noon (phase=0 or 1), 1 at midnight (phase=0.5)
-    return 0.5 - 0.5*Math.cos(dayPhase*Math.PI*2);
+    if(dayPhase <= 0.75){
+      // Day segment: peaks at 0 darkness at phase 0.375 (noon), gentle fade at dawn/dusk
+      const t = dayPhase / 0.75; // 0..1
+      // cos curve: 0 at t=0.5 (noon), rises to sides — but cap dawn/dusk at 0.25 max
+      const raw = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+      return raw * 0.5; // scale so max daytime dark is 0.25 (gentle dusk, not oppressive)
+    } else {
+      // Night segment: peaks at 1.0 at phase 0.875 (midnight)
+      const t = (dayPhase - 0.75) / 0.25; // 0..1
+      // 0=dusk(0.25), 0.5=midnight(1.0), 1.0=pre-dawn(0.25)
+      return 0.25 + 0.75 * Math.sin(t * Math.PI);
+    }
   }
   function skyColour(){
     const d=nightDark();
-    const r=Math.round(20+60*(1-d));
-    const g=Math.round(30+80*(1-d));
-    const b=Math.round(40+100*(1-d));
+    const r=Math.round(22+58*(1-d));
+    const g=Math.round(32+78*(1-d));
+    const b=Math.round(44+96*(1-d));
     return `rgb(${r},${g},${b})`;
   }
 
@@ -2542,12 +2873,14 @@ function startGame(pendingSave){
   window._GATE_X=GATE_X; window._GATE_Y=GATE_Y;
   window._VILLAGE_OX=VILLAGE_OX; window._VILLAGE_OY=VILLAGE_OY;
   // Palisade
-  const PAL_W=520, PAL_H=440;
+  const PAL_W=1100, PAL_H=900;
   const PAL={x:VILLAGE_OX-PAL_W/2, y:VILLAGE_OY-PAL_H/2, w:PAL_W, h:PAL_H};
   // NPC positions
   const GUARD1_POS   ={x:GATE_X-30, y:GATE_Y-50};
   const GUARD2_POS   ={x:GATE_X-30, y:GATE_Y+50};
   const MERCHANT_POS ={x:VILLAGE_OX+30, y:VILLAGE_OY-10};
+  const TOWNSMAN_POS ={x:VILLAGE_OX-60, y:VILLAGE_OY+200};
+  const TOWNSWOMAN_POS={x:VILLAGE_OX+180, y:VILLAGE_OY-240};
   // roadTrees built later, after ENC and PAD are declared
 
   const cCOLS=Math.ceil(CAVE.W/CAVE.TILE)+1,cROWS=Math.ceil(CAVE.H/CAVE.TILE)+1;
@@ -2649,6 +2982,22 @@ function startGame(pendingSave){
   const TREE_R=20;
   window._encRocks=encRocks;
 
+  // ── BUNNIES — two critters in the starting enclosure ─────────
+  const BUNNY_ENGAGE_R=50;
+  const bunnies=[
+    {x:SPX-60,y:SPY+40, hp:2,maxHp:2,alive:true,hitFlash:0,
+     idleTimer:60+Math.random()*80,dx:0,dy:0,facing:'right',
+     walkFrame:0,walkTimer:0,name:'Bunny',isBunny:true,variant:0},
+    {x:SPX+80,y:SPY-50, hp:2,maxHp:2,alive:true,hitFlash:0,
+     idleTimer:40+Math.random()*80,dx:0,dy:0,facing:'left',
+     walkFrame:0,walkTimer:0,name:'Bunny',isBunny:true,variant:1},
+  ];
+  window._bunnies=bunnies;
+  // Bunny respawn timer — dead bunnies come back after 20 real minutes
+  const BUNNY_RESPAWN_MS=20*60*1000;
+  const bunnyDeadAt=[null,null];
+  window._bunnyDeadAt=bunnyDeadAt;
+
   // Road-side trees — built here so ENC and PAD are fully defined
   const roadTrees=[];
   (function(){
@@ -2682,6 +3031,7 @@ function startGame(pendingSave){
   for(let i=0;i<30;i++)caveObstructions.push({x:60+Math.random()*(CAVE.W-120),y:60+Math.random()*(CAVE.H-120),type:'stalagmite',h:14+Math.random()*22,w:5+Math.random()*6,seed:Math.random()});
   for(let i=0;i<25;i++)caveObstructions.push({x:60+Math.random()*(CAVE.W-120),y:30+Math.random()*(CAVE.H/2),type:'stalactite',h:12+Math.random()*20,w:4+Math.random()*5,seed:Math.random()});
   for(let i=0;i<20;i++)caveObstructions.push({x:60+Math.random()*(CAVE.W-120),y:60+Math.random()*(CAVE.H-120),type:'crystal',h:16+Math.random()*24,seed:Math.random(),hue:Math.random()<.5?'blue':'purple'});
+  window._caveObstructions=caveObstructions;
 
   // Solid collision circles for boulders only
   const boulderColliders=caveObstructions.filter(o=>o.type==='boulder').map(o=>({x:o.x,y:o.y,r:o.r+10}));
@@ -2745,11 +3095,11 @@ function startGame(pendingSave){
     {x:500,y:1800},{x:1900,y:1600},{x:2800,y:400},{x:700,y:2000},
   ];
   const bats=BAT_DEFS.map((b,i)=>({
-    id:i, x:b.x, y:b.y, hp:2, maxHp:2, alive:true,
+    id:i, name:'Cave Bat', isBat:true, x:b.x, y:b.y, hp:2, maxHp:2, alive:true,
     angle:Math.random()*Math.PI*2,
     orbitR:30+Math.random()*60,
     orbitSpd:(Math.random()<.5?1:-1)*(0.025+Math.random()*0.02),
-    cx:b.x, cy:b.y, // orbit centre
+    cx:b.x, cy:b.y,
     hitFlash:0, walkFrame:0, walkTimer:0,
     idleDx:0, idleDy:0, idleTimer:Math.random()*80,
   }));
@@ -2898,7 +3248,9 @@ function startGame(pendingSave){
     inCombat=true;combatEnemy=g;playerTurn=true;combatBusy=false;logLines=[];
     combatPanel.style.display='block';
     addLog(`You face the ${g.name}!`,'system');
-    addLog(`It snarls and bares its fangs...`,'system');
+    if(g.isBunny)     addLog(`It freezes, nose twitching nervously...`,'system');
+    else if(g.isBat)  addLog(`It shrieks and dives toward you!`,'system');
+    else              addLog(`It snarls and bares its fangs...`,'system');
     setButtons(true);
   }
   function exitCombat(){inCombat=false;combatEnemy=null;combatPanel.style.display='none';}
@@ -2953,16 +3305,23 @@ function startGame(pendingSave){
     let dmg=0,hit=true;
     if(type==='attack'){dmg=(Math.random()<.5?2:1)+atkB;addLog(`You slash for <b>${dmg}</b> damage!`,'player');Audio.sfxSwing();}
     else{if(Math.random()<.6){dmg=2+atkB;addLog(`Heavy strike! <b>${dmg}</b> damage!`,'player');Audio.sfxSwing();}else{hit=false;addLog(`Your heavy blow swings wide!`,'miss');Audio.sfxSwing();}}
-    if(hit&&dmg>0){enemy.hp=Math.max(0,enemy.hp-dmg);enemy.hitFlash=12;spawnDmg(enemy.x,enemy.y,dmg,false);Audio.sfxHit();if(!enemy.isBat)Audio.sfxGrunt();}
+    if(hit&&dmg>0){enemy.hp=Math.max(0,enemy.hp-dmg);enemy.hitFlash=12;spawnDmg(enemy.x,enemy.y,dmg,false);Audio.sfxHit();if(!enemy.isBat&&!enemy.isBunny)Audio.sfxGrunt();}
     if(enemy.hp<=0){
       enemy.alive=false;addLog(`The ${enemy.name} collapses!`,'victory');
-      if(!enemy.isBat)Audio.sfxDeath(); else Audio.sfxHit();
+      if(!enemy.isBat&&!enemy.isBunny)Audio.sfxDeath(); else Audio.sfxHit();
+      // Record bunny death time for respawn
+      if(enemy.isBunny){
+        const bi=bunnies.indexOf(enemy);
+        if(bi!==-1)bunnyDeadAt[bi]=Date.now();
+      }
       player.kills=(player.kills||0)+1;
       setTimeout(()=>{
         // Determine drops
         let drops=[];
         if(enemy.isBat){
           if(Math.random()<0.4) drops=[{itemId:'bat_wing',qty:1}];
+        } else if(enemy.isBunny){
+          if(Math.random()<0.4) drops=[{itemId:'rabbit_meat',qty:1}];
         } else if(enemy.shaman){
           drops=rollLoot();
           drops.push({itemId:'cartwheel',qty:1}); // guaranteed cartwheel
@@ -3076,12 +3435,10 @@ function startGame(pendingSave){
           // If inGap && gateUnlocked — walk through freely
         }
         var VHUTS=[
-          {wx:VILLAGE_OX+40,  wy:VILLAGE_OY-160, hw:80, hh:60},
-          {wx:VILLAGE_OX+180, wy:VILLAGE_OY-110, hw:48, hh:38},
-          {wx:VILLAGE_OX+300, wy:VILLAGE_OY-170, hw:64, hh:50},
-          {wx:VILLAGE_OX+60,  wy:VILLAGE_OY+80,  hw:64, hh:50},
-          {wx:VILLAGE_OX+220, wy:VILLAGE_OY+100, hw:80, hh:60},
-          {wx:VILLAGE_OX+360, wy:VILLAGE_OY+50,  hw:48, hh:38},
+          {wx:VILLAGE_OX-280, wy:VILLAGE_OY-310, hw:200, hh:160},
+          {wx:VILLAGE_OX+180, wy:VILLAGE_OY-310, hw:160, hh:130},
+          {wx:VILLAGE_OX-280, wy:VILLAGE_OY+160, hw:160, hh:130},
+          {wx:VILLAGE_OX+200, wy:VILLAGE_OY+200, hw:200, hh:160},
         ];
         for(var hi2=0;hi2<VHUTS.length;hi2++){
           var vh=VHUTS[hi2];
@@ -3810,6 +4167,7 @@ function startGame(pendingSave){
     }
   }
   function drawCrystalGlow(o){
+    if(o.harvested)return; // no glow on harvested crystals
     const x=Math.round(o.x-cam.x),y=Math.round(o.y-cam.y);
     if(x<-80||x>canvas.width+80||y<-80||y>canvas.height+80)return;
     const pulse=0.6+0.4*Math.sin(Date.now()/700+o.seed*10);
@@ -3819,6 +4177,12 @@ function startGame(pendingSave){
   function drawCrystal(o){
     const x=Math.round(o.x-cam.x),y=Math.round(o.y-cam.y);
     if(x<-40||x>canvas.width+40||y<-40||y>canvas.height+40)return;
+    if(o.harvested){
+      // Crumbled remains — just a dark dust smear
+      ctx.globalAlpha=0.25;
+      ctx.fillStyle='#403838';ctx.beginPath();ctx.ellipse(x,y,o.h*.4,o.h*.15,0,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=1;return;
+    }
     const h=o.h,pulse=0.85+0.15*Math.sin(Date.now()/600+o.seed*8);
     const base=o.hue==='blue'?['#1840a8','#2060d8','#60a0ff','#a0d0ff']:['#6018a8','#9030d8','#c060ff','#e0a0ff'];
     for(let i=0;i<3;i++){
@@ -3830,12 +4194,142 @@ function startGame(pendingSave){
       ctx.fillStyle=base[3];ctx.beginPath();ctx.arc(x+ox,y-oh+2,2,0,Math.PI*2);ctx.fill();
     }
     ctx.globalAlpha=1;
+    // [ E ] prompt when player is close
+    if(dist(player,o)<52){
+      const p2=0.6+0.4*Math.sin(Date.now()/220);
+      ctx.globalAlpha=p2;ctx.font='bold 9px Cinzel,serif';ctx.textAlign='center';
+      ctx.fillStyle='#a0e0ff';ctx.fillText('[ E ] Harvest',x,y-h-8);
+      ctx.textAlign='left';ctx.globalAlpha=1;
+    }
+  }
+
+  // ── DRAW CLOCK DIAL ───────────────────────────────────────
+  function drawClock(){
+    const cc=document.getElementById('clockCanvas');
+    if(!cc)return;
+    const pc=cc.getContext('2d');
+    const W=60,H=60,cx=30,cy=30,R=26;
+    pc.clearRect(0,0,W,H);
+
+    const dark=nightDark();
+    const isNight=dayPhase>0.75;
+
+    // Dial background — shifts from day-blue to night-black
+    const bgR=Math.round(10+50*(1-dark)), bgG=Math.round(10+70*(1-dark)), bgB=Math.round(20+100*(1-dark));
+    pc.fillStyle=`rgb(${bgR},${bgG},${bgB})`;
+    pc.beginPath();pc.arc(cx,cy,R,0,Math.PI*2);pc.fill();
+
+    // Horizon line through centre
+    pc.strokeStyle='rgba(200,168,75,0.3)';pc.lineWidth=1;
+    pc.beginPath();pc.moveTo(cx-R,cy);pc.lineTo(cx+R,cy);pc.stroke();
+
+    // Stars (night only)
+    if(dark>0.3){
+      pc.globalAlpha=Math.min(1,(dark-0.3)/0.4);
+      pc.fillStyle='#ffffff';
+      [[cx-12,cy-14],[cx+10,cy-8],[cx-6,cy-20],[cx+14,cy-18],[cx-18,cy-8],[cx+4,cy-22]].forEach(function(s){
+        pc.fillRect(s[0],s[1],1,1);
+      });
+      pc.globalAlpha=1;
+    }
+
+    // Needle angle: 0=dawn (left), noon=top, dusk=right, midnight=top from night side
+    // dayPhase 0→0.75 = day (left to right across top semicircle)
+    // dayPhase 0.75→1.0 = night (right to left across bottom)
+    let angle;
+    if(!isNight){
+      // Day: phase 0..0.75 maps to π (left) → 0 (right) going clockwise over top
+      angle = Math.PI - (dayPhase/0.75)*Math.PI;
+    } else {
+      // Night: phase 0.75..1.0 maps to 0 (right) → π (left) going clockwise under
+      const t=(dayPhase-0.75)/0.25;
+      angle = t*Math.PI; // 0=right, π=left, but go via bottom
+      // Flip to bottom semicircle
+      angle = -t*Math.PI; // negative = below horizon
+    }
+
+    const nx=cx+Math.cos(angle)*(R-4);
+    const ny=cy-Math.sin(isNight?0:1)*Math.abs(Math.sin(angle))*(R-4);
+    const bodyY=cy+(isNight?1:-1)*Math.abs(Math.sin(angle))*(R-4)*(!isNight?1:1);
+    const bx=cx+Math.cos(isNight?angle+Math.PI:angle)*(R-5);
+    const by=isNight ? cy+Math.abs(Math.sin(angle-Math.PI/1))*(R-5) : cy-Math.abs(Math.sin(angle))*(R-5);
+
+    // Compute position properly
+    let bodyAngle;
+    if(!isNight){
+      // Sun sweeps top semicircle: angle goes from π (left) to 0 (right)
+      bodyAngle=Math.PI-(dayPhase/0.75)*Math.PI;
+    } else {
+      // Moon sweeps bottom: from 0 (right) down and up to π (left)
+      const t=(dayPhase-0.75)/0.25;
+      bodyAngle=t*Math.PI; // 0..π mapped to right→bottom→left
+    }
+    const bodyX=cx+Math.cos(bodyAngle)*(R-5);
+    const bodyYFinal=isNight ? cy+Math.abs(Math.sin(bodyAngle))*(R-5) : cy-Math.abs(Math.sin(bodyAngle))*(R-5);
+
+    pc.save();
+    pc.beginPath();pc.arc(cx,cy,R,0,Math.PI*2);pc.clip();
+
+    if(!isNight){
+      // Sun — yellow circle with rays at high noon
+      const sunBright=Math.abs(Math.sin(bodyAngle)); // 0 at horizon, 1 at noon
+      // Rays when high
+      if(sunBright>0.5){
+        pc.strokeStyle=`rgba(255,220,50,${(sunBright-0.5)*0.8})`;pc.lineWidth=1;
+        for(var ri=0;ri<8;ri++){
+          const ra=ri*Math.PI/4;
+          const r1=6,r2=9+sunBright*3;
+          pc.beginPath();pc.moveTo(bodyX+Math.cos(ra)*r1,bodyYFinal+Math.sin(ra)*r1);pc.lineTo(bodyX+Math.cos(ra)*r2,bodyYFinal+Math.sin(ra)*r2);pc.stroke();
+        }
+      }
+      // Sun body
+      const sunGrad=pc.createRadialGradient(bodyX,bodyYFinal,0,bodyX,bodyYFinal,6);
+      sunGrad.addColorStop(0,'#fff8a0');sunGrad.addColorStop(0.5,'#ffd020');sunGrad.addColorStop(1,'#ff9010');
+      pc.fillStyle=sunGrad;pc.beginPath();pc.arc(bodyX,bodyYFinal,6,0,Math.PI*2);pc.fill();
+    } else {
+      // Moon — silver circle with subtle shading
+      pc.fillStyle='rgba(200,210,230,0.15)';pc.beginPath();pc.arc(bodyX,bodyYFinal,7,0,Math.PI*2);pc.fill();
+      const moonGrad=pc.createRadialGradient(bodyX-2,bodyYFinal-2,0,bodyX,bodyYFinal,6);
+      moonGrad.addColorStop(0,'#f0f4ff');moonGrad.addColorStop(0.6,'#d0d8f0');moonGrad.addColorStop(1,'#9098b8');
+      pc.fillStyle=moonGrad;pc.beginPath();pc.arc(bodyX,bodyYFinal,6,0,Math.PI*2);pc.fill();
+      // Shadow bite
+      pc.fillStyle=`rgb(${bgR},${bgG},${bgB})`;pc.beginPath();pc.arc(bodyX+3,bodyYFinal-1,5,0,Math.PI*2);pc.fill();
+    }
+    pc.restore();
+
+    // Dial ring
+    pc.strokeStyle='rgba(200,168,75,0.6)';pc.lineWidth=1.5;
+    pc.beginPath();pc.arc(cx,cy,R,0,Math.PI*2);pc.stroke();
+
+    // Time label
+    const label=document.getElementById('clockLabel');
+    if(label){
+      if(!isNight){
+        const pct=dayPhase/0.75;
+        if(pct<0.15)label.textContent='DAWN';
+        else if(pct<0.45)label.textContent='MORNING';
+        else if(pct<0.6)label.textContent='MIDDAY';
+        else if(pct<0.85)label.textContent='AFTERNOON';
+        else label.textContent='DUSK';
+      } else {
+        const pct=(dayPhase-0.75)/0.25;
+        if(pct<0.3)label.textContent='EVENING';
+        else if(pct<0.7)label.textContent='MIDNIGHT';
+        else label.textContent='PRE-DAWN';
+      }
+    }
   }
 
   // ── DRAW PLAYER ────────────────────────────────────────────
   function drawPlayer(px,py,facing,frame,mov){
     const x=Math.round(px-cam.x),y=Math.round(py-cam.y);
-    ctx.fillStyle='rgba(0,0,0,0.26)';ctx.beginPath();ctx.ellipse(x,y+2,10,4,0,0,Math.PI*2);ctx.fill();
+    // Ground shadow — soft oval, slightly offset and larger for depth
+    const shadowAlpha=0.18+0.12*nightDark(); // slightly stronger at night
+    ctx.fillStyle=`rgba(0,0,0,${shadowAlpha})`;
+    ctx.beginPath();ctx.ellipse(x+3,y+3,13,5,0,0,Math.PI*2);ctx.fill();
+    // Inner shadow (tighter, darker centre)
+    ctx.fillStyle='rgba(0,0,0,0.14)';
+    ctx.beginPath();ctx.ellipse(x+2,y+2,8,3,0,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=(player.hitFlash>0&&player.hitFlash%2===0)?0.35:1;
     const ls=mov?Math.sin(frame*Math.PI/4):0,as=mov?Math.sin(frame*Math.PI/4+Math.PI):0,oy=mov?Math.abs(Math.sin(frame*Math.PI/4))*-1.5:0;
     const side=facing==='left'||facing==='right';
@@ -3976,28 +4470,26 @@ function startGame(pendingSave){
     const sx=ox-cam.x;
     if(sx<-700||sx>canvas.width+700)return;
     var HUTS=[
-      {wx:ox+40,  wy:oy-160, type:'large',  rot:0},
-      {wx:ox+180, wy:oy-110, type:'small',  rot:0},
-      {wx:ox+300, wy:oy-170, type:'medium', rot:0},
-      {wx:ox+60,  wy:oy+80,  type:'medium', rot:0},
-      {wx:ox+220, wy:oy+100, type:'large',  rot:0},
-      {wx:ox+360, wy:oy+50,  type:'small',  rot:0},
+      {wx:ox-280, wy:oy-310, type:'xl'},
+      {wx:ox+180, wy:oy-310, type:'large'},
+      {wx:ox-280, wy:oy+160, type:'large'},
+      {wx:ox+200, wy:oy+200, type:'xl'},
     ];
     // Draw shadows first (flat rects, no movement)
     for(var hi=0;hi<HUTS.length;hi++){
       var h=HUTS[hi];
       var hx=h.wx-cam.x, hy=h.wy-cam.y;
-      if(hx<-140||hx>canvas.width+140||hy<-160||hy>canvas.height+120)continue;
-      var hw=h.type==='large'?80:h.type==='medium'?64:48;
-      var hh=h.type==='large'?60:h.type==='medium'?50:38;
-      ctx.fillStyle='rgba(0,0,0,0.18)';
-      ctx.fillRect(hx-hw/2+6,hy-hh/2+6,hw,hh+6);
+      if(hx<-280||hx>canvas.width+280||hy<-240||hy>canvas.height+160)continue;
+      var hw=h.type==='xl'?200:h.type==='large'?160:h.type==='medium'?120:80;
+      var hh=h.type==='xl'?160:h.type==='large'?130:h.type==='medium'?100:70;
+      ctx.fillStyle='rgba(0,0,0,0.2)';
+      ctx.fillRect(hx-hw/2+8,hy-hh/2+8,hw,hh+8);
     }
     // Draw huts
     for(var hi=0;hi<HUTS.length;hi++){
       var h=HUTS[hi];
       var hx=h.wx-cam.x, hy=h.wy-cam.y;
-      if(hx<-140||hx>canvas.width+140||hy<-160||hy>canvas.height+120)continue;
+      if(hx<-280||hx>canvas.width+280||hy<-240||hy>canvas.height+160)continue;
       drawMedievalHut(hx,hy,h.type, h.wx, h.wy);
     }
     drawMerchantNPC();
@@ -4006,9 +4498,10 @@ function startGame(pendingSave){
   // Medieval English timber-frame hut
   // wx/wy are world-space coords used for deterministic decoration placement
   function drawMedievalHut(x,y,type,wx,wy){
-    var w=type==='large'?80:type==='medium'?64:48;
-    var h=type==='large'?58:type==='medium'?48:38;
-    var roofH=type==='large'?38:type==='medium'?32:26;
+    var w=type==='xl'?200:type==='large'?160:type==='medium'?120:80;
+    var h=type==='xl'?160:type==='large'?130:type==='medium'?100:70;
+    var roofH=type==='xl'?90:type==='large'?72:type==='medium'?56:40;
+    var tw=type==='xl'?5:type==='large'?4:3; // timber width scales up
 
     // ── FOUNDATION / BASE ──
     ctx.fillStyle='#5a5048';
@@ -4030,7 +4523,6 @@ function startGame(pendingSave){
 
     // ── TIMBER FRAMING ──
     ctx.fillStyle='#3a2810';
-    var tw=3; // timber width
     // Corner posts
     ctx.fillRect(x-w/2,     y-h/2, tw, h);
     ctx.fillRect(x+w/2-tw,  y-h/2, tw, h);
@@ -4167,30 +4659,233 @@ function startGame(pendingSave){
   // ── DAY/NIGHT OVERLAY ──────────────────────────────────────
   function drawDayNightOverlay(){
     const dark=nightDark();
-    if(dark<0.02)return; // full day — skip
-    // Tint the sky colour into the scene
-    ctx.globalCompositeOperation='multiply';
-    ctx.fillStyle=`rgba(${Math.round(10+20*(1-dark))},${Math.round(15+30*(1-dark))},${Math.round(30+50*(1-dark))},${dark*0.72})`;
+    if(dark<0.01)return;
+    // Use source-over with a dark semi-transparent fill — no composite mode switch,
+    // which eliminates the one-frame flicker caused by switching globalCompositeOperation.
+    // The overlay colour shifts from deep blue-grey (dusk) to near-black (midnight).
+    const alpha = dark * 0.68;
+    const rb = Math.round(8  * (1-dark)); // slight blue tint at dusk
+    const gb = Math.round(10 * (1-dark));
+    const bb = Math.round(28 * (1-dark));
+    ctx.fillStyle = `rgba(${rb},${gb},${bb},${alpha.toFixed(3)})`;
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.globalCompositeOperation='source-over';
     // Star field at night
-    if(dark>0.5){
-      ctx.globalAlpha=(dark-0.5)*1.4;
-      ctx.fillStyle='#ffffff';
-      // deterministic stars based on screen offset — cheap, no array
-      const seed=Math.floor(cam.x/200)*1000+Math.floor(cam.y/200);
-      for(let i=0;i<40;i++){
+    if(dark>0.55){
+      const starAlpha=(dark-0.55)*1.6;
+      for(let i=0;i<44;i++){
+        const seed=Math.floor(cam.x/200)*1000+Math.floor(cam.y/200);
         const sx=((seed+i*73)%canvas.width+canvas.width)%canvas.width;
-        const sy=((seed*3+i*41)%canvas.height+canvas.height)%canvas.height;
-        const twinkle=0.6+0.4*Math.sin(Date.now()/800+i*1.3);
-        ctx.globalAlpha=(dark-0.5)*1.4*twinkle*0.8;
+        const sy=((seed*3+i*41)%(canvas.height*0.7)+10);
+        const twinkle=0.5+0.5*Math.sin(Date.now()/900+i*1.7);
+        ctx.globalAlpha=Math.min(1,starAlpha*twinkle*0.9);
+        ctx.fillStyle='#ffffff';
         ctx.fillRect(sx,sy,1,1);
       }
       ctx.globalAlpha=1;
     }
   }
 
-  // ── UPDATE GOBLINS ─────────────────────────────────────────
+  // ── UPDATE BUNNIES ─────────────────────────────────────────
+  // ── WANDERING TOWNSFOLK ─────────────────────────────────────
+  const townfolk=[
+    {id:'townsman', name:'Edmund', x:VILLAGE_OX-60, y:VILLAGE_OY+200,
+     dx:0, dy:0, facing:'right', walkFrame:0, walkTimer:0, idleTimer:80},
+    {id:'townswoman', name:'Agnes', x:VILLAGE_OX+180, y:VILLAGE_OY-240,
+     dx:0, dy:0, facing:'left',  walkFrame:0, walkTimer:0, idleTimer:110},
+  ];
+
+  function updateTownfolk(){
+    if(currentZone!=='plains'||!gateUnlocked)return;
+    for(const t of townfolk){
+      if(dialogueOpen&&dialogueNPC===t.id){t.dx=0;t.dy=0;t.walkFrame=0;continue;}
+      t.idleTimer--;
+      if(t.idleTimer<=0){
+        t.idleTimer=80+Math.random()*120;
+        if(Math.random()<0.35){t.dx=0;t.dy=0;}
+        else{
+          const a=Math.random()*Math.PI*2, spd=0.3+Math.random()*0.4;
+          t.dx=Math.cos(a)*spd; t.dy=Math.sin(a)*spd;
+          t.facing=t.dx>0?'right':'left';
+        }
+      }
+      // Constrain inside palisade (minus margin)
+      const margin=50;
+      t.x=Math.max(PAL.x+margin,Math.min(PAL.x+PAL.w-margin, t.x+t.dx));
+      t.y=Math.max(PAL.y+margin,Math.min(PAL.y+PAL.h-margin, t.y+t.dy));
+      const mov=Math.abs(t.dx)+Math.abs(t.dy)>0.05;
+      if(mov){t.walkTimer++;if(t.walkTimer>=12){t.walkTimer=0;t.walkFrame=(t.walkFrame+1)%8;}}
+      else t.walkTimer=0;
+    }
+  }
+
+  function drawTownfolk(){
+    if(!gateUnlocked)return;
+    for(const t of townfolk){
+      const tx=Math.round(t.x-cam.x), ty=Math.round(t.y-cam.y);
+      if(tx<-40||tx>canvas.width+40||ty<-60||ty>canvas.height+30)continue;
+      const flip=t.facing==='left'?-1:1;
+      const mov=Math.abs(t.dx)+Math.abs(t.dy)>0.05;
+      const ls=mov?Math.sin(t.walkFrame*Math.PI/4)*3:0;
+      const as=mov?Math.sin(t.walkFrame*Math.PI/4+Math.PI)*3:0;
+      const oy=mov?Math.abs(Math.sin(t.walkFrame*Math.PI/4))*-1.5:0;
+
+      // Shadow
+      ctx.fillStyle='rgba(0,0,0,0.18)';ctx.beginPath();ctx.ellipse(tx+2,ty+3,10,3.5,0,0,Math.PI*2);ctx.fill();
+
+      if(t.id==='townsman'){
+        // Legs + boots
+        ctx.fillStyle='#4a3820';ctx.fillRect(tx-6,ty-4+oy+ls,5,12);ctx.fillRect(tx+1,ty-4+oy-ls,5,12);
+        ctx.fillStyle='#2a1a0a';ctx.fillRect(tx-7,ty+6+oy+ls,7,5);ctx.fillRect(tx,ty+6+oy-ls,7,5);
+        // Body — rough linen
+        ctx.fillStyle='#9a8a6a';ctx.fillRect(tx-8,ty-20+oy,16,17);
+        // Work apron
+        ctx.fillStyle='#6a5030';ctx.fillRect(tx-7,ty-10+oy,14,10);
+        // Belt
+        ctx.fillStyle='#2a1808';ctx.fillRect(tx-8,ty-4+oy,16,3);
+        // Arms
+        ctx.fillStyle='#9a8a6a';ctx.fillRect(tx-12,ty-19+oy+as,4,12);ctx.fillRect(tx+8,ty-19+oy-as,4,12);
+        ctx.fillStyle='#c07858';ctx.fillRect(tx-13,ty-8+oy+as,5,5);ctx.fillRect(tx+8,ty-8+oy-as,5,5);
+        // Neck + head
+        ctx.fillStyle='#c07858';ctx.fillRect(tx-3,ty-23+oy,6,4);
+        ctx.fillStyle='#c07858';ctx.fillRect(tx-7,ty-35+oy,14,14);
+        // Short dark hair
+        ctx.fillStyle='#2a1a08';ctx.fillRect(tx-7,ty-35+oy,14,6);
+        ctx.fillStyle='#5a5040';ctx.fillRect(tx+2,ty-35+oy,5,4);
+        // Face
+        ctx.fillStyle='#1a1008';ctx.fillRect(tx-4,ty-27+oy,2,2);ctx.fillRect(tx+2,ty-27+oy,2,2);
+        ctx.fillStyle='#7a4828';ctx.fillRect(tx-3,ty-22+oy,7,2);
+        // Beard
+        ctx.fillStyle='rgba(60,35,10,0.5)';ctx.fillRect(tx-5,ty-21+oy,10,6);
+      } else {
+        // Agnes — dress and apron
+        ctx.fillStyle='#5a4020';ctx.fillRect(tx-6,ty-2+oy+ls,5,12);ctx.fillRect(tx+1,ty-2+oy-ls,5,12);
+        ctx.fillStyle='#3a2810';ctx.fillRect(tx-7,ty+8+oy+ls,7,4);ctx.fillRect(tx,ty+8+oy-ls,7,4);
+        ctx.fillStyle='#7a2818';ctx.fillRect(tx-8,ty-22+oy,16,22);
+        ctx.fillStyle='#d8c8a8';ctx.fillRect(tx-7,ty-15+oy,14,16); // apron
+        ctx.fillStyle='#2a1808';ctx.fillRect(tx-8,ty-3+oy,16,3);
+        ctx.fillStyle='#7a2818';ctx.fillRect(tx-12,ty-20+oy+as,4,12);ctx.fillRect(tx+8,ty-20+oy-as,4,12);
+        ctx.fillStyle='#d0906a';ctx.fillRect(tx-3,ty-25+oy,6,4);
+        ctx.fillStyle='#d0906a';ctx.fillRect(tx-7,ty-37+oy,14,14);
+        ctx.fillStyle='#c0b898';ctx.fillRect(tx-7,ty-37+oy,14,7);
+        ctx.fillStyle='#d8d0b8';ctx.fillRect(tx-7,ty-38+oy,14,5);
+        ctx.fillStyle='#1a1008';ctx.fillRect(tx-4,ty-29+oy,2,2);ctx.fillRect(tx+2,ty-29+oy,2,2);
+        ctx.fillStyle='#a05040';ctx.fillRect(tx-3,ty-24+oy,7,2);
+        ctx.fillStyle='rgba(200,80,60,0.2)';ctx.beginPath();ctx.ellipse(tx-5,ty-25+oy,4,3,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(tx+5,ty-25+oy,4,3,0,0,Math.PI*2);ctx.fill();
+      }
+
+      // Name label + E prompt
+      ctx.font='600 8px Cinzel,serif';ctx.textAlign='center';
+      ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillText(t.name,tx+1,ty-44+oy);
+      ctx.fillStyle='#f0d878';ctx.fillText(t.name,tx,ty-45+oy);
+      const inRange=dist(player,t)<TALK_R+15;
+      if(inRange&&!dialogueOpen){
+        const p2=0.6+0.4*Math.sin(Date.now()/220);
+        ctx.globalAlpha=p2;ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Talk',tx,ty-57+oy);ctx.globalAlpha=1;
+      }
+      ctx.textAlign='left';
+    }
+  }
+
+  function updateBunnies(){
+    if(currentZone!=='plains')return;
+    const now=Date.now();
+    for(let i=0;i<bunnies.length;i++){
+      const b=bunnies[i];
+      if(!b.alive){
+        if(bunnyDeadAt[i]!==null&&now-bunnyDeadAt[i]>=BUNNY_RESPAWN_MS){
+          b.alive=true; b.hp=b.maxHp; b.hitFlash=0;
+          // Respawn inside enclosure at random position
+          b.x=ENC.x+60+Math.random()*(ENC.w-120);
+          b.y=ENC.y+60+Math.random()*(ENC.h-120);
+          bunnyDeadAt[i]=null;
+        }
+        continue;
+      }
+      // Freeze and face player while in combat
+      if(inCombat&&combatEnemy===b){
+        b.dx=0; b.dy=0; b.walkFrame=0;
+        b.facing=player.x<b.x?'left':'right';
+        if(b.hitFlash>0)b.hitFlash--;
+        continue;
+      }
+      b.idleTimer--;
+      if(b.idleTimer<=0){
+        b.idleTimer=60+Math.random()*120;
+        if(Math.random()<0.3){b.dx=0;b.dy=0;}
+        else{
+          const a=Math.random()*Math.PI*2;
+          const spd=0.4+Math.random()*0.5;
+          b.dx=Math.cos(a)*spd; b.dy=Math.sin(a)*spd;
+          b.facing=b.dx>0?'right':'left';
+        }
+      }
+      // Move and keep inside enclosure
+      const nx=Math.max(ENC.x+20,Math.min(ENC.x+ENC.w-20, b.x+b.dx));
+      const ny=Math.max(ENC.y+20,Math.min(ENC.y+ENC.h-20, b.y+b.dy));
+      b.x=nx; b.y=ny;
+      const mov=Math.abs(b.dx)+Math.abs(b.dy)>0.05;
+      if(mov){b.walkTimer++;if(b.walkTimer>=10){b.walkTimer=0;b.walkFrame=(b.walkFrame+1)%4;}}
+      else b.walkTimer=0;
+      if(b.hitFlash>0)b.hitFlash--;
+    }
+  }
+
+  // ── DRAW BUNNY ─────────────────────────────────────────────
+  function drawBunny(b){
+    if(!b.alive)return;
+    const bx=Math.round(b.x-cam.x), by=Math.round(b.y-cam.y);
+    if(bx<-30||bx>canvas.width+30||by<-30||by>canvas.height+30)return;
+    const flip=b.facing==='left'?-1:1;
+    const hop=b.walkFrame%2===1&&(Math.abs(b.dx)+Math.abs(b.dy)>0.05)?-2:0;
+    ctx.globalAlpha=(b.hitFlash>0&&b.hitFlash%2===0)?0.3:1;
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,0.18)';
+    ctx.beginPath();ctx.ellipse(bx,by+1,8,3,0,0,Math.PI*2);ctx.fill();
+    // Fur colour — variant: light grey or brown
+    const fur=b.variant===0?'#d8d0c8':'#c8a878';
+    const furdark=b.variant===0?'#b8b0a8':'#a88858';
+    // Body
+    ctx.fillStyle=fur;
+    ctx.beginPath();ctx.ellipse(bx,by+hop,8,6,0,0,Math.PI*2);ctx.fill();
+    // Head
+    ctx.fillStyle=fur;
+    ctx.beginPath();ctx.ellipse(bx+flip*6,by-4+hop,5,5,0,0,Math.PI*2);ctx.fill();
+    // Ears — tall and upright
+    ctx.fillStyle=fur;
+    ctx.fillRect(bx+flip*4,by-14+hop,3,10);
+    ctx.fillRect(bx+flip*8,by-13+hop,3,9);
+    // Ear inner (pink)
+    ctx.fillStyle='#e08080';
+    ctx.fillRect(bx+flip*5,by-13+hop,1,7);
+    ctx.fillRect(bx+flip*9,by-12+hop,1,6);
+    // Tail — white puff
+    ctx.fillStyle='#f0ece8';
+    ctx.beginPath();ctx.arc(bx-flip*7,by+1+hop,3,0,Math.PI*2);ctx.fill();
+    // Eye
+    ctx.fillStyle='#1a1008';
+    ctx.fillRect(bx+flip*8,by-5+hop,2,2);
+    // Eye shine
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.fillRect(bx+flip*9,by-5+hop,1,1);
+    // Nose
+    ctx.fillStyle='#e06060';
+    ctx.fillRect(bx+flip*10,by-3+hop,2,1);
+    ctx.globalAlpha=1;
+    // HP bar + E prompt if nearby
+    if(dist(player,b)<BUNNY_ENGAGE_R+10){
+      const barW=24,bary=by-18+hop;
+      ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(bx-barW/2-1,bary-1,barW+2,5);
+      ctx.fillStyle='#3a0000';ctx.fillRect(bx-barW/2,bary,barW,3);
+      ctx.fillStyle=b.hp>1?'#38c018':'#c81818';
+      ctx.fillRect(bx-barW/2,bary,barW*(b.hp/b.maxHp),3);
+      if(!inCombat){
+        const p2=0.6+0.4*Math.sin(Date.now()/220);
+        ctx.globalAlpha=p2;ctx.font='bold 9px Cinzel,serif';ctx.textAlign='center';
+        ctx.fillStyle='#ffe0a0';ctx.fillText('[ E ] Fight',bx,by-22+hop);
+        ctx.textAlign='left';ctx.globalAlpha=1;
+      }
+    }
+  }
   function updateGoblins(){
     if(currentZone!=='cave')return;
     for(const g of goblins){
@@ -4276,6 +4971,17 @@ function startGame(pendingSave){
         if(currentZone==='plains'){
           if(dist(player,CAVE_ENTRANCE)<70){transitionTo('cave');return;}
           if(dist(player,NPC_POS)<TALK_R&&!dialogueOpen){openDialogue('aldric');return;}
+          // Engage bunnies
+          for(const bn of bunnies){
+            if(!bn.alive)continue;
+            if(dist(player,bn)<=BUNNY_ENGAGE_R){enterCombat(bn);return;}
+          }
+          // Talk to townfolk
+          if(gateUnlocked){
+            for(const t of townfolk){
+              if(dist(player,t)<TALK_R&&!dialogueOpen){openDialogue(t.id);return;}
+            }
+          }
           // Gate guards
           if(dist(player,GUARD1_POS)<TALK_R&&!dialogueOpen){openDialogue('hamin');return;}
           if(dist(player,GUARD2_POS)<TALK_R&&!dialogueOpen){openDialogue('guard');return;}
@@ -4297,6 +5003,22 @@ function startGame(pendingSave){
           }
         }else{
           if(dist(player,CAVE_EXIT)<80){transitionTo('plains');return;}
+          // Crystal pickup
+          const CRYSTAL_R=48;
+          for(const o of caveObstructions){
+            if(o.type!=='crystal'||o.harvested)continue;
+            if(dist(player,o)<CRYSTAL_R){
+              if(Math.random()<0.6){
+                o.harvested=true;
+                giveItem('cave_crystal',1);
+                spawnLootPop(o.x,o.y,'💎 Crystal collected!');
+              } else {
+                o.harvested=true; // crumbles — remove from world
+                spawnLootPop(o.x,o.y,'💔 Too fragile — crumbles!');
+              }
+              return;
+            }
+          }
           // Chest interaction
           if(!caveChest.opened&&dist(player,caveChest)<60){
             caveChest.opened=true;
@@ -4340,6 +5062,8 @@ function startGame(pendingSave){
     if(player.hitFlash>0)player.hitFlash--;
     updateGoblins();
     updateBats();
+    updateBunnies();
+    updateTownfolk();
     updateDayNight();
     updateCamera();
   }
@@ -4350,6 +5074,8 @@ function startGame(pendingSave){
     if(currentZone==='plains'){
       drawPlains();
       drawVillageAndRoad();
+      drawTownfolk();
+      for(const bn of bunnies) drawBunny(bn);
       drawPlayer(player.x,player.y,player.facing,player.walkFrame,moving);
       drawDayNightOverlay();
     }else{
@@ -4383,6 +5109,7 @@ function startGame(pendingSave){
       drawCaveLighting();
     }
     drawMinimap();
+    drawClock();
   }
 
   // Initial reveal + apply save if one was passed
