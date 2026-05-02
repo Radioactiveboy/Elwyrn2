@@ -1848,6 +1848,8 @@ const Audio = (function(){
       if(n.lfo){ try{ n.lfo.stop(t+dur+0.1); }catch(e){} }
       if(n.osc){ try{ n.osc.stop(t+dur+0.1); }catch(e){} }
       if(n.src){ try{ n.src.stop(t+dur+0.1); }catch(e){} }
+      // Pause the music element after the fade completes
+      if(n._musicEl){ (function(el){setTimeout(function(){el.pause();},dur*1000+150);})(n._musicEl); }
     }
   }
 
@@ -1859,196 +1861,39 @@ const Audio = (function(){
   function playIntro(){
     if(currentTrack==='intro') return;
     currentTrack='intro';
-    fadeStop(introNodes, 0.1);
+    fadeStop(introNodes, 0.3);
     introNodes = [];
-    var C2=getCtx(); var now=C2.currentTime+0.05;
-    var rev=addReverb(C2,3.5); rev.connect(masterGain);
-    var rev2=addReverb(C2,1.2); rev2.connect(masterGain);
 
-    // Note frequencies — F major scale
-    var C3=130.81,D3=146.83,E3=164.81,F3=174.61,G3=196,A3=220,Bb3=233.08,C4=261.63;
-    var D4=293.66,E4=329.63,F4=349.23,G4=392,A4=440,Bb4=466.16,C5=523.25;
-    var D5=587.33,E5=659.25,F5=698.46,G5=784,A5=880;
+    var ctx2=getCtx();
 
-    // BPM 88, 3/4 — one beat = 0.682s, one bar = 2.045s
-    var BT=60/88;          // one beat
-    var BAR=BT*3;          // one 3/4 bar
-    var Q=BT, E=BT/2, DQ=BT*1.5, H=BT*2; // note lengths
-
-    // ── STRING PAD CHORDS ── (very soft, warm foundation)
-    var padF=C2.createBiquadFilter(); padF.type='lowpass'; padF.frequency.value=800; padF.connect(rev);
-    // Progression: F | Bb | C | F | Dm | Bb | C | F (repeating)
-    var prog=[
-      [F3,A3,C4,F4], [Bb3,D4,F4,Bb4], [C4,E4,G4,C5], [F3,A3,C4,F4],
-      [D3,F3,A3,D4], [Bb3,D4,F4,Bb4], [C4,E4,G4,C5], [F3,A3,C4,F4]
-    ];
-    var LOOPS=6;
-    for(var loop=0;loop<LOOPS;loop++){
-      for(var bi=0;bi<prog.length;bi++){
-        var t0=now+loop*8*BAR+bi*BAR;
-        for(var fi=0;fi<prog[bi].length;fi++){
-          var n=makeOsc(C2,'sine',prog[bi][fi],0.022,padF,t0,t0+BAR+0.4);
-          introNodes.push(n);
-        }
-      }
+    // Stream MP3 through Web Audio so masterGain controls volume
+    // and fadeStop can kill it like any other node
+    var musicEl=document.getElementById('bgMusicEl');
+    if(!musicEl){
+      musicEl=document.createElement('audio');
+      musicEl.id='bgMusicEl';
+      musicEl.src='https://raw.githubusercontent.com/Radioactiveboy/Elwyrn2/main/Greenvale%20Steps.mp3';
+      musicEl.loop=true;
+      musicEl.crossOrigin='anonymous';
+      document.body.appendChild(musicEl);
     }
+    // Only create a new source if not already connected
+    if(!musicEl._sourceNode){
+      var src=ctx2.createMediaElementSource(musicEl);
+      musicEl._sourceNode=src;
+    }
+    var gain=ctx2.createGain();
+    gain.gain.setValueAtTime(0,ctx2.currentTime);
+    gain.gain.linearRampToValueAtTime(0.9,ctx2.currentTime+3.0); // fade in over 3s
+    musicEl._sourceNode.connect(gain);
+    gain.connect(masterGain);
+    musicEl.currentTime=0;
+    musicEl.play().catch(function(){});
 
-    // ── HARP ARPEGGIOS ── (triangle wave, short decay, rippling 8th notes)
-    function harp(freq,t,vol){
-      var o=C2.createOscillator(), g=C2.createGain();
-      o.type='triangle'; o.frequency.value=freq;
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.008);
-      g.gain.exponentialRampToValueAtTime(0.001,t+0.9);
-      var hp=C2.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=200;
-      o.connect(hp); hp.connect(g); g.connect(rev2); g.connect(masterGain);
-      o.start(t); o.stop(t+1.0);
-      introNodes.push({osc:o,g:g});
-    }
-    // Harp plays arpeggios on each chord — 6 notes per bar (2 per beat, 3/4)
-    var arpPats=[
-      [F3,A3,C4,F4,C4,A3],   // F
-      [Bb3,D4,F4,Bb4,F4,D4], // Bb
-      [C4,E4,G4,C5,G4,E4],   // C
-      [F3,A3,C4,F4,C4,A3],   // F
-      [D3,F3,A3,D4,A3,F3],   // Dm
-      [Bb3,D4,F4,Bb4,F4,D4], // Bb
-      [C4,E4,G4,C5,G4,E4],   // C
-      [F3,A3,C4,F4,C4,A3],   // F
-    ];
-    for(var loop=0;loop<LOOPS;loop++){
-      for(var bi=0;bi<arpPats.length;bi++){
-        for(var ni=0;ni<6;ni++){
-          harp(arpPats[bi][ni], now+loop*8*BAR+bi*BAR+ni*E, 0.065+Math.random()*0.015);
-        }
-      }
-    }
-
-    // ── FLUTE/OBOE MELODY ── (Harmony transcription)
-    // The actual Harmony melody note-for-note as closely as possible.
-    // Instrument: triangle wave + narrow bandpass for oboe/flute colour + vibrato
-    function flute(freq,t,dur,vol){
-      var o=C2.createOscillator(), g=C2.createGain();
-      var vib=C2.createOscillator(), vibG=C2.createGain();
-      o.type='triangle'; o.frequency.value=freq;
-      vib.frequency.value=5.8; vibG.gain.value=freq*0.010;
-      vib.connect(vibG); vibG.connect(o.frequency);
-      var bp=C2.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=freq*1.2; bp.Q.value=1.8;
-      g.gain.setValueAtTime(0,t);
-      g.gain.linearRampToValueAtTime(vol,t+0.05);
-      g.gain.setValueAtTime(vol,t+dur-0.08);
-      g.gain.linearRampToValueAtTime(0,t+dur);
-      o.connect(bp); bp.connect(g);
-      g.connect(rev); g.connect(masterGain);
-      o.start(t); o.stop(t+dur+0.05);
-      vib.start(t); vib.stop(t+dur+0.05);
-      introNodes.push({osc:o,g:g},{lfo:vib,g:vibG});
-    }
-
-    // Harmony melody — 8 bar phrase, note-accurate transcription
-    // Format: [freq, beat_offset_from_phrase_start, duration_in_beats]
-    // Bar numbers follow the OSRS Harmony structure
-    var mel=[
-      // Bar 1: C5 dotted quarter, D5 eighth, C5 quarter | pickup feel
-      [C5, 0,    DQ],
-      [D5, DQ,   E ],
-      [C5, DQ+E, Q ],
-      // Bar 2: F5 half, E5 quarter
-      [F5, BAR,        H ],
-      [E5, BAR+H,      Q ],
-      // Bar 3: D5 dotted quarter, C5 eighth, Bb4 quarter
-      [D5, BAR*2,      DQ],
-      [C5, BAR*2+DQ,   E ],
-      [Bb4,BAR*2+DQ+E, Q ],
-      // Bar 4: A4 dotted half (held)
-      [A4, BAR*3,      BAR],
-      // Bar 5: C5 dotted quarter, D5 eighth, C5 quarter
-      [C5, BAR*4,      DQ],
-      [D5, BAR*4+DQ,   E ],
-      [C5, BAR*4+DQ+E, Q ],
-      // Bar 6: F5 quarter, G5 eighth, F5 eighth, E5 quarter
-      [F5, BAR*5,      Q ],
-      [G5, BAR*5+Q,    E ],
-      [F5, BAR*5+Q+E,  E ],
-      [E5, BAR*5+Q+E+E,Q ],
-      // Bar 7: D5 dotted quarter, C5 eighth, Bb4 quarter
-      [D5, BAR*6,      DQ],
-      [C5, BAR*6+DQ,   E ],
-      [Bb4,BAR*6+DQ+E, Q ],
-      // Bar 8: C5 dotted half (resolve)
-      [C5, BAR*7,      BAR*1.4],
-
-      // Second phrase — starts bar 9 (slight variation, higher)
-      // Bar 9: F5 dotted quarter, G5 eighth, F5 quarter
-      [F5, BAR*8,        DQ],
-      [G5, BAR*8+DQ,     E ],
-      [F5, BAR*8+DQ+E,   Q ],
-      // Bar 10: A5 half, G5 quarter
-      [A5, BAR*9,        H ],
-      [G5, BAR*9+H,      Q ],
-      // Bar 11: F5 dotted quarter, E5 eighth, D5 quarter
-      [F5, BAR*10,       DQ],
-      [E5, BAR*10+DQ,    E ],
-      [D5, BAR*10+DQ+E,  Q ],
-      // Bar 12: C5 dotted half
-      [C5, BAR*11,       BAR],
-      // Bar 13-14: step down F5 E5 D5 C5
-      [F5, BAR*12,       Q ],
-      [E5, BAR*12+Q,     Q ],
-      [D5, BAR*12+Q*2,   Q ],
-      [C5, BAR*13,       Q ],
-      [D5, BAR*13+Q,     E ],
-      [E5, BAR*13+Q+E,   E ],
-      [F5, BAR*13+Q+E+E, Q ],
-      // Bar 15-16: final phrase back to home
-      [G5, BAR*14,       DQ],
-      [F5, BAR*14+DQ,    E ],
-      [E5, BAR*14+DQ+E,  Q ],
-      [F5, BAR*15,       BAR*1.8],
-    ];
-
-    // Play LOOPS repetitions of the 16-bar phrase
-    var PHRASE_LEN=BAR*16;
-    for(var loop=0;loop<LOOPS;loop++){
-      for(var mi=0;mi<mel.length;mi++){
-        var m=mel[mi];
-        flute(m[0], now+loop*PHRASE_LEN+m[1], m[2]*0.92, 0.14+Math.random()*0.025);
-      }
-    }
-
-    // ── BASS LINE ── (pizzicato feel — short plucked basses on beat 1)
-    function bass(freq,t){
-      var o=C2.createOscillator(), g=C2.createGain();
-      o.type='sine'; o.frequency.value=freq;
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.055,t+0.02);
-      g.gain.exponentialRampToValueAtTime(0.001,t+0.6);
-      o.connect(g); g.connect(rev);
-      o.start(t); o.stop(t+0.65);
-      introNodes.push({osc:o,g:g});
-    }
-    var bassNotes=[F3,Bb3/2,C3,F3, D3,Bb3/2,C3,F3];
-    for(var loop=0;loop<LOOPS;loop++){
-      for(var bi=0;bi<8;bi++){
-        bass(bassNotes[bi], now+loop*8*BAR+bi*BAR);
-      }
-    }
-
-    // ── BELL SHIMMER ── (on phrase downbeats, very soft)
-    function shimmer(freq,t,vol){
-      var o=C2.createOscillator(), g=C2.createGain();
-      o.type='sine'; o.frequency.value=freq;
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.01);
-      g.gain.exponentialRampToValueAtTime(0.001,t+3.8);
-      o.connect(g); g.connect(rev);
-      o.start(t); o.stop(t+4.0);
-      introNodes.push({osc:o,g:g});
-    }
-    for(var loop=0;loop<LOOPS;loop++){
-      shimmer(F5*2, now+loop*PHRASE_LEN,       0.04);
-      shimmer(C5*2, now+loop*PHRASE_LEN+BAR*4, 0.03);
-      shimmer(F5*2, now+loop*PHRASE_LEN+BAR*8, 0.035);
-      shimmer(C5*2, now+loop*PHRASE_LEN+BAR*12,0.03);
-    }
+    // Store gain node so fadeStop can fade it out
+    introNodes.push({g:gain, _musicEl:musicEl});
   }
+
 
   // ── CAVE AMBIENCE ────────────────────────────────────────────
   // Layers: deep resonant drone, slow wind howl, random drip pings,
